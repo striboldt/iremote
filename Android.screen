@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model:Screen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:model="http://wireframesketcher.com/1.0/model.ecore" theme="clean">
+  <widgets xsi:type="model:WidgetGroup" id="1" x="18" y="11" measuredWidth="396" measuredHeight="790" name="Phone">
+    <widgets xsi:type="model:WidgetGroup" id="2" measuredWidth="396" measuredHeight="790">
+      <widgets xsi:type="model:WidgetGroup" id="3" y="281" measuredWidth="396" measuredHeight="509">
+        <widgets xsi:type="model:Circle" id="4" y="324" width="396" height="185" measuredWidth="396" measuredHeight="185" background="#444444" foreground="#444444">
+          <font/>
+        </widgets>
+        <widgets xsi:type="model:Rectangle" id="5" width="395" height="415" measuredWidth="395" measuredHeight="415" background="#444444" foreground="#444444">
+          <font/>
+        </widgets>
+      </widgets>
+      <widgets xsi:type="model:WidgetGroup" id="6" measuredWidth="396" measuredHeight="763">
+        <widgets xsi:type="model:Circle" id="7" y="586" width="396" height="177" measuredWidth="396" measuredHeight="177" background="#666666" foreground="#666666">
+          <font/>
+        </widgets>
+        <widgets xsi:type="model:Circle" id="8" width="396" height="177" measuredWidth="396" measuredHeight="177" background="#666666" foreground="#666666">
+          <font/>
+        </widgets>
+        <widgets xsi:type="model:Rectangle" id="9" y="86" width="395" height="585" measuredWidth="395" measuredHeight="585" background="#666666" foreground="#666666">
+          <font/>
+        </widgets>
+      </widgets>
+      <widgets xsi:type="model:WidgetGroup" id="10" x="10" y="28" measuredWidth="376" measuredHeight="674">
+        <widgets xsi:type="model:Circle" id="11" y="582" width="376" height="92" measuredWidth="376" measuredHeight="92" background="#000000">
+          <font/>
+        </widgets>
+        <widgets xsi:type="model:Circle" id="12" width="376" height="115" measuredWidth="376" measuredHeight="115" background="#000000">
+          <font/>
+        </widgets>
+        <widgets xsi:type="model:Rectangle" id="13" y="53" width="375" height="574" measuredWidth="375" measuredHeight="574" background="#000000">
+          <font/>
+        </widgets>
+      </widgets>
+      <widgets xsi:type="model:Rectangle" id="14" x="121" y="16" width="153" height="9" measuredWidth="153" measuredHeight="9" background="#999999" border="solid-rounded">
+        <font/>
+      </widgets>
+      <widgets xsi:type="model:Circle" id="15" x="180" y="714" width="36" height="36" measuredWidth="36" measuredHeight="36" background="#999999">
+        <font/>
+      </widgets>
+      <widgets xsi:type="model:WidgetGroup" id="16" x="70" y="649" measuredWidth="260" measuredHeight="16">
+        <widgets xsi:type="model:Icon" id="17" measuredWidth="16" measuredHeight="16" foreground="#ffffff" icon="undo (small)"/>
+        <widgets xsi:type="model:Icon" id="18" x="162" measuredWidth="16" measuredHeight="16" foreground="#ffffff" icon="home (small)"/>
+        <widgets xsi:type="model:Icon" id="19" x="244" measuredWidth="16" measuredHeight="16" foreground="#ffffff" icon="find (small)"/>
+        <widgets xsi:type="model:WidgetGroup" id="20" x="82" measuredWidth="14" measuredHeight="15">
+          <widgets xsi:type="model:HLine" id="21" width="14" measuredWidth="14" measuredHeight="6" foreground="#ffffff"/>
+          <widgets xsi:type="model:HLine" id="22" x="4" y="3" width="10" measuredWidth="10" measuredHeight="6" foreground="#ffffff"/>
+          <widgets xsi:type="model:HLine" id="23" x="4" y="9" width="10" measuredWidth="10" measuredHeight="6" foreground="#ffffff"/>
+          <widgets xsi:type="model:HLine" id="24" x="4" y="6" width="10" measuredWidth="10" measuredHeight="6" foreground="#ffffff"/>
+        </widgets>
+      </widgets>
+    </widgets>
+    <widgets xsi:type="model:Panel" id="25" x="38" y="89" width="320" height="536" measuredWidth="320" measuredHeight="536" background="#d0e0e3" alpha="192" border="none"/>
+  </widgets>
+  <widgets xsi:type="model:WidgetGroup" id="208" x="56" y="100" measuredWidth="320" measuredHeight="28" name="Status Bar">
+    <widgets xsi:type="model:Rectangle" id="209" width="320" height="28" text="11:22" measuredWidth="320" measuredHeight="28" background="#444444" border="none" textAlignment="Right">
+      <font size="8" bold="true"/>
+    </widgets>
+    <widgets xsi:type="model:Icon" id="210" x="209" y="6" measuredWidth="16" measuredHeight="16" foreground="#00ff00" icon="wifi (small)"/>
+    <widgets xsi:type="model:Icon" id="211" x="233" y="6" measuredWidth="16" measuredHeight="16" foreground="#00ff00" icon="signal (small)"/>
+    <widgets xsi:type="model:Icon" id="212" x="257" y="6" measuredWidth="16" measuredHeight="16" foreground="#00ff00" icon="battery (small)"/>
+  </widgets>
+  <widgets xsi:type="model:WidgetGroup" id="213" x="648" y="64" measuredWidth="536" measuredHeight="28" name="Status Bar Landscape">
+    <widgets xsi:type="model:Rectangle" id="214" width="536" height="28" text="11:22" measuredWidth="536" measuredHeight="28" background="#444444" border="none" textAlignment="Right">
+      <font size="8" bold="true"/>
+    </widgets>
+    <widgets xsi:type="model:Icon" id="215" x="424" y="6" measuredWidth="16" measuredHeight="16" foreground="#00ff00" icon="wifi (small)"/>
+    <widgets xsi:type="model:Icon" id="216" x="447" y="6" measuredWidth="16" measuredHeight="16" foreground="#00ff00" icon="signal (small)"/>
+    <widgets xsi:type="model:Icon" id="217" x="471" y="6" measuredWidth="16" measuredHeight="16" foreground="#00ff00" icon="battery (small)"/>
+  </widgets>
+  <widgets xsi:type="model:WidgetGroup" id="161" x="728" y="240" measuredWidth="281" measuredHeight="172" name="Message Dialog">
+    <widgets xsi:type="model:Panel" id="162" width="281" height="172" measuredWidth="281" measuredHeight="172" border="solid-rounded"/>
+    <widgets xsi:type="model:Button" id="163" x="16" y="128" width="113" height="34" text="OK" measuredWidth="113" measuredHeight="34">
+      <font/>
+    </widgets>
+    <widgets xsi:type="model:Button" id="164" x="152" y="128" width="113" height="34" text="Cancel" measuredWidth="113" measuredHeight="34">
+      <font/>
+    </widgets>
+    <widgets xsi:type="model:Label" id="165" x="18" y="13" text="Dialog Title" measuredWidth="96" measuredHeight="24" icon="info (medium)">
+      <font bold="true"/>
+    </widgets>
+    <widgets xsi:type="model:HLine" id="166" x="16" y="44" width="249" measuredWidth="249" measuredHeight="6"/>
+    <widgets xsi:type="model:Text" id="167" x="18" y="64" width="247" height="49" text="Message text" measuredWidth="247" measuredHeight="49">
+      <font/>
+    </widgets>
+  </widgets>
+  <widgets xsi:type="model:WidgetGroup" id="168" x="56" y="101" measuredWidth="0" measuredHeight="0" name="Modal Screen"/>
+  <widgets xsi:type="model:WidgetGroup" id="170" x="448" y="480" width="299" height="288" measuredWidth="298" measuredHeight="288" name="Menu Two Rows">
+    <widgets xsi:type="model:WidgetGroup" id="171" x="110" width="188" height="288" measuredWidth="188" measuredHeight="288">
+      <widgets xsi:type="model:Panel" id="172" width="188" height="288" measuredWidth="188" measuredHeight="288" border="none"/>
+      <widgets xsi:type="model:HLine" id="173" y="145" width="188" measuredWidth="188" measuredHeight="6"/>
+      <widgets xsi:type="model:VLine" id="174" x="61" height="288" measuredWidth="6" measuredHeight="288"/>
+      <widgets xsi:type="model:VLine" id="175" x="124" height="288" measuredWidth="6" measuredHeight="288"/>
+    </widgets>
+    <widgets xsi:type="model:Label" id="176" x="115" y="46" width="53" text="Add" measuredWidth="53" measuredHeight="56" textAlignment="Center" icon="circled-plus (large)" iconPosition="top">
+      <font/>
+    </widgets>
+    <widgets xsi:type="model:Label" id="177" x="116" y="188" width="53" text="Search" measuredWidth="53" measuredHeight="56" textAlignment="Center" icon="find (large)" iconPosition="top">
+      <font/>
+    </widgets>
+    <widgets xsi:type="model:Label" id="178" x="179" y="46" width="53" text="Manage apps" measuredWidth="53" measuredHeight="56" textAlignment="Center" icon="options (large)" iconPosition="top">
+      <font/>
+    </widgets>
+    <widgets xsi:type="model:Label" id="179" x="245" y="46" text="Walpaper" measuredWidth="53" measuredHeight="56" textAlignment="Center" icon="image (large)" iconPosition="top">
+      <font/>
+    </widgets>
+    <widgets xsi:type="model:Label" id="180" y="25" width="53" text="Notifications" measuredWidth="53" measuredHeight="56" textAlignment="Center" icon="info (large)" iconPosition="top">
+      <font/>
+    </widgets>
+    <widgets xsi:type="model:Label" id="181" x="242" y="188" width="53" text="More" measuredWidth="53" measuredHeight="56" textAlignment="Center" icon="more (large)" iconPosition="top">
+      <font/>
+    </widgets>
+  </widgets>
+  <widgets xsi:type="model:WidgetGroup" id="190" x="816" y="440" measuredWidth="320" measuredHeight="20" name="Banner">
+    <widgets xsi:type="model:Rectangle" id="191" width="320" height="20" text="Label" measuredWidth="320" measuredHeight="20" background="#999999" border="none">
+      <font size="9" bold="true"/>
+    </widgets>
+  </widgets>
+  <widgets xsi:type="model:WidgetGroup" id="192" x="816" y="472" measuredWidth="320" measuredHeight="20" name="Banner Left">
+    <widgets xsi:type="model:Rectangle" id="193" width="320" height="20" text="Label" measuredWidth="320" measuredHeight="20" background="#999999" border="none" textAlignment="Left">
+      <font size="9" bold="true"/>
+    </widgets>
+  </widgets>
+  <widgets xsi:type="model:WidgetGroup" id="194" x="448" y="808" measuredWidth="300" measuredHeight="265" name="Dropdown List">
+    <widgets xsi:type="model:WidgetGroup" id="195" measuredWidth="300" measuredHeight="265">
+      <widgets xsi:type="model:WidgetGroup" id="196" measuredWidth="300" measuredHeight="265">
+        <widgets xsi:type="model:Panel" id="197" width="300" height="265" measuredWidth="300" measuredHeight="265"/>
+        <widgets xsi:type="model:WidgetGroup" id="198" x="2" y="221" measuredWidth="296" measuredHeight="42">
+          <widgets xsi:type="model:Panel" id="199" width="296" height="42" measuredWidth="296" measuredHeight="42" background="#666666" border="none"/>
+          <widgets xsi:type="model:Button" id="200" x="86" y="4" width="121" height="32" text="Cancel" measuredWidth="121" measuredHeight="32">
+            <font/>
+          </widgets>
+        </widgets>
+      </widgets>
+      <widgets xsi:type="model:Rectangle" id="201" width="300" height="49" text="Vibrate" measuredWidth="300" measuredHeight="49" background="#000000" border="none" textAlignment="Left">
+        <font bold="true"/>
+      </widgets>
+    </widgets>
+    <widgets xsi:type="model:Table" id="202" x="3" y="48" width="293" height="173" text="Always,()&#xA;Never,()&#xA;Only in Silent mode,(o)&#xA;Only when not in\rSilent mode,()" measuredWidth="293" measuredHeight="173" border="false" rowHeight="38" horizontalLines="true" verticalLines="false" header="false">
+      <font/>
+    </widgets>
+  </widgets>
+  <widgets xsi:type="model:WidgetGroup" id="203" x="776" y="512" measuredWidth="320" measuredHeight="527" name="Options List">
+    <widgets xsi:type="model:Table" id="204" y="19" width="320" height="508" text="*Airplane mode*\rDisable all wireless connections,[]&#xA;*Wi-Fi*\rConnected to network,[x]&#xA;*Wi-Fi settings*\nSet up &amp; manage wireless access points&#xA;~*Bluetooth*\rTurn on Bluetooth~&#xA;*Bluetooth settings*\rManage connection\, set device name &amp; \ndiscoverability,(v)&#xA;*Tethering &amp; portable hotspot*\rShare your phone's mobile data connection\rvia USB or as a portable Wi-Fi hotspot&#xA;*VPN settings*\rSet up &amp; manage Virtual Private Networks\r(VPNs)" measuredWidth="320" measuredHeight="508" selection="" border="false" background="#000000" rowHeight="56" horizontalLines="true" alternative="#000000" verticalLines="false" header="false">
+      <font/>
+    </widgets>
+    <widgets xsi:type="model:Rectangle" id="205" width="320" height="20" text="Wireless &amp; network settings" measuredWidth="320" measuredHeight="20" background="#999999" border="none" textAlignment="Left">
+      <font size="9" bold="true"/>
+    </widgets>
+  </widgets>
+  <widgets xsi:type="model:WidgetGroup" id="206" x="1168" y="432" measuredWidth="241" measuredHeight="375" name="Popup Menu">
+    <widgets xsi:type="model:Table" id="207" width="241" text="Add bookmark&#xA;FInd on page&#xA;Select text&#xA;Page info&#xA;Share page&#xA;Downloads&#xA;Settings" measuredWidth="241" measuredHeight="375" background="#000000" rowHeight="53" horizontalLines="true" alternative="#000000" verticalLines="false" header="false">
+      <font bold="true"/>
+    </widgets>
+  </widgets>
+  <widgets xsi:type="model:Label" id="222" x="264" y="340" text="Settings" measuredWidth="48" measuredHeight="72" textAlignment="Center" icon="options (xlarge)" iconPosition="top">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="223" x="104" y="240" text="Favoritter" measuredWidth="54" measuredHeight="72" textAlignment="Center" icon="favorites (xlarge)" iconPosition="top">
+    <font bold="false"/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="224" x="264" y="240" text="Locations" measuredWidth="54" measuredHeight="72" textAlignment="Center" icon="location (xlarge)" iconPosition="top">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="225" x="110" y="340" text="Active" measuredWidth="48" measuredHeight="72" textAlignment="Center" icon="bulb (xlarge)" iconPosition="top">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:TextField" id="226" x="883" y="337" text="Text field" measuredWidth="61" measuredHeight="21">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:TextField" id="228" x="56" y="127" width="320" text="     IRemote" measuredWidth="320" measuredHeight="34" background="#000000">
+    <font size="22"/>
+  </widgets>
+  <widgets xsi:type="model:Image" id="229" x="65" y="128" width="28" height="28" measuredWidth="28" measuredHeight="28" src="res/drawable-hdpi/remote.png"/>
+  <widgets xsi:type="model:Label" id="230" x="264" y="446" text="About" measuredWidth="48" measuredHeight="72" textAlignment="Center" icon="info (xlarge)" iconPosition="top">
+    <font/>
+  </widgets>
+  <hRuler/>
+  <vRuler/>
+  <font/>
+</model:Screen>

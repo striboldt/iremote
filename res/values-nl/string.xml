@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<string name="about">Over IRemote</string> 
+<string name="author">Auteur: Morten Striboldt.</string>
+<string name="email">Email: ihc@striboldt.com</string> 
+<string name="aboutText">IRemote Viewer is een afstandsbediening voor Schneider Electric (Intelligent House Control). Dit is een onafhankelijke toepassing en daardoor niet ondersteund of onderhouden door Schneider Electric.</string> 
+<string name="app_name">IRemote Viewer</string> 
+<string name="lan_host">LAN Host</string> 
+<string name="lan_host_help">IP or Hostname</string> 
+<string name="wan_host">WAN Host</string> 
+<string name="wan_host_help">IP or Hostname</string> 
+<string name="username">Gebruiker</string> 
+<string name="password">Paswoord</string> 
+<string name="connect_wan_only">Enkel verbinden via WAN</string> 
+<string name="locations">Lokaties</string> 
+<string name="favourites">Favorieten</string> 
+<string name="settings">Instellingen</string> 
+<string name="active_resources">Actieve bronnen</string> 
+<string name="resources">Bronnen: </string> 
+<string name="upperleft">l.b</string> 
+<string name="upperright">r.b</string> 
+<string name="midleft">l.m</string> 
+<string name="midright">r.m</string> 
+<string name="lowerleft">l.o</string> 
+<string name="lowerright">r.o</string> 
+<string name="loginbutton">Aanmelden</string> 
+<string name="reload_project">Herladen projekt</string> 
+<string name="check_license">Controleer licentie</string> 
+<string name="checking_license">Controleren licentie...</string> 
+<string name="dont_allow">Gebruiker niet toegelaten</string> 
+<string name="allow">Gebruiker toegelaten</string> 
+<string name="login_msg">Aanmelden. Even geduld aub…</string> 
+<string name="login_failed_msg">Inloggen is mislukt: </string> 
+<string name="loading_project_msg">Projekt laden. Even geduld aub...</string> 
+<string name="application_error">Toepassing fout: %1$s</string> 
+<string name="unlicensed_dialog_title">Toepassing zonder licentie</string> 
+<string name="unlicensed_dialog_body">Deze toepassing heeft geen licentie. Gelieve de toepassing aan te kopen via Android Market.</string> 
+<string name="buy_button">Koop app</string> 
+<string name="quit_button">Verlaten</string> 
+<string name="autologin">Automatisch aanmelden</string> 
+<string name="left">l</string> 
+<string name="right">r</string> 
+<string name="up">u</string> 
+<string name="down">d</string> 
+<string name="edit_resource">Edit bron</string>
+	<string-array name="ContextMenu">
+			<item>Toevoegen / verwijderen favoriet</item>
+    		<item>Delete bron</item>
+    </string-array>
+    <string-array name="ContextMenuRemoveFav">
+			<item>Verwijderen favoriet</item>
+    </string-array>
+</resources>
