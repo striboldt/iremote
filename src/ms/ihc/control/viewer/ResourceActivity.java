@@ -3,6 +3,7 @@ package ms.ihc.control.viewer;
 import java.util.Iterator;
 
 import ms.ihc.control.devices.wireless.IHCResource;
+import ms.ihc.control.fragments.LocationFragment;
 import ms.ihc.control.viewer.SoapImpl.ControllerConnection;
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -58,7 +59,7 @@ public class ResourceActivity extends Activity implements OnClickListener, Contr
 			resourceTextView1.setText("< Location: ");
 			resourceTextView2.setText(selectedLocation);
 			registerForContextMenu(resourceListView);
-			resourceListView.setAdapter(LocationActivity.resourceAdapter);  
+			resourceListView.setAdapter(LocationFragment.resourceAdapter);  
 			resourceListView.setOnCreateContextMenuListener(this);
 			
 			resourceTableRow.setOnClickListener(this);
@@ -106,7 +107,7 @@ public class ResourceActivity extends Activity implements OnClickListener, Contr
 		@Override
 		protected Boolean doInBackground(Void... params) {
 			Log.v("waitForResourceValueChangesTask-ResourceActivity", "Waiting for valuechanges");
-			return soapImp.waitForResourceValueChanges(LocationActivity.resourceMap);
+			return soapImp.waitForResourceValueChanges(LocationFragment.resourceMap);
 		}
 
 		@Override
@@ -148,9 +149,9 @@ public class ResourceActivity extends Activity implements OnClickListener, Contr
 
 		@Override
 		protected void onPostExecute(Boolean result) {
-			if (LocationActivity.resourceAdapter != null) {
+			if (LocationFragment.resourceAdapter != null) {
 				Log.v("refresjResourceViewTask-ResourceActivity", "Refreshing view...");
-				LocationActivity.resourceAdapter.notifyDataSetChanged();
+				LocationFragment.resourceAdapter.notifyDataSetChanged();
 			}
 		}
 	}
@@ -181,7 +182,7 @@ public class ResourceActivity extends Activity implements OnClickListener, Contr
 				Iterator<IHCResource> iResources = location.resources.iterator();
 				while (iResources.hasNext()) { 
 					IHCResource ihcResource = iResources.next();
-					if(ihcResource.equals((IHCResource) LocationActivity.resourceAdapter.getItem(info.position)))
+					if(ihcResource.equals((IHCResource) LocationFragment.resourceAdapter.getItem(info.position)))
 					{					
 						switch (menuItemIndex) 
 						{
@@ -198,11 +199,11 @@ public class ResourceActivity extends Activity implements OnClickListener, Contr
 							}
 							// Save changes to iremote resource file.
 							appContext.writeDataFile("iremote.data");
-							LocationActivity.resourceAdapter.notifyDataSetChanged();
+							LocationFragment.resourceAdapter.notifyDataSetChanged();
 							break;
 						case 1: // Delete Resource
 							  iResources.remove();					
-							  LocationActivity.resourceAdapter.removeItem(info.position);
+							  LocationFragment.resourceAdapter.removeItem(info.position);
 							  appContext.writeDataFile("iremote.data");
 							break;
 							

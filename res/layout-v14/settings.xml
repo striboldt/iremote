@@ -41,13 +41,15 @@
 			</EditText>
 		</TableRow>
 	</TableLayout>
-	<TableLayout android:layout_width="match_parent" android:orientation="vertical">
+<TableLayout android:layout_width="match_parent" android:orientation="vertical">
 		<TableRow android:padding="3dip">
 			<Switch
 			    android:id="@+ihc/WanOnly"	    
 			    android:layout_width="wrap_content"
 			    android:layout_height="wrap_content"
-			    android:text="@string/connect_wan_only" />
+			    android:textOn="@string/wan"
+                android:textOff="@string/lan"
+			    android:text="@string/default_connection_type" />
 
 		</TableRow>
 		<TableRow android:padding="3dip">
@@ -56,14 +58,6 @@
 			    android:layout_width="wrap_content"
 			    android:layout_height="wrap_content"
 			    android:text="@string/reload_project" />
-
-		</TableRow>
-		<TableRow android:padding="3dip">
-		    <Switch
-			    android:id="@+ihc/autologin"
-			    android:layout_width="wrap_content"
-			    android:layout_height="wrap_content"
-			    android:text="@string/autologin" />
 
 		</TableRow>
 	</TableLayout>

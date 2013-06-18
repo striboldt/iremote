@@ -44,7 +44,7 @@
 	<TableLayout android:layout_width="match_parent"
 		 android:orientation="vertical">
 		<TableRow>
-			<TextView android:text="@string/connect_wan_only"
+			<TextView android:text="@string/default_connection_type"
 				android:padding="3dip">
 			</TextView>
 			<CheckBox android:id="@+ihc/WanOnly" android:layout_width="wrap_content"
@@ -53,11 +53,6 @@
 		<TableRow android:padding="3dip">
 			<TextView android:text="@string/reload_project" android:id="@+id/TextView01" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
 			<CheckBox android:id="@+ihc/reloadProject" android:layout_width="wrap_content" android:layout_height="wrap_content" android:clickable="true"></CheckBox>
-
-		</TableRow>
-		<TableRow android:padding="3dip">
-			<TextView android:text="@string/autologin" android:id="@+id/TextView02" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
-			<CheckBox android:id="@+ihc/autologin" android:layout_width="wrap_content" android:layout_height="wrap_content" android:clickable="true"></CheckBox>
 
 		</TableRow>
 	</TableLayout>

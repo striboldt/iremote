@@ -3,6 +3,7 @@ package ms.ihc.control.viewer;
 import java.util.Iterator;
 
 import ms.ihc.control.devices.wireless.IHCResource;
+import ms.ihc.control.fragments.LocationFragment;
 import ms.ihc.control.valueTypes.DeviceType;
 import ms.ihc.control.viewer.SoapImpl.ControllerConnection;
 import android.app.Activity;
@@ -103,7 +104,7 @@ public class ActiveResourcesActivity extends Activity implements OnClickListener
 		@Override
 		protected Boolean doInBackground(Void... params) {
 			Log.v("waitForResourceValueChangesTask", "Waiting for valuechanges");
-			return soapImp.waitForResourceValueChanges(LocationActivity.resourceMap);
+			return soapImp.waitForResourceValueChanges(LocationFragment.resourceMap);
 		}
 
 		@Override

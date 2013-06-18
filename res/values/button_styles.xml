@@ -3,51 +3,56 @@
     
     <style name="button_on_off">
 		<item name="android:background">@drawable/poweron_off</item>
-		<item name="android:layout_marginTop">8dp</item>
-		<item name="android:layout_marginLeft">8dp</item>
-		<item name="android:layout_marginBottom">8dp</item>
-        <item name="android:layout_width">32dp</item>
-        <item name="android:layout_height">32dp</item>
+		<item name="android:layout_marginTop">@dimen/icon_padding</item>
+		<item name="android:layout_marginLeft">@dimen/icon_padding</item>
+		<item name="android:layout_marginBottom">@dimen/icon_padding</item>
+		<item name="android:layout_gravity">center_vertical</item>
+        <item name="android:layout_width">@dimen/icon_width</item>
+        <item name="android:layout_height">@dimen/icon_height</item>
     </style>
     
     <style name="button01_on">
 		<item name="android:background">@drawable/on_off</item>
-		<item name="android:layout_marginTop">8dp</item>
-		<item name="android:layout_marginLeft">8dp</item>
-		<item name="android:layout_marginBottom">8dp</item>
-        <item name="android:layout_width">32dp</item>
-        <item name="android:layout_height">32dp</item>
+		<item name="android:layout_marginTop">@dimen/icon_padding</item>
+		<item name="android:layout_marginLeft">@dimen/icon_padding</item>
+		<item name="android:layout_marginBottom">@dimen/icon_padding</item>
+		<item name="android:layout_gravity">center_vertical</item>
+        <item name="android:layout_width">@dimen/icon_width</item>
+        <item name="android:layout_height">@dimen/icon_height</item>
     </style>
     
     <style name="button02_off">
 		<item name="android:background">@drawable/off_off</item>
-		<item name="android:layout_marginTop">8dp</item>
-		<item name="android:layout_marginRight">8dp</item>
-		<item name="android:layout_marginBottom">8dp</item>
-        <item name="android:layout_width">32dp</item>
-        <item name="android:layout_height">32dp</item>
+		<item name="android:layout_marginTop">@dimen/icon_padding</item>
+		<item name="android:layout_marginRight">@dimen/icon_padding</item>
+		<item name="android:layout_marginBottom">@dimen/icon_padding</item>
+		<item name="android:layout_gravity">center_vertical</item>
+        <item name="android:layout_width">@dimen/icon_width</item>
+        <item name="android:layout_height">@dimen/icon_height</item>
     </style>
     
     <style name="button_left">
 		<item name="android:background">@drawable/off_noicon</item>
-		<item name="android:layout_marginTop">8dp</item>
-		<item name="android:layout_marginLeft">8dp</item>
-		<item name="android:layout_marginBottom">8dp</item>
-        <item name="android:layout_width">32dp</item>
-        <item name="android:layout_height">32dp</item>
+		<item name="android:layout_marginTop">@dimen/icon_padding</item>
+		<item name="android:layout_marginLeft">@dimen/icon_padding</item>
+		<item name="android:layout_marginBottom">@dimen/icon_padding</item>
+		<item name="android:layout_gravity">center_vertical</item>
+        <item name="android:layout_width">@dimen/icon_width</item>
+        <item name="android:layout_height">@dimen/icon_height</item>
     </style>
         
     <style name="button_right">
 		<item name="android:background">@drawable/off_noicon</item>
-		<item name="android:layout_marginTop">8dp</item>
-		<item name="android:layout_marginRight">8dp</item>
-		<item name="android:layout_marginBottom">8dp</item>
-        <item name="android:layout_width">32dp</item>
-        <item name="android:layout_height">32dp</item>
+		<item name="android:layout_marginTop">@dimen/icon_padding</item>
+		<item name="android:layout_marginRight">@dimen/icon_padding</item>
+		<item name="android:layout_marginBottom">@dimen/icon_padding</item>
+		<item name="android:layout_gravity">center_vertical</item>
+        <item name="android:layout_width">@dimen/icon_width</item>
+        <item name="android:layout_height">@dimen/icon_height</item>
     </style>
     
     <style name="tablerow_48dp">
-		<item name="android:layout_height">48dp</item>>
+		<item name="android:layout_height">56dp</item>>
     </style>
 
     

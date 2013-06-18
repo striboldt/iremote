@@ -1,10 +1,20 @@
-package ms.ihc.control.viewer;
+package ms.ihc.control.fragments;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
 import ms.ihc.control.devices.wireless.IHCResource;
+import ms.ihc.control.viewer.ApplicationContext;
+import ms.ihc.control.viewer.IHCHome;
+import ms.ihc.control.viewer.IHCLocation;
+import ms.ihc.control.viewer.R;
+import ms.ihc.control.viewer.ResourceActivity;
+import ms.ihc.control.viewer.ResourceAdapter;
+import ms.ihc.control.viewer.SoapImpl;
+import ms.ihc.control.viewer.R.id;
+import ms.ihc.control.viewer.R.layout;
+import ms.ihc.control.viewer.R.string;
 import ms.ihc.control.viewer.SoapImpl.ControllerConnection;
 import android.app.Activity;
 import android.app.Dialog;
@@ -14,11 +24,14 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -26,7 +39,7 @@ import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
 
-public class LocationActivity extends Activity implements OnItemClickListener, ControllerConnection{
+public class LocationFragment extends Fragment implements OnItemClickListener, ControllerConnection{
 
 	private ListView locationListView;
 	private Handler mHandler = new Handler();
@@ -39,15 +52,17 @@ public class LocationActivity extends Activity implements OnItemClickListener, C
 	ArrayList<HashMap<String,String>> list;
 	private ApplicationContext appContext;
 	
-	/** Called when the activity is first created. */
+	
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		appContext = (ApplicationContext) getApplication();
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		
+		final View view = inflater.inflate(R.layout.locations,container);
+		appContext = (ApplicationContext) getActivity().getApplicationContext();
 		appContext.setIsWaitingForValueChanges(false);
 		soapImp = appContext.getIhcConnector();
 		if(soapImp == null)
-			this.finish();
+			this.getActivity().finish();
 		else
 		{
 			soapImp.setControlerConnectionListener(this);
@@ -56,9 +71,9 @@ public class LocationActivity extends Activity implements OnItemClickListener, C
 			if(list == null)
 			{
 				list = new ArrayList<HashMap<String,String>>();
-				for (IHCLocation location : home.locations) {
+				for (IHCLocation location : home.getLocations()) {
 					HashMap<String, String> map = new HashMap<String, String>();
-					map.put("location", location.Name);
+					map.put("location", location);
 					map.put("resources", getResources().getString(R.string.resources) + String.valueOf(location.resources.size()));
 					list.add(map);
 				}
@@ -66,8 +81,8 @@ public class LocationActivity extends Activity implements OnItemClickListener, C
 			String[] from = {"location", "resources"};
 			int[] to = {R.id.location,R.id.resources};
 	
-			setContentView(R.layout.locations);
-			locationListView = (ListView) findViewById(R.id.locationlist);
+			
+			locationListView = (ListView) view.findViewById(R.id.locationlist);
 	
 			locationListView.setOnItemClickListener(this);
 	
@@ -78,12 +93,15 @@ public class LocationActivity extends Activity implements OnItemClickListener, C
 				runtimeTask.execute();
 			}
 			
-			locationAdapter = new SimpleAdapter( this, list, R.layout.location_list_item, from,to );
+			locationAdapter = new SimpleAdapter(getActivity().getApplicationContext(), list, R.layout.location_list_item, from,to );
 			locationListView.setAdapter(locationAdapter);
 		}
+		
+		return view;
 	}
 	
 	/** Called when the Menu button is pushed */
+	/*
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getMenuInflater();
@@ -145,7 +163,7 @@ public class LocationActivity extends Activity implements OnItemClickListener, C
 			return super.onOptionsItemSelected(item);
 
 		}
-	}
+	}*/
 	
 	
 	// Click on ListView item
@@ -153,7 +171,7 @@ public class LocationActivity extends Activity implements OnItemClickListener, C
 			HashMap<String,String> map = list.get(position);
 			String selectedResource = map.get("location");
 			
-			resourceAdapter = new ResourceAdapter(getApplicationContext(),soapImp);
+			resourceAdapter = new ResourceAdapter(getActivity().getApplicationContext(),soapImp);
 
 			Iterator<IHCLocation> iLocations = home.locations.iterator();
 			while (iLocations.hasNext()) {
@@ -168,7 +186,7 @@ public class LocationActivity extends Activity implements OnItemClickListener, C
 				}
 			}
 			
-			Intent intent = new Intent(this,ResourceActivity.class);
+			Intent intent = new Intent(getActivity().getApplicationContext(),ResourceActivity.class);
 			intent.putExtra("location", selectedResource);
 			startActivity(intent);
 	}
@@ -233,7 +251,7 @@ public class LocationActivity extends Activity implements OnItemClickListener, C
 		@Override
 		protected Boolean doInBackground(Void... params) {
 			Log.v("waitForResourceValueChangesTask-LocationActivity", "Waiting for valuechanges");
-			return soapImp.waitForResourceValueChanges(LocationActivity.resourceMap);
+			return soapImp.waitForResourceValueChanges(LocationFragment.resourceMap);
 		}
 
 		@Override
@@ -256,9 +274,9 @@ public class LocationActivity extends Activity implements OnItemClickListener, C
 
 		@Override
 		protected void onPostExecute(Boolean result) {
-			if (LocationActivity.resourceAdapter != null && !soapImp.isInTouchMode) {
+			if (LocationFragment.resourceAdapter != null && !soapImp.isInTouchMode) {
 				Log.v("refresjResourceViewTask-ResourceActivity", "Refreshing view...");
-				LocationActivity.resourceAdapter.notifyDataSetChanged();
+				LocationFragment.resourceAdapter.notifyDataSetChanged();
 			}
 		}
 	}
@@ -273,5 +291,7 @@ public class LocationActivity extends Activity implements OnItemClickListener, C
 	public void onRuntimeVaulesChanged() {
 			new refreshResourceViewTask().execute();
 	}
+
+
 
 }

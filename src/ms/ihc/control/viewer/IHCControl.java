@@ -10,6 +10,7 @@ import com.android.vending.licensing.LicenseChecker;
 import com.android.vending.licensing.LicenseCheckerCallback;
 import com.android.vending.licensing.ServerManagedPolicy;
 
+import ms.ihc.control.fragments.LocationFragment;
 import ms.ihc.control.viewer.R;
 import ms.ihc.control.viewer.R.ihc;
 import android.app.Activity;
@@ -132,9 +133,6 @@ public class IHCControl extends Activity {
 		super.onCreate(savedInstanceState);
 		Thread.setDefaultUncaughtExceptionHandler(new CustomExceptionHandler(null));
 			
-		// persist IHC Connection Object across Activities.
-		((ApplicationContext) getApplication()).setIhcConnector(soapImp);
-		
 		// Reads iremote.data into memory if it exists
 		if(!((ApplicationContext) getApplication()).dataFileExists("iremote.data"))
 			forceReload = true;
@@ -148,12 +146,12 @@ public class IHCControl extends Activity {
 		
 		if (Build.VERSION.SDK_INT >= 14) {
 			this.wanCheckBox = (Switch) findViewById(R.ihc.WanOnly);
-			this.autoLoginBox = (Switch) findViewById(R.ihc.autologin);
+			//this.autoLoginBox = (Switch) findViewById(R.ihc.autologin);
 			this.reloadProjectCheckBox = (Switch) findViewById(ihc.reloadProject);
 		}
 		else {
 			this.wanCheckBox = (CheckBox) findViewById(R.ihc.WanOnly);
-			this.autoLoginBox = (CheckBox) findViewById(R.ihc.autologin);
+			//this.autoLoginBox = (CheckBox) findViewById(R.ihc.autologin);
 			this.reloadProjectCheckBox = (CheckBox) findViewById(ihc.reloadProject);		
 		}
 		
@@ -388,7 +386,7 @@ public class IHCControl extends Activity {
 
 		protected void onPostExecute(Boolean b) {
 			dialog.cancel();
-			Intent intent = new Intent(getApplicationContext(), LocationActivity.class);
+			Intent intent = new Intent(getApplicationContext(), LocationFragment.class);
 			startActivity(intent);
 		}
 	}
