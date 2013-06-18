@@ -1,20 +1,13 @@
 package ms.ihc.control.viewer;
 
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import com.android.vending.licensing.AESObfuscator;
 import com.android.vending.licensing.LicenseChecker;
 import com.android.vending.licensing.LicenseCheckerCallback;
 import com.android.vending.licensing.ServerManagedPolicy;
-
 import ms.ihc.control.fragments.LocationFragment;
-import ms.ihc.control.viewer.R;
-import ms.ihc.control.viewer.R.ihc;
 import android.app.Activity;
-import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -27,21 +20,18 @@ import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
-
 import android.os.Bundle;
 import android.provider.Settings.Secure;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Switch;
-
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -139,20 +129,21 @@ public class IHCControl extends Activity {
 
 		setContentView(R.layout.settings);
 		settings = getSharedPreferences(PREFS_NAME, 0);
-		((EditText) findViewById(R.ihc.username)).setText(settings.getString("username", ""));
-		((EditText) findViewById(R.ihc.password)).setText(settings.getString("password", ""));
-		((EditText) findViewById(R.ihc.lan_ip)).setText(settings.getString("lan_ip", ""));
-		((EditText) findViewById(R.ihc.wan_ip)).setText(settings.getString("wan_ip", ""));
+        findViewById(R.id.username);
+		((EditText) findViewById(R.id.username)).setText(settings.getString("username", ""));
+		((EditText) findViewById(R.id.password)).setText(settings.getString("password", ""));
+		((EditText) findViewById(R.id.lan_ip)).setText(settings.getString("lan_ip", ""));
+		((EditText) findViewById(R.id.wan_ip)).setText(settings.getString("wan_ip", ""));
 		
 		if (Build.VERSION.SDK_INT >= 14) {
-			this.wanCheckBox = (Switch) findViewById(R.ihc.WanOnly);
+			this.wanCheckBox = (Switch) findViewById(R.id.WanOnly);
 			//this.autoLoginBox = (Switch) findViewById(R.ihc.autologin);
-			this.reloadProjectCheckBox = (Switch) findViewById(ihc.reloadProject);
+			this.reloadProjectCheckBox = (Switch) findViewById(R.id.reloadProject);
 		}
 		else {
-			this.wanCheckBox = (CheckBox) findViewById(R.ihc.WanOnly);
+			this.wanCheckBox = (CheckBox) findViewById(R.id.WanOnly);
 			//this.autoLoginBox = (CheckBox) findViewById(R.ihc.autologin);
-			this.reloadProjectCheckBox = (CheckBox) findViewById(ihc.reloadProject);		
+			this.reloadProjectCheckBox = (CheckBox) findViewById(R.id.reloadProject);
 		}
 		
 		this.wanCheckBox.setChecked(settings.getBoolean("wanonly", false));
@@ -184,19 +175,19 @@ public class IHCControl extends Activity {
 
 		// Handle item selection
 		switch (item.getItemId()) {
-		case R.menu.locations:
+		case R.id.locations:
 				String ip;
 
-				String wanip = ((EditText) findViewById(R.ihc.wan_ip)).getText().toString();
-				String lanip = ((EditText) findViewById(R.ihc.lan_ip)).getText().toString();
+				String wanip = ((EditText) findViewById(R.id.wan_ip)).getText().toString();
+				String lanip = ((EditText) findViewById(R.id.lan_ip)).getText().toString();
 				if (wanCheckBox.isChecked()) {
 					ip = wanip;
 				} else {
 					ip = lanip;
 				}
 	
-				String username = ((EditText) findViewById(R.ihc.username)).getText().toString();
-				String password = ((EditText) findViewById(R.ihc.password)).getText().toString();
+				String username = ((EditText) findViewById(R.id.username)).getText().toString();
+				String password = ((EditText) findViewById(R.id.password)).getText().toString();
 	
 				SharedPreferences saveSettings = getSharedPreferences(PREFS_NAME, 0);
 				SharedPreferences.Editor editor = saveSettings.edit();
@@ -213,7 +204,7 @@ public class IHCControl extends Activity {
 				new LoginTask().execute(username, password, ip);
 			return true;
 
-		case R.menu.about:
+		case R.id.about:
 			Dialog dialog = new Dialog(context);
 			dialog.setContentView(R.layout.about);
 			dialog.setTitle(getResources().getString(R.string.about));
@@ -266,16 +257,16 @@ public class IHCControl extends Activity {
 		if(this.autoLoginBox.isChecked() && ((ApplicationContext) getApplication()).getIsAppRestarted())
 		{
 			String ip;
-			String wanip = ((EditText) findViewById(R.ihc.wan_ip)).getText().toString();
-			String lanip = ((EditText) findViewById(R.ihc.lan_ip)).getText().toString();
+			String wanip = ((EditText) findViewById(R.id.wan_ip)).getText().toString();
+			String lanip = ((EditText) findViewById(R.id.lan_ip)).getText().toString();
 			if (this.wanCheckBox.isChecked()) {
 				ip = wanip;
 			} else {
 				ip = lanip;
 			}
 
-			String username = ((EditText) findViewById(R.ihc.username)).getText().toString();
-			String password = ((EditText) findViewById(R.ihc.password)).getText().toString();
+			String username = ((EditText) findViewById(R.id.username)).getText().toString();
+			String password = ((EditText) findViewById(R.id.password)).getText().toString();
 
 			SharedPreferences saveSettings = getSharedPreferences(PREFS_NAME, 0);
 			SharedPreferences.Editor editor = saveSettings.edit();

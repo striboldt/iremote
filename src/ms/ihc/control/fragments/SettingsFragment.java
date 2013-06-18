@@ -1,7 +1,6 @@
 package ms.ihc.control.fragments;
 
 import ms.ihc.control.viewer.R;
-import ms.ihc.control.viewer.R.ihc;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
@@ -32,18 +31,18 @@ public class SettingsFragment extends Fragment {
 		View view = inflater.inflate(R.layout.settings, container);
 
 		settings = getActivity().getSharedPreferences(PREFS_NAME, 0);
-		((EditText) view.findViewById(R.ihc.username)).setText(settings.getString("username", ""));
-		((EditText) view.findViewById(R.ihc.password)).setText(settings.getString("password", ""));
-		((EditText) view.findViewById(R.ihc.lan_ip)).setText(settings.getString("lan_ip", ""));
-		((EditText) view.findViewById(R.ihc.wan_ip)).setText(settings.getString("wan_ip", ""));
+		((EditText) view.findViewById(R.id.username)).setText(settings.getString("username", ""));
+		((EditText) view.findViewById(R.id.password)).setText(settings.getString("password", ""));
+		((EditText) view.findViewById(R.id.lan_ip)).setText(settings.getString("lan_ip", ""));
+		((EditText) view.findViewById(R.id.wan_ip)).setText(settings.getString("wan_ip", ""));
 		
 		if (Build.VERSION.SDK_INT >= 14) {
-			this.wanCheckBox = (Switch) view.findViewById(R.ihc.WanOnly);
-			this.reloadProjectCheckBox = (Switch) view.findViewById(ihc.reloadProject);
+			this.wanCheckBox = (Switch) view.findViewById(R.id.WanOnly);
+			this.reloadProjectCheckBox = (Switch) view.findViewById(R.id.reloadProject);
 		}
 		else {
-			this.wanCheckBox = (CheckBox) view.findViewById(R.ihc.WanOnly);
-			this.reloadProjectCheckBox = (CheckBox) view.findViewById(ihc.reloadProject);		
+			this.wanCheckBox = (CheckBox) view.findViewById(R.id.WanOnly);
+			this.reloadProjectCheckBox = (CheckBox) view.findViewById(R.id.reloadProject);
 		}
 		
 		this.wanCheckBox.setChecked(settings.getBoolean("wanonly", false));

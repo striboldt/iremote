@@ -10,9 +10,14 @@ public class IHCLocation implements java.io.Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	int ID;
-	String Name;
-	ArrayList<IHCResource> resources = new ArrayList<IHCResource>();
+	private int ID;
+	private String Name;
+    private ArrayList<IHCResource> resources = new ArrayList<IHCResource>();
+
+    public ArrayList<IHCResource> getResources() {
+        return resources;
+    }
+
 	public String getName() {
 		return Name;
 	}

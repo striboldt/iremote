@@ -18,25 +18,25 @@
 		<TableRow>
 			<TextView android:text="@string/lan_host" android:padding="3dip">
 			</TextView>
-			<EditText android:id="@+ihc/lan_ip" android:hint="@string/lan_host_help" android:layout_weight="15">
+			<EditText android:id="@+id/lan_ip" android:hint="@string/lan_host_help" android:layout_weight="15">
 			</EditText>
 		</TableRow>
 		<TableRow>
 			<TextView android:text="@string/wan_host" android:padding="3dip">
 			</TextView>
-			<EditText android:id="@+ihc/wan_ip" android:hint="@string/wan_host_help" android:layout_weight="15" >
+			<EditText android:id="@+id/wan_ip" android:hint="@string/wan_host_help" android:layout_weight="15" >
 			</EditText>
 		</TableRow>
 		<TableRow>
 			<TextView android:text="@string/username" android:padding="3dip">
 			</TextView>
-			<EditText android:id="@+ihc/username" android:layout_weight="50">
+			<EditText android:id="@+id/username" android:layout_weight="50">
 			</EditText>
 		</TableRow>
 		<TableRow>
 			<TextView android:text="@string/password" android:padding="3dip">
 			</TextView>
-			<EditText android:id="@+ihc/password" android:inputType="textPassword"
+			<EditText android:id="@+id/password" android:inputType="textPassword"
 				android:layout_weight="50">
 			</EditText>
 		</TableRow>
@@ -47,12 +47,12 @@
 			<TextView android:text="@string/default_connection_type"
 				android:padding="3dip">
 			</TextView>
-			<CheckBox android:id="@+ihc/WanOnly" android:layout_width="wrap_content"
+			<CheckBox android:id="@+id/WanOnly" android:layout_width="wrap_content"
 				android:layout_height="wrap_content"></CheckBox>
 		</TableRow>
 		<TableRow android:padding="3dip">
 			<TextView android:text="@string/reload_project" android:id="@+id/TextView01" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
-			<CheckBox android:id="@+ihc/reloadProject" android:layout_width="wrap_content" android:layout_height="wrap_content" android:clickable="true"></CheckBox>
+			<CheckBox android:id="@+id/reloadProject" android:layout_width="wrap_content" android:layout_height="wrap_content" android:clickable="true"></CheckBox>
 
 		</TableRow>
 	</TableLayout>

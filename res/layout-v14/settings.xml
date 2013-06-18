@@ -18,25 +18,25 @@
 		<TableRow>
 			<TextView android:text="@string/lan_host" android:padding="3dip">
 			</TextView>
-			<EditText android:id="@+ihc/lan_ip" android:hint="@string/lan_host_help" android:layout_weight="15">
+			<EditText android:id="@+id/lan_ip" android:hint="@string/lan_host_help" android:layout_weight="15">
 			</EditText>
 		</TableRow>
 		<TableRow>
 			<TextView android:text="@string/wan_host" android:padding="3dip">
 			</TextView>
-			<EditText android:id="@+ihc/wan_ip" android:hint="@string/wan_host_help" android:layout_weight="15" >
+			<EditText android:id="@+id/wan_ip" android:hint="@string/wan_host_help" android:layout_weight="15" >
 			</EditText>
 		</TableRow>
 		<TableRow>
 			<TextView android:text="@string/username" android:padding="3dip">
 			</TextView>
-			<EditText android:id="@+ihc/username" android:layout_weight="50">
+			<EditText android:id="@+id/username" android:layout_weight="50">
 			</EditText>
 		</TableRow>
 		<TableRow>
 			<TextView android:text="@string/password" android:padding="3dip">
 			</TextView>
-			<EditText android:id="@+ihc/password" android:inputType="textPassword"
+			<EditText android:id="@+id/password" android:inputType="textPassword"
 				android:layout_weight="50">
 			</EditText>
 		</TableRow>
@@ -44,7 +44,7 @@
 <TableLayout android:layout_width="match_parent" android:orientation="vertical">
 		<TableRow android:padding="3dip">
 			<Switch
-			    android:id="@+ihc/WanOnly"	    
+			    android:id="@+id/WanOnly"
 			    android:layout_width="wrap_content"
 			    android:layout_height="wrap_content"
 			    android:textOn="@string/wan"
@@ -54,7 +54,7 @@
 		</TableRow>
 		<TableRow android:padding="3dip">
 		    <Switch
-			    android:id="@+ihc/reloadProject"
+			    android:id="@+id/reloadProject"
 			    android:layout_width="wrap_content"
 			    android:layout_height="wrap_content"
 			    android:text="@string/reload_project" />

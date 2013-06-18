@@ -178,8 +178,8 @@ public class ResourceActivity extends Activity implements OnClickListener, Contr
 		while (iLocations.hasNext()) 
 		{
 			IHCLocation location = iLocations.next();
-			if (location.Name.equals(selectedLocation)) {
-				Iterator<IHCResource> iResources = location.resources.iterator();
+			if (location.getName().equals(selectedLocation)) {
+				Iterator<IHCResource> iResources = location.getResources().iterator();
 				while (iResources.hasNext()) { 
 					IHCResource ihcResource = iResources.next();
 					if(ihcResource.equals((IHCResource) LocationFragment.resourceAdapter.getItem(info.position)))

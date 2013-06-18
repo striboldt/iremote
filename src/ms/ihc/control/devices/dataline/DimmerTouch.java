@@ -130,7 +130,6 @@ public class DimmerTouch extends ioResource implements IHCResource, java.io.Seri
 
 	@Override
 	public void setInputClicked(boolean OnOff, int inputID, SoapImpl ihcCtrl) {
-		// TODO Auto-generated method stub
 		
 	}
 	

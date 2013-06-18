@@ -128,7 +128,6 @@ public class UserDefinedOutputW_Scenario extends ioResource implements IHCResour
 
 	@Override
 	public void setInputClicked(boolean OnOff, int inputID, SoapImpl ihcCtrl) {
-		// TODO Auto-generated method stub
 		
 	}
 	

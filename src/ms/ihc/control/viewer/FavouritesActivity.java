@@ -53,10 +53,10 @@ public class FavouritesActivity extends Activity implements OnClickListener, Con
 			Iterator<IHCLocation> iLocations = appContext.getIHCHome().locations.iterator();
 			while (iLocations.hasNext()) {
 				IHCLocation location = iLocations.next();
-				Iterator<IHCResource> iResources = location.resources.iterator();
+				Iterator<IHCResource> iResources = location.getResources().iterator();
 				while (iResources.hasNext()) {
 					IHCResource resource = iResources.next();
-					resource.setLocation(location.Name);	
+					resource.setLocation(location.getName());
 					if(resource.isFavourite())
 						resourceAdapter.addItem(resource);
 					
@@ -172,7 +172,7 @@ public class FavouritesActivity extends Activity implements OnClickListener, Con
 		while (iLocations.hasNext()) 
 		{
 			IHCLocation location = iLocations.next();
-			Iterator<IHCResource> iResources = location.resources.iterator();
+			Iterator<IHCResource> iResources = location.getResources().iterator();
 			while (iResources.hasNext()) { 
 				IHCResource ihcResource = iResources.next();
 				if(ihcResource.equals((IHCResource) resourceAdapter.getItem(info.position)))

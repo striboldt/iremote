@@ -129,7 +129,6 @@ public class OutputResource extends ioResource implements IHCResource, java.io.S
 
 	@Override
 	public void setInputClicked(boolean OnOff, int inputID, SoapImpl ihcCtrl) {
-		// TODO Auto-generated method stub
 		
 	}
 	

@@ -49,10 +49,10 @@ public class ActiveResourcesActivity extends Activity implements OnClickListener
 			Iterator<IHCLocation> iLocations = appContext.getIHCHome().locations.iterator();
 			while (iLocations.hasNext()) {
 				IHCLocation location = iLocations.next();
-				Iterator<IHCResource> iResources = location.resources.iterator();
+				Iterator<IHCResource> iResources = location.getResources().iterator();
 				while (iResources.hasNext()) {
 					IHCResource resource = iResources.next();
-					resource.setLocation(location.Name);
+					resource.setLocation(location.getName());
 					if(resource.type() == DeviceType.INPUT_OUTPUT || resource.type() == DeviceType.OUTPUT)
 					{
 						if(resource.getState())

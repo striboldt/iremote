@@ -642,8 +642,8 @@ public class SoapImpl{
 				 {
 					 location = new IHCLocation();
 					 home.locations.add(location);
-					 location.Name = xpp.getAttributeValue(null, "name");
-					 System.out.println(location.Name);
+					 location.setName(xpp.getAttributeValue(null, "name"));
+					 System.out.println(location.getName());
 				 }
 	     		 // Wireless or Standard IHC resources
 				 else if(xpp.getName().equals("product_airlink"))
@@ -659,7 +659,7 @@ public class SoapImpl{
 							
 						 ihcResource.setState(false);	
 						 ihcResource.setupResources(xpp, xpp.getName());
-						 location.resources.add(ihcResource);
+						 location.getResources().add(ihcResource);
 					 }
 					 catch(Exception ihc)
 					 {
@@ -679,7 +679,7 @@ public class SoapImpl{
 							
 						 ihcResource.setState(false);	
 						 ihcResource.setupResources(xpp, xpp.getName());
-						 location.resources.add(ihcResource);
+						 location.getResources().add(ihcResource);
 					 }
 					 catch(Exception ihc)
 					 {

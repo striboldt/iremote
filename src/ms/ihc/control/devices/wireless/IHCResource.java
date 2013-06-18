@@ -63,9 +63,9 @@ public interface IHCResource extends View.OnClickListener  {
 	public static final int TASTTRYK4_4D_OPUS = 0x2106;
 	public static final int TASTTRYK6_3D_FUGA = 0x2107;
 	public static final int TASTTRYK4_4D_FUGA = 0x2108;
-	public static final int ELKO_TEMPERATURFØLER = 0x2122;
+	public static final int ELKO_TEMPSENSOR = 0x2122;
 	public static final int TASTTRYK2_4D_FUGA = 0x2130;
-	public static final int TEMPERATURFØLER = 0x2124;
+	public static final int TEMPSENSOR = 0x2124;
 	
 	public static final int TASTTRYK12 = 0x21312;
 	public static final int GENERISK_INPUT = 0x2701;
@@ -123,8 +123,8 @@ public interface IHCResource extends View.OnClickListener  {
 			put(DOORLOCK,OutputResource.class);
 			put(RINGEKLOKKE,OutputResource.class);
 			
-			put(TEMPERATURFØLER,TemperatureSensor.class);
-			put(ELKO_TEMPERATURFØLER,TemperatureSensor.class);
+			put(TEMPSENSOR,TemperatureSensor.class);
+			put(ELKO_TEMPSENSOR,TemperatureSensor.class);
 			// New added 16-02-2011
 			put(MOBIL_STIKKONTAKT_DIMMER,UniDimmer.class);
 			put(TASTTRYK12,Panel12Button.class);

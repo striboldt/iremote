@@ -73,8 +73,9 @@ public class LocationFragment extends Fragment implements OnItemClickListener, C
 				list = new ArrayList<HashMap<String,String>>();
 				for (IHCLocation location : home.getLocations()) {
 					HashMap<String, String> map = new HashMap<String, String>();
-					map.put("location", location);
-					map.put("resources", getResources().getString(R.string.resources) + String.valueOf(location.resources.size()));
+                    // TODO: Refactor locations to reflect new fragment design
+					map.put("location", location.getName());
+				//	map.put("resources", getResources().getString(R.string.resources) + String.valueOf(location.resources.size()));
 					list.add(map);
 				}
 			}
@@ -99,8 +100,8 @@ public class LocationFragment extends Fragment implements OnItemClickListener, C
 		
 		return view;
 	}
-	
-	/** Called when the Menu button is pushed */
+
+    /** Called when the Menu button is pushed */
 	/*
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -173,11 +174,11 @@ public class LocationFragment extends Fragment implements OnItemClickListener, C
 			
 			resourceAdapter = new ResourceAdapter(getActivity().getApplicationContext(),soapImp);
 
-			Iterator<IHCLocation> iLocations = home.locations.iterator();
+			Iterator<IHCLocation> iLocations = home.getLocations().iterator();
 			while (iLocations.hasNext()) {
 				IHCLocation location = iLocations.next();
-				if (location.Name.equals(selectedResource)) {
-					Iterator<IHCResource> iResources = location.resources.iterator();
+				if (location.getName().equals(selectedResource)) {
+					Iterator<IHCResource> iResources = location.getResources().iterator();
 					while (iResources.hasNext()) {
 						IHCResource ihcResource = iResources.next();
 						ihcResource.setLocation("");
@@ -196,10 +197,10 @@ public class LocationFragment extends Fragment implements OnItemClickListener, C
 		@Override
 		protected Boolean doInBackground(Void... params) {
 			resourceMap = new HashMap<Integer, IHCResource>();
-			Iterator<IHCLocation> iLocations = home.locations.iterator();
+			Iterator<IHCLocation> iLocations = home.getLocations().iterator();
 			while (iLocations.hasNext()) {
 				IHCLocation location = iLocations.next();
-					Iterator<IHCResource> iResources = location.resources.iterator();
+					Iterator<IHCResource> iResources = location.getResources().iterator();
 					while (iResources.hasNext()) {
 						IHCResource resource = iResources.next();
 						resourceMap = resource.getResourceIds(resourceMap);
@@ -211,25 +212,26 @@ public class LocationFragment extends Fragment implements OnItemClickListener, C
 	}
 	
 	
-	// Called when app is resumed from background
-	@Override
-	protected void onResume() {
-		super.onResume();
-		mHandler.postDelayed(waitForResourceValuesChange, 100);
-	}
+    // Called when app is resumed from background
+    @Override
+    public void onResume() {
+        super.onResume();
+        mHandler.postDelayed(waitForResourceValuesChange, 100);
+    }
 
 	// Called when app is put into background
 	@Override
-	protected void onPause() {
+	public void onPause() {
 		super.onPause();
 		mHandler.removeCallbacks(waitForResourceValuesChange);
 	}
-	
-	@Override 
+
+    // TODO: Not used, but test impact on application
+	/*@Override
 	public void onBackPressed() {  
 		((ApplicationContext) getApplication()).setIsAppRestarted(false);
 		super.onBackPressed();
-	}
+	}*/
 	
 	private Runnable waitForResourceValuesChange = new Runnable() {
 		public void run() {

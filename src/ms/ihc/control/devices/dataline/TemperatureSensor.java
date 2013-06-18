@@ -146,7 +146,6 @@ public class TemperatureSensor extends ioResource implements IHCResource, java.i
 
 	@Override
 	public void setInputClicked(boolean OnOff, int inputID, SoapImpl ihcCtrl) {
-		// TODO Auto-generated method stub
 		
 	}
 	
