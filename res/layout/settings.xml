@@ -47,12 +47,12 @@
 			<TextView android:text="@string/default_connection_type"
 				android:padding="3dip">
 			</TextView>
-			<CheckBox android:id="@+id/WanOnly" android:layout_width="wrap_content"
+			<CheckBox android:id="@+id/WanOnly" android:layout_width="150dp"
 				android:layout_height="wrap_content"></CheckBox>
 		</TableRow>
 		<TableRow android:padding="3dip">
 			<TextView android:text="@string/reload_project" android:id="@+id/TextView01" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
-			<CheckBox android:id="@+id/reloadProject" android:layout_width="wrap_content" android:layout_height="wrap_content" android:clickable="true"></CheckBox>
+			<CheckBox android:id="@+id/reloadProject" android:layout_width="150dp" android:layout_height="wrap_content" android:clickable="true"></CheckBox>
 
 		</TableRow>
 	</TableLayout>

@@ -11,7 +11,7 @@ import ms.ihc.control.devices.dataline.Panel6Button_Fuga;
 import ms.ihc.control.devices.dataline.Panel8Button;
 import ms.ihc.control.devices.dataline.TemperatureSensor;
 import ms.ihc.control.valueTypes.DeviceType;
-import ms.ihc.control.viewer.SoapImpl;
+import ms.ihc.control.viewer.IhcManager;
 
 import org.xmlpull.v1.XmlPullParser;
 
@@ -161,7 +161,7 @@ public interface IHCResource extends View.OnClickListener  {
 	public Boolean isFavourite();
 	
 	
-	public void setDimmerValue(SoapImpl ihcCtrl);
+	public void setDimmerValue(IhcManager ihcCtrl);
 	public int getDimmerValue();
 	
 	public void setPosition(String position);
@@ -171,9 +171,9 @@ public interface IHCResource extends View.OnClickListener  {
 
 	public Boolean getIsDimmable();
 	
-	public void inputClicked(int inputID, SoapImpl ihcCtrl);
+	public void inputClicked(int inputID, IhcManager ihcCtrl);
 	
-	public View getView(LayoutInflater layoutInf, SoapImpl ihcCtrl);
+	public View getView(LayoutInflater layoutInf, IhcManager ihcCtrl);
 	public View updateView(View convertView);
 
 }

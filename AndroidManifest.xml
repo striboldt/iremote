@@ -19,22 +19,14 @@
         android:icon="@drawable/remote"
         android:label="@string/app_name" >
         <activity
-            android:name="ms.ihc.control.viewer.IHCControl"
-            android:clearTaskOnLaunch="true"
+            android:name="ms.ihc.control.activities.MainActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/app_name"
-            android:launchMode="singleTask"
             android:screenOrientation="sensor" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-        <activity
-            android:name="ms.ihc.control.fragments.LocationFragment"
-            android:configChanges="keyboardHidden|orientation|screenSize"
-            android:screenOrientation="sensor" >
         </activity>
         <activity
             android:name="ms.ihc.control.viewer.ResourceActivity"
@@ -50,11 +42,6 @@
             android:name="ms.ihc.control.viewer.FavouritesActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="sensor" >
-        </activity>
-        <activity
-            android:name="ms.ihc.control.activities.MainActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
-            android:screenOrientation="sensor">
         </activity>
     </application>
 

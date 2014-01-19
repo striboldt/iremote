@@ -5,35 +5,26 @@ import java.util.ArrayList;
 import ms.ihc.control.devices.wireless.IHCResource;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
-import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.View.OnCreateContextMenuListener;
-import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class ResourceAdapter extends BaseAdapter {
 
 	private LayoutInflater mInflater;
-	private SoapImpl ihcCtrl;
+	private IhcManager ihcCtrl;
 
 	private ArrayList<IHCResource> resourceData = new ArrayList<IHCResource>();
 
-	public ResourceAdapter(Context context, SoapImpl ctrl) {
+	public ResourceAdapter(Context context, IhcManager ctrl) {
 		mInflater = LayoutInflater.from(context);
 		ihcCtrl = ctrl;
 	}

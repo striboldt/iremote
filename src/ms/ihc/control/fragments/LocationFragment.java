@@ -8,42 +8,31 @@ import ms.ihc.control.devices.wireless.IHCResource;
 import ms.ihc.control.viewer.ApplicationContext;
 import ms.ihc.control.viewer.IHCHome;
 import ms.ihc.control.viewer.IHCLocation;
+import ms.ihc.control.viewer.IhcManager;
 import ms.ihc.control.viewer.R;
 import ms.ihc.control.viewer.ResourceActivity;
 import ms.ihc.control.viewer.ResourceAdapter;
-import ms.ihc.control.viewer.SoapImpl;
-import ms.ihc.control.viewer.R.id;
-import ms.ihc.control.viewer.R.layout;
-import ms.ihc.control.viewer.R.string;
-import ms.ihc.control.viewer.SoapImpl.ControllerConnection;
-import android.app.Activity;
-import android.app.Dialog;
-import android.content.Context;
+import ms.ihc.control.viewer.IhcManager.ControllerConnection;
+
 import android.content.Intent;
-import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
-import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
 
 public class LocationFragment extends Fragment implements OnItemClickListener, ControllerConnection{
 
 	private ListView locationListView;
 	private Handler mHandler = new Handler();
-	private SoapImpl soapImp = null;
+	private IhcManager ihcManager = null;
 	private IHCHome home = null;
 	public static HashMap<Integer,IHCResource> resourceMap = new HashMap<Integer, IHCResource>();
 	private enableRuntimeValueNotificationsTask runtimeTask = null;
@@ -59,13 +48,11 @@ public class LocationFragment extends Fragment implements OnItemClickListener, C
 		
 		final View view = inflater.inflate(R.layout.locations,container);
 		appContext = (ApplicationContext) getActivity().getApplicationContext();
-		appContext.setIsWaitingForValueChanges(false);
-		soapImp = appContext.getIhcConnector();
-		if(soapImp == null)
+		ihcManager = appContext.getInstaceIhcManager();
+		if(ihcManager == null)
 			this.getActivity().finish();
 		else
 		{
-			soapImp.setControlerConnectionListener(this);
 			home = appContext.getIHCHome();
 			
 			if(list == null)
@@ -172,7 +159,7 @@ public class LocationFragment extends Fragment implements OnItemClickListener, C
 			HashMap<String,String> map = list.get(position);
 			String selectedResource = map.get("location");
 			
-			resourceAdapter = new ResourceAdapter(getActivity().getApplicationContext(),soapImp);
+			resourceAdapter = new ResourceAdapter(getActivity().getApplicationContext(), ihcManager);
 
 			Iterator<IHCLocation> iLocations = home.getLocations().iterator();
 			while (iLocations.hasNext()) {
@@ -206,7 +193,7 @@ public class LocationFragment extends Fragment implements OnItemClickListener, C
 						resourceMap = resource.getResourceIds(resourceMap);
 					}
 			}
-			soapImp.enableRuntimeValueNotifications(resourceMap);
+			ihcManager.enableRuntimeValueNotifications(resourceMap);
 			return true;
 		}
 	}
@@ -253,7 +240,7 @@ public class LocationFragment extends Fragment implements OnItemClickListener, C
 		@Override
 		protected Boolean doInBackground(Void... params) {
 			Log.v("waitForResourceValueChangesTask-LocationActivity", "Waiting for valuechanges");
-			return soapImp.waitForResourceValueChanges(LocationFragment.resourceMap);
+			return ihcManager.waitForResourceValueChanges(LocationFragment.resourceMap);
 		}
 
 		@Override
@@ -276,7 +263,7 @@ public class LocationFragment extends Fragment implements OnItemClickListener, C
 
 		@Override
 		protected void onPostExecute(Boolean result) {
-			if (LocationFragment.resourceAdapter != null && !soapImp.isInTouchMode) {
+			if (LocationFragment.resourceAdapter != null && !ihcManager.isInTouchMode) {
 				Log.v("refresjResourceViewTask-ResourceActivity", "Refreshing view...");
 				LocationFragment.resourceAdapter.notifyDataSetChanged();
 			}

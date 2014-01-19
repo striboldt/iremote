@@ -3,19 +3,16 @@ package ms.ihc.control.devices.wireless;
 import java.io.IOException;
 import java.util.HashMap;
 
+import ms.ihc.control.viewer.IhcManager;
 import ms.ihc.control.viewer.R;
-import ms.ihc.control.viewer.SoapImpl;
 import ms.ihc.control.viewer.ResourceAdapter.ViewHolder;
 import ms.ihc.control.valueTypes.DeviceType;
 import ms.ihc.control.valueTypes.WSBooleanValue;
 import org.ksoap2.serialization.PropertyInfo;
 import org.ksoap2.serialization.SoapObject;
-import org.w3c.dom.Node;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
-import android.graphics.PorterDuff.Mode;
-import android.os.AsyncTask;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -75,7 +72,7 @@ public class PuckRelay extends ioResource implements IHCResource, java.io.Serial
 		return this.state;
 	}
 
-	public void setDimmerValue(SoapImpl ihcCtrl) {
+	public void setDimmerValue(IhcManager ihcCtrl) {
 		//this.dimmerValue = dimmerValue;
 
 	}
@@ -130,12 +127,12 @@ public class PuckRelay extends ioResource implements IHCResource, java.io.Serial
 	}
 
 	@Override
-	public void setInputClicked(boolean OnOff, int inputID, SoapImpl ihcCtrl) {
+	public void setInputClicked(boolean OnOff, int inputID, IhcManager ihcCtrl) {
 		// Not implemented
 	}
 	
 	@Override
-	public void inputClicked(int inputID, SoapImpl ihcCtrl) {
+	public void inputClicked(int inputID, IhcManager ihcCtrl) {
 		Boolean value = true;
 		
 		if(inputID == 2)
@@ -160,7 +157,7 @@ public class PuckRelay extends ioResource implements IHCResource, java.io.Serial
 		
 	}
 
-	public View getView(LayoutInflater layoutInf, SoapImpl ihcCtrl) {
+	public View getView(LayoutInflater layoutInf, IhcManager ihcCtrl) {
 		View ConvertView = layoutInf.inflate(R.layout.panel2button, null);
 		ViewHolder holder = new ViewHolder();
         holder.position = (TextView)ConvertView.findViewById(R.id.position);

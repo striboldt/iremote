@@ -5,7 +5,7 @@ import java.util.Iterator;
 import ms.ihc.control.devices.wireless.IHCResource;
 import ms.ihc.control.fragments.LocationFragment;
 
-import ms.ihc.control.viewer.SoapImpl.ControllerConnection;
+import ms.ihc.control.viewer.IhcManager.ControllerConnection;
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -28,7 +28,7 @@ public class FavouritesActivity extends Activity implements OnClickListener, Con
 	private ListView favouritesListView;
 	private TableRow favouritesTableRow;
 	private TextView favouritesTextView;
-	private SoapImpl soapImp = null;
+	private IhcManager soapImp = null;
 	private ResourceAdapter resourceAdapter;
 	private ApplicationContext appContext;
 	
@@ -38,12 +38,12 @@ public class FavouritesActivity extends Activity implements OnClickListener, Con
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.resources);
 		appContext = (ApplicationContext) getApplication();
-		soapImp = appContext.getIhcConnector();
+//		soapImp = appContext.getIhcManager();
 		if(soapImp == null)
 			this.finish();
 		else
 		{
-			soapImp.setControlerConnectionListener(this);
+	//		soapImp.setControlerConnectionListener(this);
 			favouritesListView = (ListView) findViewById(R.id.resourcelist);
 			favouritesTableRow = (TableRow) findViewById(R.id.HeaderTableRow);
 			favouritesTextView = (TextView) findViewById(R.id.locationtext1);

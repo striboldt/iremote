@@ -4,7 +4,7 @@ import java.util.Iterator;
 
 import ms.ihc.control.devices.wireless.IHCResource;
 import ms.ihc.control.fragments.LocationFragment;
-import ms.ihc.control.viewer.SoapImpl.ControllerConnection;
+import ms.ihc.control.viewer.IhcManager.ControllerConnection;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
@@ -29,7 +29,7 @@ public class ResourceActivity extends Activity implements OnClickListener, Contr
 
 	private ListView resourceListView;
 	private TableRow resourceTableRow;
-	private SoapImpl soapImp = null;
+	private IhcManager soapImp = null;
 	private ApplicationContext appContext;
 	private TextView resourceTextView1;
 	private TextView resourceTextView2;
@@ -41,13 +41,13 @@ public class ResourceActivity extends Activity implements OnClickListener, Contr
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.resources);
 		appContext = (ApplicationContext) getApplication();
-		soapImp = appContext.getIhcConnector();
+		//soapImp = appContext.getIhcManager();
 		
 		if(soapImp == null)
 			this.finish();
 		else
 		{
-			soapImp.setControlerConnectionListener(this);
+		//	soapImp.setControlerConnectionListener(this);
 			Intent i = getIntent();
 			selectedLocation = i.getStringExtra("location");
 	

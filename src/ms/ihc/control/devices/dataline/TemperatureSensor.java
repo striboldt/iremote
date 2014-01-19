@@ -5,8 +5,8 @@ import java.math.BigDecimal;
 import java.util.HashMap;
 
 import ms.ihc.control.valueTypes.DeviceType;
+import ms.ihc.control.viewer.IhcManager;
 import ms.ihc.control.viewer.R;
-import ms.ihc.control.viewer.SoapImpl;
 import ms.ihc.control.viewer.ResourceAdapter.ViewHolder;
 import ms.ihc.control.devices.wireless.IHCResource;
 import ms.ihc.control.devices.wireless.ioResource;
@@ -80,7 +80,7 @@ public class TemperatureSensor extends ioResource implements IHCResource, java.i
 		return this.state;
 	}
 
-	public void setDimmerValue(SoapImpl ihcCtrl) {
+	public void setDimmerValue(IhcManager ihcCtrl) {
 		//this.dimmerValue = dimmerValue;
 	}
 
@@ -145,15 +145,15 @@ public class TemperatureSensor extends ioResource implements IHCResource, java.i
 	}
 
 	@Override
-	public void setInputClicked(boolean OnOff, int inputID, SoapImpl ihcCtrl) {
+	public void setInputClicked(boolean OnOff, int inputID, IhcManager ihcCtrl) {
 		
 	}
 	
 	@Override
-	public void inputClicked(int inputID, SoapImpl ihcCtrl) {	
+	public void inputClicked(int inputID, IhcManager ihcCtrl) {
 	}
 
-	public View getView(LayoutInflater layoutInf, SoapImpl ihcCtrl) {
+	public View getView(LayoutInflater layoutInf, IhcManager ihcCtrl) {
 		View ConvertView = layoutInf.inflate(R.layout.temperature, null);
 		ViewHolder holder = new ViewHolder();
         holder.position = (TextView)ConvertView.findViewById(R.id.position);

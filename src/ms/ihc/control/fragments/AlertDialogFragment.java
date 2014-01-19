@@ -29,7 +29,7 @@ public class AlertDialogFragment extends DialogFragment {
         int title = getArguments().getInt("title");
 
         // We have only one dialog.
-        return new AlertDialog.Builder(getActivity())
+        AlertDialog dialog = new AlertDialog.Builder(getActivity())
                 .setTitle(title)
                 .setMessage(R.string.unlicensed_dialog_body)
                 .setPositiveButton(R.string.buy_button, new DialogInterface.OnClickListener() {
@@ -37,7 +37,7 @@ public class AlertDialogFragment extends DialogFragment {
                         Intent marketIntent = new Intent(Intent.ACTION_VIEW).setData( Uri.parse(
                                 "market://details?id=" + getActivity().getPackageName()));
                         startActivity(marketIntent);
-                        getActivity().finish();
+                        //getActivity().finish();
                     }
                 })
                 .setNegativeButton(R.string.quit_button, new DialogInterface.OnClickListener() {
@@ -55,5 +55,8 @@ public class AlertDialogFragment extends DialogFragment {
                     }
                 })
                 .create();
+
+        dialog.setCanceledOnTouchOutside(false);
+        return dialog;
     }
 }

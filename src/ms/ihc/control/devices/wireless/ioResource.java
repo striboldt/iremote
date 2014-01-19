@@ -1,7 +1,8 @@
 package ms.ihc.control.devices.wireless;
 
+import ms.ihc.control.viewer.IhcManager;
 import ms.ihc.control.viewer.R;
-import ms.ihc.control.viewer.SoapImpl;
+
 import android.annotation.SuppressLint;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -18,8 +19,8 @@ public abstract class ioResource implements OnLongClickListener, java.io.Seriali
 	 */
 	private static final long serialVersionUID = -1240051520566963622L;
 	private boolean longClickDetected = false;
-	public abstract void inputClicked(int inputID, SoapImpl ihcCtrl);
-	public abstract void setInputClicked(boolean OnOff, int inputID, SoapImpl ihcCtrl);
+	public abstract void inputClicked(int inputID, IhcManager ihcCtrl);
+	public abstract void setInputClicked(boolean OnOff, int inputID, IhcManager ihcCtrl);
 	public boolean isFavourite = false;
 	
 	
@@ -71,7 +72,7 @@ public abstract class ioResource implements OnLongClickListener, java.io.Seriali
 					
 		}	
 		
-		SoapImpl ihcCtrl = (SoapImpl)btn.getTag();
+		IhcManager ihcCtrl = (IhcManager)btn.getTag();
 		
 		if(longClickDetected)
 		{
@@ -143,7 +144,7 @@ public abstract class ioResource implements OnLongClickListener, java.io.Seriali
 					
 		}	
 		
-		SoapImpl ihcCtrl = (SoapImpl)btn.getTag();
+		IhcManager ihcCtrl = (IhcManager)btn.getTag();
 		ihcCtrl.isInTouchMode = true;
 		if (Build.VERSION.SDK_INT>=Build.VERSION_CODES.HONEYCOMB) {
 			new ClickBgEvent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,button,ihcCtrl,true);
@@ -160,7 +161,7 @@ public abstract class ioResource implements OnLongClickListener, java.io.Seriali
 		protected Boolean doInBackground(Object... params) {
 			Log.v("ioResource.ClickBgEvent", "Running AsyncTask");
 			int btnNumber = (Integer)params[0];
-			SoapImpl ihcCtrl = (SoapImpl) params[1];
+			IhcManager ihcCtrl = (IhcManager) params[1];
 			if(params.length > 2)
 			{	
 				setInputClicked((Boolean)params[2], btnNumber, ihcCtrl);
@@ -180,7 +181,7 @@ public abstract class ioResource implements OnLongClickListener, java.io.Seriali
 	public class SetDimmerEvent extends AsyncTask<Object, Void, Boolean> {
 		@Override
 		protected Boolean doInBackground(Object... params) {
-			SoapImpl ihcCtrl = (SoapImpl) params[0];
+			IhcManager ihcCtrl = (IhcManager) params[0];
 			setDimmerValue(ihcCtrl);
 			return true;
 		}
@@ -189,7 +190,7 @@ public abstract class ioResource implements OnLongClickListener, java.io.Seriali
 		}
 	}
 
-	public abstract void setDimmerValue(SoapImpl ihcCtrl);
+	public abstract void setDimmerValue(IhcManager ihcCtrl);
 
 	
 

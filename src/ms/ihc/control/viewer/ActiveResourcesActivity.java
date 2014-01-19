@@ -5,7 +5,7 @@ import java.util.Iterator;
 import ms.ihc.control.devices.wireless.IHCResource;
 import ms.ihc.control.fragments.LocationFragment;
 import ms.ihc.control.valueTypes.DeviceType;
-import ms.ihc.control.viewer.SoapImpl.ControllerConnection;
+import ms.ihc.control.viewer.IhcManager.ControllerConnection;
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -23,7 +23,7 @@ public class ActiveResourcesActivity extends Activity implements OnClickListener
 	private ListView resourceListView;
 	private TableRow resourceTableRow;
 	private TextView resourceTextView;
-	private SoapImpl soapImp = null;
+	private IhcManager ihcManager = null;
 	private ResourceAdapter resourceAdapter;
 	private ApplicationContext appContext;
 	
@@ -33,18 +33,16 @@ public class ActiveResourcesActivity extends Activity implements OnClickListener
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.resources);
 		appContext = (ApplicationContext) getApplication();
-		soapImp = appContext.getIhcConnector();
-		if(soapImp == null)
+		ihcManager = appContext.getInstaceIhcManager();
+		if(ihcManager == null)
 			this.finish();
 		else
 		{
-
-			soapImp.setControlerConnectionListener(this);
 			resourceListView = (ListView) findViewById(R.id.resourcelist);
 			resourceTableRow = (TableRow) findViewById(R.id.HeaderTableRow);
 			resourceTextView = (TextView) findViewById(R.id.locationtext1);
 	
-			resourceAdapter = new ResourceAdapter(getApplicationContext(),soapImp);
+			resourceAdapter = new ResourceAdapter(getApplicationContext(), ihcManager);
 	
 			Iterator<IHCLocation> iLocations = appContext.getIHCHome().locations.iterator();
 			while (iLocations.hasNext()) {
@@ -104,7 +102,7 @@ public class ActiveResourcesActivity extends Activity implements OnClickListener
 		@Override
 		protected Boolean doInBackground(Void... params) {
 			Log.v("waitForResourceValueChangesTask", "Waiting for valuechanges");
-			return soapImp.waitForResourceValueChanges(LocationFragment.resourceMap);
+			return ihcManager.waitForResourceValueChanges(LocationFragment.resourceMap);
 		}
 
 		@Override
@@ -129,7 +127,7 @@ public class ActiveResourcesActivity extends Activity implements OnClickListener
 
 		@Override
 		protected void onPostExecute(Boolean result) {
-			if (resourceAdapter != null && !soapImp.isInTouchMode) {
+			if (resourceAdapter != null && !ihcManager.isInTouchMode) {
 				Log.v("refresjResourceViewTask", "Refreshing view...");
 				resourceAdapter.notifyDataSetChanged();
 			}

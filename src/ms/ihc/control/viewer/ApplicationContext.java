@@ -13,7 +13,7 @@ import android.widget.Toast;
 
 public class ApplicationContext extends Application{
 	
-	private SoapImpl ihcConnector;
+	private IhcManager ihcManager;
 	private IHCHome home;
 	private Boolean isAppRestarted;
 	private Boolean waitingForValueChanges;
@@ -24,12 +24,13 @@ public class ApplicationContext extends Application{
 		Log.v("ApplicationContext", "Instantiating app context");
 	}
 
-	public void setIhcConnector(SoapImpl ihcConnector) {
-		this.ihcConnector = ihcConnector;
-	}
 
-	public SoapImpl getIhcConnector() {
-		return ihcConnector;
+	public IhcManager getInstaceIhcManager() {
+		if(ihcManager == null)
+            return new IhcManager(this);
+        else
+            return ihcManager;
+
 	}
 
 	public void setIHCHome(IHCHome home) {

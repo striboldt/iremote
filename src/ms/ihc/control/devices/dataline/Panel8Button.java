@@ -3,8 +3,8 @@ package ms.ihc.control.devices.dataline;
 import java.io.IOException;
 import java.util.HashMap;
 
+import ms.ihc.control.viewer.IhcManager;
 import ms.ihc.control.viewer.R;
-import ms.ihc.control.viewer.SoapImpl;
 import ms.ihc.control.viewer.ResourceAdapter.ViewHolder;
 import ms.ihc.control.devices.wireless.IHCResource;
 import ms.ihc.control.devices.wireless.ioResource;
@@ -78,7 +78,7 @@ public class Panel8Button extends ioResource implements IHCResource, java.io.Ser
 		return this.state;
 	}
 
-	public void setDimmerValue(SoapImpl ihcCtrl) {
+	public void setDimmerValue(IhcManager ihcCtrl) {
 		//this.dimmerValue = dimmerValue;
 
 	}
@@ -154,7 +154,7 @@ public class Panel8Button extends ioResource implements IHCResource, java.io.Ser
 	}
 
 	@Override
-	public void setInputClicked(boolean OnOff, int inputID, SoapImpl ihcCtrl) {
+	public void setInputClicked(boolean OnOff, int inputID, IhcManager ihcCtrl) {
 		int resourceClicked = 0;
 		if(inputID == 1)
 			resourceClicked = this.one;
@@ -199,7 +199,7 @@ public class Panel8Button extends ioResource implements IHCResource, java.io.Ser
 	}
 	
 	@Override
-	public void inputClicked(int inputID, SoapImpl ihcCtrl) {
+	public void inputClicked(int inputID, IhcManager ihcCtrl) {
 		int resourceClicked = 0;
 		
 		if(inputID == 1)
@@ -262,7 +262,7 @@ public class Panel8Button extends ioResource implements IHCResource, java.io.Ser
 		
 	}
 
-	public View getView(LayoutInflater layoutInf, SoapImpl ihcCtrl) {
+	public View getView(LayoutInflater layoutInf, IhcManager ihcCtrl) {
 		View ConvertView = layoutInf.inflate(R.layout.panel8button, null);
 		ViewHolder holder = new ViewHolder();
 		holder.position = (TextView)ConvertView.findViewById(R.id.position);

@@ -8,6 +8,8 @@
 
     <fragment
         android:id="@+id/locationfragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         class="ms.ihc.control.fragments.LocationFragment"
         tools:layout="@layout/locations" />
 

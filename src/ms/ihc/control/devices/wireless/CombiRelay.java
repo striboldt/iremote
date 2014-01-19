@@ -3,8 +3,8 @@ package ms.ihc.control.devices.wireless;
 import java.io.IOException;
 import java.util.HashMap;
 
+import ms.ihc.control.viewer.IhcManager;
 import ms.ihc.control.viewer.R;
-import ms.ihc.control.viewer.SoapImpl;
 import ms.ihc.control.viewer.ResourceAdapter.ViewHolder;
 import ms.ihc.control.valueTypes.DeviceType;
 import ms.ihc.control.valueTypes.WSBooleanValue;
@@ -78,7 +78,7 @@ public class CombiRelay extends ioResource implements IHCResource, java.io.Seria
 		return this.state;
 	}
 
-	public void setDimmerValue(SoapImpl ihcCtrl) {
+	public void setDimmerValue(IhcManager ihcCtrl) {
 
 	}
 
@@ -146,7 +146,7 @@ public class CombiRelay extends ioResource implements IHCResource, java.io.Seria
 	}
 
 	@Override
-	public void setInputClicked(boolean OnOff, int inputID, SoapImpl ihcCtrl) {
+	public void setInputClicked(boolean OnOff, int inputID, IhcManager ihcCtrl) {
 		int resourceClicked = 0;
 		if(inputID == 3)
 			resourceClicked = this.upper_left_id;
@@ -185,7 +185,7 @@ public class CombiRelay extends ioResource implements IHCResource, java.io.Seria
 	}
 	
 	@Override
-	public void inputClicked(int inputID, SoapImpl ihcCtrl) {
+	public void inputClicked(int inputID, IhcManager ihcCtrl) {
 		int resourceClicked = 0;
 		
 		
@@ -267,7 +267,7 @@ public class CombiRelay extends ioResource implements IHCResource, java.io.Seria
 		
 	}
 
-	public View getView(LayoutInflater layoutInf, SoapImpl ihcCtrl) {
+	public View getView(LayoutInflater layoutInf, IhcManager ihcCtrl) {
 		View ConvertView = layoutInf.inflate(R.layout.combi4relay, null);
 		ViewHolder holder = new ViewHolder();
 		holder.position = (TextView)ConvertView.findViewById(R.id.position);

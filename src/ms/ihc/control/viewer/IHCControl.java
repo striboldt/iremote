@@ -29,13 +29,14 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+@Deprecated
 public class IHCControl extends FragmentActivity {
 
 	private LicenseCheckerCallback mLicenseCheckerCallback;   
 	private LicenseChecker mChecker;
 	
 	private static final String PREFS_NAME = "IHCSettings";
-	private SoapImpl soapImp = new SoapImpl();
+	private IhcManager ihcManager = null;
 	private ProgressDialog dialog;
 	
 	private SharedPreferences settings = null;
@@ -282,10 +283,10 @@ public class IHCControl extends FragmentActivity {
 		
 		@Override
 		protected Boolean doInBackground(String... params) {
-			boolean result = soapImp.Authenticate(params[0], params[1],
-					params[2], settings.getBoolean("wanonly", false));
+			boolean result = ihcManager.authenticate(params[0], params[1],
+                    params[2], settings.getBoolean("wanonly", false));
 			if (!result)
-				loginMessage = soapImp.getLoginMessage();
+				loginMessage = ihcManager.getLoginMessage();
 			return result;
 		}
 		
@@ -337,7 +338,7 @@ public class IHCControl extends FragmentActivity {
 
 			if(params[0] || forceReload)
 			{
-				((ApplicationContext) getApplication()).setIHCHome(soapImp.getIHCProject(simulationMode,streamIn));
+				((ApplicationContext) getApplication()).setIHCHome(ihcManager.getIHCProject(simulationMode, streamIn));
 				if(((ApplicationContext) getApplication()).writeDataFile("iremote.data"))
 					forceReload = false;
 				

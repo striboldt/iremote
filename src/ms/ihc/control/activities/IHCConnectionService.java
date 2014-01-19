@@ -1,7 +1,8 @@
 package ms.ihc.control.activities;
 
 import ms.ihc.control.viewer.ApplicationContext;
-import ms.ihc.control.viewer.SoapImpl;
+import ms.ihc.control.viewer.IhcManager;
+
 import android.app.Service;
 import android.content.Intent;
 import android.os.Binder;
@@ -14,7 +15,7 @@ public class IHCConnectionService extends Service {
 	// This is the object that receives interactions from clients.  See
     // RemoteService for a more complete example.
     private final IBinder mBinder = new LocalBinder();
-	private SoapImpl soapImp;
+	private IhcManager ihcManager;
 
 
     /**
@@ -44,7 +45,8 @@ public class IHCConnectionService extends Service {
 	@Override
 	public void onCreate() {
 		super.onCreate();
-		soapImp = new SoapImpl();
+        final ApplicationContext appContext = (ApplicationContext) getApplicationContext();
+        ihcManager = appContext.getInstaceIhcManager();
 	}
 
 
