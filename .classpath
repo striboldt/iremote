@@ -9,5 +9,6 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/ksoap2-j2se"/>
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
 	<classpathentry kind="lib" path="libs/ksoap2-android-assembly-2.5.2-jar-with-dependencies.jar"/>
+	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.DEPENDENCIES"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>
