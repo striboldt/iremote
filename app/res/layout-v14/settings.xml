@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout android:layout_width="fill_parent"
+	android:layout_height="fill_parent" xmlns:android="http://schemas.android.com/apk/res/android">
+	<TableLayout android:layout_width="wrap_content"
+		android:layout_height="wrap_content" android:orientation="vertical"
+		android:background="#ff999999">
+		<TableRow android:layout_width="fill_parent"
+			android:layout_height="wrap_content" android:orientation="horizontal">
+			<TextView android:layout_width="wrap_content"
+				android:layout_height="wrap_content" android:text="@string/settings"
+				android:textStyle="bold" android:textColor="#ff000000">
+			</TextView>
+
+		</TableRow>
+	</TableLayout>
+	<TableLayout android:layout_width="wrap_content"
+		android:layout_height="wrap_content" android:orientation="vertical">
+		<TableRow>
+			<TextView android:text="@string/lan_host" android:padding="3dip">
+			</TextView>
+			<EditText android:id="@+id/lan_ip" android:hint="@string/lan_host_help" android:layout_weight="15">
+			</EditText>
+		</TableRow>
+		<TableRow>
+			<TextView android:text="@string/wan_host" android:padding="3dip">
+			</TextView>
+			<EditText android:id="@+id/wan_ip" android:hint="@string/wan_host_help" android:layout_weight="15" >
+			</EditText>
+		</TableRow>
+		<TableRow>
+			<TextView android:text="@string/username" android:padding="3dip">
+			</TextView>
+			<EditText android:id="@+id/username" android:layout_weight="50">
+			</EditText>
+		</TableRow>
+		<TableRow>
+			<TextView android:text="@string/password" android:padding="3dip">
+			</TextView>
+			<EditText android:id="@+id/password" android:inputType="textPassword"
+				android:layout_weight="50">
+			</EditText>
+		</TableRow>
+	</TableLayout>
+<TableLayout android:layout_width="match_parent" android:orientation="vertical">
+		<TableRow android:padding="3dip">
+			<Switch
+			    android:id="@+id/WanOnly"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:textOn="@string/wan"
+                android:textOff="@string/lan"
+			    android:text="@string/default_connection_type" />
+
+		</TableRow>
+		<TableRow android:padding="3dip">
+		    <Switch
+			    android:id="@+id/reloadProject"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:text="@string/reload_project" />
+
+		</TableRow>
+	</TableLayout>
+</TableLayout>
+

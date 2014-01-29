@@ -7,6 +7,10 @@ repositories {
 
 dependencies {
     compile project(':ksoap2-android:ksoap2-base')
-    compile group: 'org.apache.httpcomponents', name: 'httpclient', version:'4.0-alpha4'
+    compile project(':ksoap2-android:ksoap2-j2se')
+}
 
+
+task wrapper(type: org.gradle.api.tasks.wrapper.Wrapper) {
+    gradleVersion = '1.9'
 }

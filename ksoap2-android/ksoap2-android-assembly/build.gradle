@@ -1,8 +1,0 @@
-apply plugin: 'java'
-
-
-dependencies {
-    compile project(':ksoap2-android:ksoap2-android-assembly')
-    compile project(':ksoap2-android:ksoap2-base')
-    compile project(':ksoap2-android:ksoap2-j2se')
-}

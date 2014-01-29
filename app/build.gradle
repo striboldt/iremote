@@ -1,5 +1,4 @@
 
-
 buildscript {
     repositories {
         mavenCentral()
@@ -17,9 +16,8 @@ repositories {
 }
 
 dependencies {
-    compile fileTree(dir: 'app/libs', include: '*.jar')
+    compile fileTree(dir: 'libs', include: '*.jar')
     compile project(':ksoap2-android:ksoap2-android')
-    compile project(':ksoap2-android:ksoap2-android-assembly')
     compile project(':ksoap2-android:ksoap2-base')
     compile project(':ksoap2-android:ksoap2-j2se')
 }
@@ -30,16 +28,26 @@ android {
     compileSdkVersion 19
     buildToolsVersion "19.0.1"
 
+    defaultConfig {
+        minSdkVersion 7
+        targetSdkVersion 19
+    }
+
     sourceSets {
         main {
-            manifest.srcFile 'app/AndroidManifest.xml'
-            java.srcDirs = ['app/src']
-            resources.srcDirs = ['app/src']
-            aidl.srcDirs = ['app/src']
-            renderscript.srcDirs = ['app/src']
-            res.srcDirs = ['app/res']
-            assets.srcDirs = ['app/assets']
+            manifest.srcFile 'AndroidManifest.xml'
+            java.srcDirs = ['src']
+            resources.srcDirs = ['src']
+            aidl.srcDirs = ['src']
+            renderscript.srcDirs = ['src']
+            res.srcDirs = ['res']
+            assets.srcDirs = ['assets']
         }
+
+        beta {
+            manifest.srcFile 'AndroidManifest_beta.xml'
+        }
+
 
         // Move the tests to tests/java, tests/res, etc...
         instrumentTest.setRoot('tests')
@@ -53,12 +61,45 @@ android {
         debug.setRoot('build-types/debug')
         release.setRoot('build-types/release')
     }
+
+    signingConfigs {
+        release {
+            storeFile file("release.keystore")
+            keyAlias "striboldt"
+            storePassword System.getenv("KEYSTORE_PASSWORD")
+            keyPassword System.getenv("KEY_PASSWORD")
+        }
+        debug {
+            storeFile file("debug.keystore")
+        }
+        beta {
+            storeFile file("release.keystore")
+            keyAlias "striboldt"
+            storePassword System.getenv("KEYSTORE_PASSWORD")
+            keyPassword System.getenv("KEY_PASSWORD")
+        }
+    }
+
+    buildTypes {
+        beta {
+            applic
+            packageNameSuffix ".beta"
+            signingConfig signingConfigs.beta
+        }
+
+        release {
+            signingConfig signingConfigs.release
+            runProguard true
+        }
+    }
+
 }
 
 
 allprojects {
     task hello << { task -> println "I'm $task.project.name" }
 }
-/*task wrapper(type: org.gradle.api.tasks.wrapper.Wrapper) {
+
+task wrapper(type: org.gradle.api.tasks.wrapper.Wrapper) {
     gradleVersion = '1.9'
-}*/
+}
