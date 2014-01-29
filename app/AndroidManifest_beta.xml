@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="ms.ihc.control.viewer"
+    android:versionCode="33"
+    android:versionName="Beta 1.49" >
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="com.android.vending.CHECK_LICENSE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <uses-sdk
+        android:minSdkVersion="7"
+        android:targetSdkVersion="17" >
+    </uses-sdk>
+
+    <application
+        android:name="ms.ihc.control.viewer.ApplicationContext"
+        android:allowBackup="false"
+        android:icon="@drawable/remote"
+        android:label="@string/app_name" >
+        <activity
+            android:name="ms.ihc.control.activities.MainActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:label="@string/app_name"
+            android:screenOrientation="sensor" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="ms.ihc.control.viewer.ResourceActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="sensor" >
+        </activity>
+        <activity
+            android:name="ms.ihc.control.viewer.ActiveResourcesActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="sensor" >
+        </activity>
+        <activity
+            android:name="ms.ihc.control.viewer.FavouritesActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="sensor" >
+        </activity>
+    </application>
+
+</manifest>
