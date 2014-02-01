@@ -1,7 +1,6 @@
 package ms.ihc.control.viewer;
 
 import java.io.BufferedInputStream;
-
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -10,10 +9,7 @@ import java.net.SocketTimeoutException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import ms.ihc.control.devices.wireless.IHCResource;
-import ms.ihc.control.devices.wireless.ResourceFactory;
-import ms.ihc.control.gzip.GZIPInputStream;
-
+import java.util.zip.GZIPInputStream;
 import org.ksoap2.*;
 import org.ksoap2.serialization.KvmSerializable;
 import org.ksoap2.serialization.SoapObject;
@@ -23,12 +19,12 @@ import org.ksoap2.transport.HttpTransportSE;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
-
 import android.content.Intent;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
-
-import com.android.vending.licensing.util.Base64;
+import com.google.android.vending.licensing.util.Base64;
+import ms.ihc.control.devices.wireless.IHCResource;
+import ms.ihc.control.devices.wireless.ResourceFactory;
 
 
 public class IhcManager {
@@ -650,7 +646,7 @@ public class IhcManager {
 				 {
 					 try
 					 {
-						 IHCResource ihcResource = ResourceFactory.createResource(xpp.getAttributeValue(null,"product_identifier").replace("_0x", ""), this);	
+						 IHCResource ihcResource = ResourceFactory.createResource(xpp.getAttributeValue(null, "product_identifier").replace("_0x", ""), this);
 						 ihcResource.setName(xpp.getAttributeValue(null,"name"));
 						 if(xpp.getAttributeValue(null,"position") != null)
 							 ihcResource.setPosition(xpp.getAttributeValue(null,"position"));

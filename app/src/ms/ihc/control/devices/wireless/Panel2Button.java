@@ -2,13 +2,7 @@ package ms.ihc.control.devices.wireless;
 
 import java.io.IOException;
 import java.util.HashMap;
-
 import ms.ihc.control.viewer.IhcManager;
-import ms.ihc.control.viewer.R;
-import ms.ihc.control.viewer.ResourceAdapter.ViewHolder;
-import ms.ihc.control.valueTypes.DeviceType;
-import ms.ihc.control.valueTypes.WSBooleanValue;
-
 import org.ksoap2.serialization.PropertyInfo;
 import org.ksoap2.serialization.SoapObject;
 import org.xmlpull.v1.XmlPullParser;
@@ -18,6 +12,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import ms.ihc.control.valueTypes.*;
+import ms.ihc.control.viewer.R;
+import ms.ihc.control.viewer.ResourceAdapter;
 
 public class Panel2Button extends ioResource implements IHCResource, java.io.Serializable {
 
@@ -213,8 +210,8 @@ public class Panel2Button extends ioResource implements IHCResource, java.io.Ser
 	}
 
 	public View getView(LayoutInflater layoutInf, IhcManager ihcCtrl) {
-		View ConvertView = layoutInf.inflate(R.layout.panel2button, null);
-		ViewHolder holder = new ViewHolder();
+		View ConvertView = layoutInf.inflate(R.layout. panel2button, null);
+		ResourceAdapter.ViewHolder holder = new ResourceAdapter.ViewHolder();
 		holder.position = (TextView)ConvertView.findViewById(R.id.position);
         holder.button1 = (Button)ConvertView.findViewById(R.id.Button01);
         holder.button2 = (Button)ConvertView.findViewById(R.id.Button02);

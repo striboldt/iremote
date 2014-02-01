@@ -1,9 +1,11 @@
 package ms.ihc.control.activities;
 
-import com.android.vending.licensing.AESObfuscator;
-import com.android.vending.licensing.LicenseChecker;
-import com.android.vending.licensing.LicenseCheckerCallback;
-import com.android.vending.licensing.ServerManagedPolicy;
+
+import com.google.android.vending.licensing.AESObfuscator;
+import com.google.android.vending.licensing.LicenseChecker;
+import com.google.android.vending.licensing.LicenseCheckerCallback;
+import com.google.android.vending.licensing.ServerManagedPolicy;
+
 import ms.ihc.control.fragments.AlertDialogFragment;
 import ms.ihc.control.viewer.CustomExceptionHandler;
 import ms.ihc.control.viewer.IhcManager;
@@ -24,7 +26,7 @@ import android.view.MenuItem;
 
 
 public class MainActivity extends FragmentActivity {
-	private LicenseCheckerCallback mLicenseCheckerCallback;   
+	private LicenseCheckerCallback mLicenseCheckerCallback;
 	private LicenseChecker mChecker;
 	
 	private static final String PREFS_NAME = "IHCSettings";
@@ -41,39 +43,40 @@ public class MainActivity extends FragmentActivity {
             if(intent.getAction() != null && intent.getAction().equalsIgnoreCase(IhcManager.RESOURCE_VALUE_CHANGED)) {
                 // TODO: Update resourcefragment
             }
-
-
         }
     };
 
 
 	private class MyLicenseCheckerCallback implements LicenseCheckerCallback {
-    	
-    	public void allow() 
-    	{            
-    		if (isFinishing()) 
-    		{                
-    			// Don't update UI if Activity is finishing.                
-    			return;           
-    		}
-    		final SharedPreferences saveSettings = getSharedPreferences(PREFS_NAME, 0);
-			final SharedPreferences.Editor editor = saveSettings.edit();
-			editor.putBoolean("isLicensed", true);
-			editor.commit();
-    	}        
-    	
-    	public void dontAllow() {          
-    		if (isFinishing()) {            
-    			// Don't update UI if Activity is finishing.        
-    			return;        
-  			}
+
+
+        @Override
+        public void allow(int reason) {
+            if (isFinishing())
+            {
+                // Don't update UI if Activity is finishing.
+                return;
+            }
+            final SharedPreferences saveSettings = getSharedPreferences(PREFS_NAME, 0);
+            final SharedPreferences.Editor editor = saveSettings.edit();
+            editor.putBoolean("isLicensed", true);
+            editor.commit();
+        }
+
+        @Override
+        public void dontAllow(int reason) {
+            if (isFinishing()) {
+                // Don't update UI if Activity is finishing.
+                return;
+            }
             final AlertDialogFragment dialogFragment = AlertDialogFragment.newInstance(R.string.unlicensed_dialog_title);
             dialogFragment.show(getSupportFragmentManager(), "dialog");
-			
-    	}
+        }
 
-		public void applicationError(ApplicationErrorCode errorCode) {	
-		}   
+        @Override
+        public void applicationError(int errorCode) {
+
+        }
     }
 
 

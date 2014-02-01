@@ -10,13 +10,11 @@ import ms.ihc.control.devices.dataline.Panel4Button_Fuga;
 import ms.ihc.control.devices.dataline.Panel6Button_Fuga;
 import ms.ihc.control.devices.dataline.Panel8Button;
 import ms.ihc.control.devices.dataline.TemperatureSensor;
-import ms.ihc.control.valueTypes.DeviceType;
 import ms.ihc.control.viewer.IhcManager;
-
 import org.xmlpull.v1.XmlPullParser;
-
 import android.view.LayoutInflater;
 import android.view.View;
+import ms.ihc.control.valueTypes.*;
 
 
 public interface IHCResource extends View.OnClickListener  {

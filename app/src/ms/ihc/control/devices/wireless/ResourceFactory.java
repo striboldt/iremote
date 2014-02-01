@@ -1,7 +1,6 @@
 package ms.ihc.control.devices.wireless;
 
 import android.util.Log;
-
 import ms.ihc.control.viewer.IhcManager;
 
 public class ResourceFactory {
