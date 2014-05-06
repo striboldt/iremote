@@ -27,9 +27,9 @@ import ms.ihc.control.viewer.R.id;
 import ms.ihc.control.viewer.R.layout;
 import ms.ihc.control.viewer.ResourceActivity;
 import ms.ihc.control.viewer.ResourceAdapter;
-import ms.ihc.control.viewer.IhcManager.ControllerConnection;
+//import ms.ihc.control.viewer.IhcManager.ControllerConnection;
 
-public class ResourceListFragment extends Fragment implements OnItemClickListener, ControllerConnection{
+public class ResourceListFragment extends Fragment implements OnItemClickListener{
 
 	private ListView locationListView;
 	private Handler mHandler = new Handler();
@@ -273,7 +273,7 @@ public class ResourceListFragment extends Fragment implements OnItemClickListene
 	}
 
 
-	public void onConnectionAccepted() {
+	/*public void onConnectionAccepted() {
 		Log.v("LocationActivity", "onConnectionAccepted");
 		runtimeTask = new enableRuntimeValueNotificationsTask();
 		runtimeTask.execute();
@@ -281,7 +281,7 @@ public class ResourceListFragment extends Fragment implements OnItemClickListene
 
 	public void onRuntimeVaulesChanged() {
 			new refreshResourceViewTask().execute();
-	}
+	}*/
 
 
 

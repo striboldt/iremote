@@ -2,56 +2,75 @@
 buildscript {
     repositories {
         mavenCentral()
+        maven {
+            url 'https://oss.sonatype.org/content/repositories/snapshots/'
+        }
+        maven { url 'http://download.crashlytics.com/maven' }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:0.7.0'
+        classpath 'com.android.tools.build:gradle:0.9.+'
+        classpath 'com.squareup.gradle:gradle-android-test-plugin:0.9.1-SNAPSHOT' // Enables the test plugin used below.
+        classpath 'com.crashlytics.tools.gradle:crashlytics-gradle:1.+'
     }
 }
 
 apply plugin: 'android'
+apply plugin: 'android-test'
+apply plugin: 'crashlytics'
 
-repositories {
-    maven { url 'https://ksoap2-android.googlecode.com/svn/m2-repo' }
-    mavenCentral()
-}
+
 
 dependencies {
-    compile fileTree(dir: 'libs', include: '*.jar')
+    repositories {
+        maven { url 'https://ksoap2-android.googlecode.com/svn/m2-repo' }
+        maven { url 'https://oss.sonatype.org/content/repositories/snapshots/'}
+        mavenCentral()
+        maven { url 'http://download.crashlytics.com/maven'}
+
+        }
+    compile 'com.android.support:appcompat-v7:+'
     compile project(':ksoap2-android:ksoap2-android')
     compile project(':ksoap2-android:ksoap2-base')
     compile project(':ksoap2-android:ksoap2-j2se')
     compile project(':Google-LVL')
+    compile 'com.crashlytics.android:crashlytics:1.+'
+
+    // Test dependencies
+    testCompile 'junit:junit:4.10'
+    testCompile 'com.squareup:fest-android:1.0.+'
+    testCompile 'org.robolectric:robolectric:2.1.+'
+    androidTestCompile 'junit:junit:4.10'
+    androidTestCompile 'org.robolectric:robolectric:2.3-SNAPSHOT'
+    androidTestCompile 'com.squareup:fest-android:1.0.+'
 }
 
 
 
 android {
     compileSdkVersion 19
-    buildToolsVersion "19.0.1"
+    buildToolsVersion '19.0.1'
 
     defaultConfig {
-        minSdkVersion 7
+        minSdkVersion 8
         targetSdkVersion 19
     }
 
     sourceSets {
         main {
-            manifest.srcFile 'AndroidManifest.xml'
-            java.srcDirs = ['src']
-            resources.srcDirs = ['src']
-            aidl.srcDirs = ['src']
-            renderscript.srcDirs = ['src']
-            res.srcDirs = ['res']
-            assets.srcDirs = ['assets']
+          //  manifest.srcFile 'AndroidManifest.xml'
+           // java.srcDirs = ['src']
+           // resources.srcDirs = ['res']
+          //  aidl.srcDirs = ['src']
+          //  renderscript.srcDirs = ['src']
+          //  res.srcDirs = ['res']
+           // assets.srcDirs = ['assets']
         }
 
         beta {
-            manifest.srcFile 'AndroidManifest_beta.xml'
+            //manifest.srcFile 'AndroidManifest_beta.xml'
         }
 
-
-        // Move the tests to tests/java, tests/res, etc...
-        instrumentTest.setRoot('tests')
+        instrumentTest.setRoot('src/test')
 
         // Move the build types to build-types/<type>
         // For instance, build-types/debug/java, build-types/debug/AndroidManifest.xml, ...
@@ -83,7 +102,6 @@ android {
 
     buildTypes {
         beta {
-            applic
             packageNameSuffix ".beta"
             signingConfig signingConfigs.beta
         }
@@ -104,3 +122,4 @@ allprojects {
 task wrapper(type: org.gradle.api.tasks.wrapper.Wrapper) {
     gradleVersion = '1.9'
 }
+

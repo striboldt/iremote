@@ -29,16 +29,54 @@ import ms.ihc.control.devices.wireless.ResourceFactory;
 
 public class IhcManager {
 
-    public static final String RESOURCE_VALUE_CHANGED = "0";
-    private String URI;
+    private static final String TAG = IhcManager.class.getPackage().getName();
+
+    public enum IHCEVENTS {
+        RESOURCE_VALUE_CHANGED("ms.ihc.control.viewer.resource_value_changed"),
+        CONNECTED("ms.ihc.control.viewer.connected"),
+        DISCONNECTED("ms.ihc.control.viewer.disconnected"),
+        LOADING_PROJECT("ms.ihc.control.viewer.loading_project");
+
+        private String pretty;
+        private IHCEVENTS(String pretty) {
+            this.pretty = pretty;
+        }
+
+        @Override
+        public String toString() {
+            // you can localise this string somehow here
+            return pretty;
+        }
+    }
+
+    public enum IHCMESSAGE {
+        CONNECTION_RESTRICTIONS("loginFailedDueToConnectionRestrictions"),
+        INSUFFICIENT_RIGHTS("loginFailedDueToInsufficientUserRights"),
+        SOCKET_TIMEOUT("socketTimeout"),
+        INVALID_ACCOUNT("loginFailedDueToAccountInvalid");
+
+
+        private String pretty;
+        private IHCMESSAGE(String pretty) {
+            this.pretty = pretty;
+        }
+
+        @Override
+        public String toString() {
+            // you can localise this string somehow here
+            return pretty;
+        }
+    }
+
 	private static final String NAMESPACE = "utcs";
+	public Boolean isInTouchMode = false;
+    private String URI;
 	private String SESSIONID = "";
 	private String login;
 	private String password;
 	private String ctrlIp;
-	private Boolean wanOnly;
-	private String msg;
-	public Boolean isInTouchMode = false;
+	private Boolean wan;
+	//private String msg;
 	private Boolean isConnected = false;
     private ApplicationContext context;
 
@@ -47,83 +85,72 @@ public class IhcManager {
         this.context = applicationContext;
     }
 
-	// Define our custom Listener interface
-	public interface ControllerConnection {
-		public abstract void onConnectionAccepted();
-		public abstract void onRuntimeVaulesChanged();
-	}
 	
-	public String getLoginMessage(){
-		return msg;
-	}
+	public void authenticate(final String username, final String Password, final String ip, final Boolean WAN) {
 
-	
-	public Boolean authenticate(String username, String Password, String ip, Boolean WanOnly) {
-		
 		this.login = username;
 		this.password = Password;
 		this.ctrlIp = ip;
-		this.wanOnly = WanOnly;
-		
+		this.wan = WAN;
+
 		String SOAP_ACTION = "authenticate";
 		String METHOD_NAME = "authenticate1";
-		msg = "Unknown error";
+        IHCMESSAGE ihcmessage = null;
+
 		boolean loginWasSuccessful = false;
 		SoapObject request = new SoapObject(NAMESPACE, METHOD_NAME);
 		request.addProperty("username", username);
 		request.addProperty("password", Password);
-		if(WanOnly)
+
+		if(WAN)
 			request.addProperty("application", "sceneview");
 		else
 			request.addProperty("application", "treeview");
 
-		SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(
-				SoapEnvelope.VER11);
+		SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
 		envelope.setOutputSoapObject(request);
 
 		this.URI = "https://%IP%/ws/";
 		this.URI = this.URI.replace("%IP%", ip);
-		HttpTransportSE androidHttpTransport = new HttpTransportSE(this.URI
-				+ "AuthenticationService");
+		HttpTransportSE androidHttpTransport = new HttpTransportSE(this.URI + "AuthenticationService");
 
 		try {
-			
+
 			androidHttpTransport.call(SOAP_ACTION, envelope);
 			this.SESSIONID = androidHttpTransport.sessionCookie;
 			SoapObject soapResponse = (SoapObject) envelope.bodyIn;
 			loginWasSuccessful = (Boolean) soapResponse.getProperty("loginWasSuccessful");
 			if(!loginWasSuccessful){
-				if((Boolean) soapResponse.getProperty("loginFailedDueToConnectionRestrictions"))
-					msg = "loginFailedDueToConnectionRestrictions";
-				else if ((Boolean) soapResponse.getProperty("loginFailedDueToInsufficientUserRights"))
-					msg = "loginFailedDueToInsufficientUserRights";
-				else if ((Boolean) soapResponse.getProperty("loginFailedDueToAccountInvalid"))
-					msg = "loginFailedDueToAccountInvalid";
+				if((Boolean) soapResponse.getProperty(IHCMESSAGE.CONNECTION_RESTRICTIONS.toString()))
+					ihcmessage = IHCMESSAGE.CONNECTION_RESTRICTIONS;
+				else if ((Boolean) soapResponse.getProperty(IHCMESSAGE.INSUFFICIENT_RIGHTS.toString()))
+                    ihcmessage = IHCMESSAGE.INSUFFICIENT_RIGHTS;
+				else if ((Boolean) soapResponse.getProperty(IHCMESSAGE.INVALID_ACCOUNT.toString()))
+                    ihcmessage = IHCMESSAGE.INVALID_ACCOUNT;
 			}
 			isConnected = true;
 
-		} 
+		}
 		catch (SocketTimeoutException socketTimeout){
-			msg = "SocketTimeout";
+            ihcmessage = IHCMESSAGE.SOCKET_TIMEOUT;
 		}
 		catch (Exception e) {
-			 msg = e.getMessage();
+            Log.e(TAG, e.getMessage());
 		}
 		finally{
 			androidHttpTransport.reset();
 		}
 
-		return loginWasSuccessful;
+        if(loginWasSuccessful)
+            sendBroadcast(IHCEVENTS.CONNECTED, null);
+        else
+            sendBroadcast(IHCEVENTS.DISCONNECTED, ihcmessage);
 	}
 
     // TODO: Setup algorithm for connection retry and timeout. And notify upstream Activities in case of failure
-	public Boolean reAuthenticate()
+	public void reAuthenticate()
 	{
-		 if(this.authenticate(this.login, this.password, this.ctrlIp, this.wanOnly)){
-			 return true;
-		 }
-		 else
-			 return false;
+		 this.authenticate(this.login, this.password, this.ctrlIp, this.wan);
 	}
 
 	public Boolean ping() {
@@ -134,15 +161,14 @@ public class IhcManager {
 		SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(
 				SoapEnvelope.VER11);
 
-		HttpTransportSE androidHttpTransport = new HttpTransportSE(this.URI
-				+ SERVICE);
+		HttpTransportSE androidHttpTransport = new HttpTransportSE(this.URI+ SERVICE);
 		androidHttpTransport.sessionCookie = this.SESSIONID;
 
 		try {
 			androidHttpTransport.call(SOAP_ACTION, envelope);
 			resultsRequestSOAP = (Boolean) envelope.bodyIn;
 		} catch (Exception e) {
-			e.printStackTrace();
+            Log.e(TAG, e.getMessage());
 		}
 		finally
 		{
@@ -152,17 +178,15 @@ public class IhcManager {
 		return resultsRequestSOAP;
 
 	}
-	
+
 	public String getState() {
 		String SOAP_ACTION = "getState";
 		String SERVICE = "ControllerService";
 		String response = "";
 
-		SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(
-				SoapEnvelope.VER11);
+		SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
 
-		HttpTransportSE androidHttpTransport = new HttpTransportSE(this.URI
-				+ SERVICE);
+		HttpTransportSE androidHttpTransport = new HttpTransportSE(this.URI+ SERVICE);
 		androidHttpTransport.sessionCookie = this.SESSIONID;
 
 		try {
@@ -170,7 +194,7 @@ public class IhcManager {
 			SoapObject resultsRequestSOAP = (SoapObject) envelope.bodyIn;
 			response = resultsRequestSOAP.toString();
 		} catch (Exception e) {
-			e.printStackTrace();
+            Log.e(TAG, e.getMessage());
 		}
 		finally
 		{
@@ -182,22 +206,21 @@ public class IhcManager {
 	}
 	
 	public Boolean isIHCProjectAvailable(String username, String Password, String ip) {
-		String SOAP_ACTION = "isIHCProjectAvailable";
-		String SERVICE = "ControllerService";
+		final String SOAP_ACTION = "isIHCProjectAvailable";
+		final String SERVICE = "ControllerService";
+
 		Boolean response = false;
 
-		SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(
-				SoapEnvelope.VER11);
+		final SoapSerializationEnvelope envelope = new SoapSerializationEnvelope( SoapEnvelope.VER11);
 
-		HttpTransportSE androidHttpTransport = new HttpTransportSE(this.URI
-				+ SERVICE);
+		final HttpTransportSE androidHttpTransport = new HttpTransportSE(this.URI + SERVICE);
 		androidHttpTransport.sessionCookie = this.SESSIONID;
 
 		try {
 			androidHttpTransport.call(SOAP_ACTION, envelope);
 			response = (Boolean) envelope.bodyIn;
 		} catch (Exception e) {
-			e.printStackTrace();
+            Log.e(TAG, e.getMessage());
 		}
 		finally
 		{
@@ -207,7 +230,6 @@ public class IhcManager {
 		return response;
 
 	}
-
 	
 	private int getProjectNumberOfSegments()
 	{
@@ -215,8 +237,7 @@ public class IhcManager {
 		String SERVICE = "ControllerService";
 		int numberOfSegements = 0;
 
-		SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(
-				SoapEnvelope.VER11);
+		SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
 
 		HttpTransportSE androidHttpTransport = new HttpTransportSE(this.URI + SERVICE);
 		androidHttpTransport.sessionCookie = this.SESSIONID;
@@ -225,7 +246,7 @@ public class IhcManager {
 			androidHttpTransport.call(SOAP_ACTION, envelope);
 			numberOfSegements = (Integer) envelope.bodyIn;
 		} catch (Exception e) {
-			e.printStackTrace();
+            Log.e(TAG, e.getMessage());
 		}
 		finally
 		{
@@ -233,28 +254,26 @@ public class IhcManager {
 		}
 		return numberOfSegements;
 	}
-	
+
 	private Map<String, Integer> getProjectInfo()
 	{
 		String SOAP_ACTION = "getProjectInfo";
 		String SERVICE = "ControllerService";
 		HashMap<String, Integer> projectInfo = new HashMap<String, Integer>();
 
-		SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(
-				SoapEnvelope.VER11);
+		SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
 
-		HttpTransportSE androidHttpTransport = new HttpTransportSE(this.URI
-				+ SERVICE);
+		HttpTransportSE androidHttpTransport = new HttpTransportSE(this.URI + SERVICE);
 		androidHttpTransport.sessionCookie = this.SESSIONID;
 
 		try {
 			androidHttpTransport.call(SOAP_ACTION, envelope);
 			// Retrieve body in response
 			SoapObject soapResponse = (SoapObject) envelope.bodyIn;
-			projectInfo.put("projectMajorRevision", (Integer)soapResponse.getProperty("projectMajorRevision"));
+			projectInfo.put("projectMajorRevision", (Integer) soapResponse.getProperty("projectMajorRevision"));
 			projectInfo.put("projectMinorRevision", (Integer)soapResponse.getProperty("projectMinorRevision"));
 		} catch (Exception e) {
-			e.printStackTrace();
+            Log.e(TAG, e.getMessage());
 		}
 		finally
 		{
@@ -270,11 +289,9 @@ public class IhcManager {
 		String SERVICE = "ControllerService";
 		int segmentSize = 0;
 
-		SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(
-				SoapEnvelope.VER11);
+		SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
 
-		HttpTransportSE androidHttpTransport = new HttpTransportSE(this.URI
-				+ SERVICE);
+		HttpTransportSE androidHttpTransport = new HttpTransportSE(this.URI + SERVICE);
 		androidHttpTransport.sessionCookie = this.SESSIONID;
 
 		try {
@@ -282,64 +299,64 @@ public class IhcManager {
 			// Retrieve body in response
 			segmentSize =(Integer) envelope.bodyIn;
 		} catch (Exception e) {
-			e.printStackTrace();
+            Log.e(TAG, e.getMessage());
 		}
 		finally
 		{
 			androidHttpTransport.reset();
 		}
-		
+
 		return segmentSize;
 	}
-	
 	
 	private ByteArrayOutputStream getProjectSegment(int segments, int arraySize, int majorRevision, int minorRevision )
 	{
 		ByteArrayOutputStream decodedStream = new ByteArrayOutputStream(arraySize);
-		
+
 		String SOAP_ACTION = "getIHCProjectSegment";
 		String SERVICE = "ControllerService";
 		HttpTransportSE androidHttpTransport = null;
-		
+
 		for(int i = 0; i<segments; i++)
 		{
 			SoapObject request = new SoapObject(NAMESPACE, "");
 			request.addProperty("getIHCProjectSegment1", i);
 			request.addProperty("getIHCProjectSegment2", majorRevision);
 			request.addProperty("getIHCProjectSegment3", minorRevision);
-			
-			SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(
-					SoapEnvelope.VER11);
+
+			SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
 			envelope.setAddAdornments(false);
 			envelope.setOutputSoapObject(request);
-			
+
 			if(androidHttpTransport == null)
 			{
 				androidHttpTransport = new HttpTransportSE(this.URI+ SERVICE);
 				androidHttpTransport.debug = false;
 				androidHttpTransport.sessionCookie = this.SESSIONID;
 			}
-	
-			try {
-				androidHttpTransport.call(SOAP_ACTION, envelope);
-				//String requestDump = androidHttpTransport.requestDump;
-				//String responseDumo = androidHttpTransport.responseDump;
-				SoapObject resultsRequestSOAP = (SoapObject) envelope.bodyIn;
-			
-				// Get Base64Binary data and decode to byte array 
-				// getData
-				SoapPrimitive base64 = (SoapPrimitive) resultsRequestSOAP.getProperty("data");
-				
-				decodedStream.write(Base64.decode(base64.toString()));
-				
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+
+			try
+            {
+                androidHttpTransport.call(SOAP_ACTION, envelope);
+                //String requestDump = androidHttpTransport.requestDump;
+                //String responseDumo = androidHttpTransport.responseDump;
+                SoapObject resultsRequestSOAP = (SoapObject) envelope.bodyIn;
+
+                // Get Base64Binary data and decode to byte array
+                // getData
+                SoapPrimitive base64 = (SoapPrimitive) resultsRequestSOAP.getProperty("data");
+
+                decodedStream.write(Base64.decode(base64.toString()));
+
+    		}
+            catch (Exception e) {
+                Log.e(TAG, e.getMessage());
+			}
 		}
-		
+
 		if(androidHttpTransport != null)
 			androidHttpTransport.reset();
-		
+
 		return decodedStream;
 	}
 	
@@ -351,17 +368,17 @@ public class IhcManager {
 				home = parse(instream, "group", home);
 			} catch (XmlPullParserException e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+                Log.e(TAG, e.getMessage());
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+                Log.e(TAG, e.getMessage());
 			}
-			
+
 		}
 		else
 		{
 
-			int segments = getProjectNumberOfSegments();	
+			int segments = getProjectNumberOfSegments();
 			int segmentSize = getSegmentSize();
 			int arraySize = segments * segmentSize;
 			ByteArrayOutputStream decoded = new ByteArrayOutputStream(arraySize);
@@ -382,15 +399,14 @@ public class IhcManager {
 				GZIPInputStream zip = new GZIPInputStream(buffered);
 				home = parse(zip, "group", home);
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+                Log.e(TAG, e.getMessage());
 			}
 			catch(XmlPullParserException e)
 			{
-				e.printStackTrace();
+                Log.e(TAG, e.getMessage());
 			}
 		}
-		
+
 		return home;
 
 	}
@@ -403,16 +419,16 @@ public class IhcManager {
 		if(this.isConnected)
 		{
 			SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
-	
+
 			envelope.addMapping("d", type, valueType.getClass());
-			
+
 			envelope.setOutputSoapObject(request);
 			HttpTransportSE androidHttpTransport = new HttpTransportSE(this.URI
 					+ SERVICE);
 			androidHttpTransport.sessionCookie = this.SESSIONID;
 			androidHttpTransport.debug = false;
-			
-			
+
+
 			try {
 				// Send Soap request
 				Log.v("setResourceBooleanValue", "Setting value - START");
@@ -422,9 +438,9 @@ public class IhcManager {
 				String responseDumo = androidHttpTransport.responseDump;*/
 				// Retrieve body in response
 				response = (Boolean) envelope.bodyIn;
-	
+
 			} catch (Exception e) {
-				e.printStackTrace();
+                Log.e(TAG, e.getMessage());
 			}
 			finally
 			{
@@ -445,16 +461,16 @@ public class IhcManager {
 		if(this.isConnected)
 		{
 			SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
-	
+
 			envelope.addMapping("d", type, valueType.getClass());
-			
+
 			envelope.setOutputSoapObject(request);
 			HttpTransportSE androidHttpTransport = new HttpTransportSE(this.URI
 					+ SERVICE);
 			androidHttpTransport.sessionCookie = this.SESSIONID;
 			androidHttpTransport.debug = false;
-			
-			
+
+
 			try {
 				// Send Soap request
 				androidHttpTransport.call(SOAP_ACTION, envelope);
@@ -462,9 +478,9 @@ public class IhcManager {
 				//String responseDumo = androidHttpTransport.responseDump;
 				// Retrieve body in response
 				response = (Boolean) envelope.bodyIn;
-	
+
 			} catch (Exception e) {
-				e.printStackTrace();
+                Log.e(TAG, e.getMessage());
 			}
 			finally
 			{
@@ -480,23 +496,21 @@ public class IhcManager {
 		String SOAP_ACTION = "getRuntimeValues";
 		String SERVICE = "ResourceInteractionService";
 		String METHOD_NAME = "getRuntimeValues1";
-		
+
 		SoapObject request = new SoapObject(NAMESPACE, METHOD_NAME);
 		request.addProperty("arrayItem", resourceID);
 
-		SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(
-				SoapEnvelope.VER11);
+		SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
 
 		envelope.setOutputSoapObject(request);
-		HttpTransportSE androidHttpTransport = new HttpTransportSE(this.URI
-				+ SERVICE);
+		HttpTransportSE androidHttpTransport = new HttpTransportSE(this.URI + SERVICE);
 		androidHttpTransport.sessionCookie = this.SESSIONID;
 
 		try {
 			androidHttpTransport.call(SOAP_ACTION, envelope);
 			return (SoapObject) envelope.bodyIn;
 		} catch (Exception e) {
-			e.printStackTrace();
+            Log.e(TAG, e.getMessage());
 		}
 		finally
 		{
@@ -510,10 +524,10 @@ public class IhcManager {
 	{
 		String SOAP_ACTION = "waitForResourceValueChanges";
 		String SERVICE = "ResourceInteractionService";
-		
+
 		SoapObject request = new SoapObject(NAMESPACE, "");
 		request.addProperty("waitForResourceValueChanges1", 10);
-		
+
 		SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
 
 		envelope.setOutputSoapObject(request);
@@ -528,11 +542,7 @@ public class IhcManager {
 				androidHttpTransport.call(SOAP_ACTION, envelope);
 				if(envelope.bodyIn.getClass().getName().equals(SoapFault.class.getName()))
 				{
-					this.isConnected = false;
-					if(reAuthenticate())
-					{
-						this.isConnected = true;
-					}
+                    // TODO: Re-authenticate
 					Log.v("waitForResourceValueChanges", "reauthenticate");
 					return false;
 				}
@@ -540,7 +550,7 @@ public class IhcManager {
 				{
 					SoapObject soapResponse = (SoapObject) envelope.bodyIn;
 					int properties = soapResponse.getPropertyCount();
-		
+
 					for(int i=0; i<properties; i++)
 					{
 						Object val;
@@ -564,7 +574,7 @@ public class IhcManager {
 					}
 				}
 			} catch (Exception e) {
-				e.printStackTrace();
+                Log.e(TAG, e.getMessage());
 			}
 			finally
 			{
@@ -576,14 +586,9 @@ public class IhcManager {
 			Log.v("waitForResourceValueChanges", "No connection");
 			return false;
 		}
-		
-		// Inform broadcastreceivers about RuntimeValues has changed.
-        final Intent intent = new Intent(RESOURCE_VALUE_CHANGED);
-        LocalBroadcastManager.getInstance(this.context).sendBroadcast(intent);
 
 		return true;
 	}
-	
 	
 	public Boolean enableRuntimeValueNotifications(HashMap<Integer, IHCResource> resourceIds)
 	{
@@ -591,21 +596,19 @@ public class IhcManager {
 		String SERVICE = "ResourceInteractionService";
 		String METHOD_NAME = "enableRuntimeValueNotifications1";
 		Boolean bSuccess = false;
-		
+
 		SoapObject request = new SoapObject(NAMESPACE, METHOD_NAME);
-		
+
 		for (Iterator<Integer> iterator = resourceIds.keySet().iterator(); iterator.hasNext();) {
 			int resourceId = iterator.next();
 				request.addProperty("arrayItem",resourceId);
 		}
 
 
-		SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(
-				SoapEnvelope.VER11);
+		SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
 
 		envelope.setOutputSoapObject(request);
-		HttpTransportSE androidHttpTransport = new HttpTransportSE(this.URI
-				+ SERVICE);
+		HttpTransportSE androidHttpTransport = new HttpTransportSE(this.URI+ SERVICE);
 		androidHttpTransport.sessionCookie = this.SESSIONID;
 		androidHttpTransport.debug = false;
 
@@ -613,7 +616,7 @@ public class IhcManager {
 			androidHttpTransport.call(SOAP_ACTION, envelope);
 			bSuccess = true;
 		} catch (Exception e) {
-			e.printStackTrace();
+            Log.e(TAG, e.getMessage());
 		}
 		finally
 		{
@@ -622,17 +625,17 @@ public class IhcManager {
 
 		return bSuccess;
 	}
-
+	
 	public IHCHome parse(InputStream inputStream, String ITEM, IHCHome home) throws XmlPullParserException, IOException {
 		IHCLocation location = null;
-		XmlPullParserFactory factory = XmlPullParserFactory.newInstance(); 
-		factory.setNamespaceAware(true);       
-		XmlPullParser xpp = factory.newPullParser();    
-		xpp.setInput(inputStream,null); 
+		XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
+		factory.setNamespaceAware(true);
+		XmlPullParser xpp = factory.newPullParser();
+		xpp.setInput(inputStream,null);
 		int eventType = xpp.getEventType();
-		while (eventType != XmlPullParser.END_DOCUMENT) 
+		while (eventType != XmlPullParser.END_DOCUMENT)
 		{
-			 if(eventType == XmlPullParser.START_TAG) 
+			 if(eventType == XmlPullParser.START_TAG)
 			 {
 				 if(xpp.getName().equals("group"))
 				 {
@@ -652,51 +655,61 @@ public class IhcManager {
 							 ihcResource.setPosition(xpp.getAttributeValue(null,"position"));
 						 else
 							 ihcResource.setPosition("");
-							
-						 ihcResource.setState(false);	
+
+						 ihcResource.setState(false);
 						 ihcResource.setupResources(xpp, xpp.getName());
 						 location.getResources().add(ihcResource);
 					 }
-					 catch(Exception ihc)
+					 catch(Exception e)
 					 {
-						//ihc.printStackTrace();
-					 }	
+                         Log.e(TAG, e.getMessage());
+					 }
 				 }
 				 else if(xpp.getName().equals("product_dataline"))
 				 {
 					 try
 					 {
-						 IHCResource ihcResource = ResourceFactory.createResource(xpp.getAttributeValue(null,"product_identifier").replace("_0x", ""), this);	
+						 IHCResource ihcResource = ResourceFactory.createResource(xpp.getAttributeValue(null,"product_identifier").replace("_0x", ""), this);
 						 ihcResource.setName(xpp.getAttributeValue(null,"name"));
 						 if(xpp.getAttributeValue(null,"position") != null)
 							 ihcResource.setPosition(xpp.getAttributeValue(null,"position"));
 						 else
 							 ihcResource.setPosition("");
-							
-						 ihcResource.setState(false);	
+
+						 ihcResource.setState(false);
 						 ihcResource.setupResources(xpp, xpp.getName());
 						 location.getResources().add(ihcResource);
 					 }
-					 catch(Exception ihc)
+					 catch(Exception e)
 					 {
-						//ihc.printStackTrace();
+                         Log.e(TAG, e.getMessage());
 					 }
-						 
+
 				 }
 			 }
 			 try
 			 {
-				 eventType = xpp.next(); 
+				 eventType = xpp.next();
 			 }
 			 catch(XmlPullParserException pullException )
 			 {
-				 pullException.printStackTrace();
+                 Log.e(TAG, pullException.getMessage());
 			 }
-			 
+
 		 }
 
 		return home;
 	}
+
+
+    private void sendBroadcast(IHCEVENTS action, IHCMESSAGE message) {
+        // Inform broadcastreceivers about RuntimeValues has changed.
+        Intent intent = new Intent(action.toString());
+        if(message != null)
+            intent.putExtra(IHCMESSAGE.class.getName(),message.toString());
+
+        LocalBroadcastManager.getInstance(this.context).sendBroadcast(intent);
+    }
 
 
 

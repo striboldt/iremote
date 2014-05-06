@@ -12,7 +12,7 @@ import ms.ihc.control.viewer.IhcManager;
 import ms.ihc.control.viewer.R;
 import ms.ihc.control.viewer.ResourceActivity;
 import ms.ihc.control.viewer.ResourceAdapter;
-import ms.ihc.control.viewer.IhcManager.ControllerConnection;
+//import ms.ihc.control.viewer.IhcManager.ControllerConnection;
 
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -28,7 +28,7 @@ import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.AdapterView.OnItemClickListener;
 
-public class LocationFragment extends Fragment implements OnItemClickListener, ControllerConnection{
+public class LocationFragment extends Fragment implements OnItemClickListener{
 
 	private ListView locationListView;
 	private Handler mHandler = new Handler();
@@ -271,7 +271,7 @@ public class LocationFragment extends Fragment implements OnItemClickListener, C
 	}
 
 
-	public void onConnectionAccepted() {
+	/*public void onConnectionAccepted() {
 		Log.v("LocationActivity", "onConnectionAccepted");
 		runtimeTask = new enableRuntimeValueNotificationsTask();
 		runtimeTask.execute();
@@ -279,7 +279,7 @@ public class LocationFragment extends Fragment implements OnItemClickListener, C
 
 	public void onRuntimeVaulesChanged() {
 			new refreshResourceViewTask().execute();
-	}
+	}*/
 
 
 

@@ -7,6 +7,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="com.android.vending.CHECK_LICENSE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET"/>
 
     <uses-sdk
         android:minSdkVersion="7"
@@ -19,9 +20,10 @@
         android:icon="@drawable/remote"
         android:label="@string/app_name" >
         <activity
-            android:name="ms.ihc.control.activities.MainActivity"
+            android:name="ms.ihc.control.activities.SettingsActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/app_name"
+            android:noHistory="true"
             android:screenOrientation="sensor" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -29,20 +31,11 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="ms.ihc.control.viewer.ResourceActivity"
+            android:name="ms.ihc.control.activities.LocationActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="sensor" >
         </activity>
-        <activity
-            android:name="ms.ihc.control.viewer.ActiveResourcesActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
-            android:screenOrientation="sensor" >
-        </activity>
-        <activity
-            android:name="ms.ihc.control.viewer.FavouritesActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
-            android:screenOrientation="sensor" >
-        </activity>
+        <meta-data android:name="com.crashlytics.ApiKey" android:value="1b7e419e1e57e4a03bc3adca36ab9087ab1d3c95"/>
     </application>
 
 </manifest>

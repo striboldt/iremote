@@ -5,7 +5,7 @@ import java.util.Iterator;
 import ms.ihc.control.devices.wireless.IHCResource;
 import ms.ihc.control.fragments.LocationFragment;
 
-import ms.ihc.control.viewer.IhcManager.ControllerConnection;
+//import ms.ihc.control.viewer.IhcManager.ControllerConnection;
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -23,7 +23,7 @@ import android.widget.TableRow;
 import android.widget.TextView;
 
 
-public class FavouritesActivity extends Activity implements OnClickListener, ControllerConnection {
+public class FavouritesActivity extends Activity implements OnClickListener {
 
 	private ListView favouritesListView;
 	private TableRow favouritesTableRow;
@@ -140,15 +140,6 @@ public class FavouritesActivity extends Activity implements OnClickListener, Con
 				resourceAdapter.notifyDataSetChanged();
 			}
 		}
-	}
-
-	public void onConnectionAccepted() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void onRuntimeVaulesChanged() {
-		new refreshResourceViewTask().execute();
 	}
 	
 	@Override 

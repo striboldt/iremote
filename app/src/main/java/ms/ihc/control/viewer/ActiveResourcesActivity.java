@@ -5,7 +5,7 @@ import java.util.Iterator;
 import ms.ihc.control.devices.wireless.IHCResource;
 import ms.ihc.control.fragments.LocationFragment;
 import ms.ihc.control.valueTypes.DeviceType;
-import ms.ihc.control.viewer.IhcManager.ControllerConnection;
+//import ms.ihc.control.viewer.IhcManager.ControllerConnection;
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -18,7 +18,7 @@ import android.widget.TableRow;
 import android.widget.TextView;
 
 
-public class ActiveResourcesActivity extends Activity implements OnClickListener, ControllerConnection {
+public class ActiveResourcesActivity extends Activity implements OnClickListener{
 
 	private ListView resourceListView;
 	private TableRow resourceTableRow;
@@ -134,13 +134,13 @@ public class ActiveResourcesActivity extends Activity implements OnClickListener
 		}
 	}
 
-	public void onConnectionAccepted() {
+	/*public void onConnectionAccepted() {
 		// TODO Auto-generated method stub
 		
 	}
 
 	public void onRuntimeVaulesChanged() {
 		new refreshResourceViewTask().execute();
-	}
+	}*/
 
 }

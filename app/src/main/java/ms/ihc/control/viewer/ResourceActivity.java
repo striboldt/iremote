@@ -4,7 +4,6 @@ import java.util.Iterator;
 
 import ms.ihc.control.devices.wireless.IHCResource;
 import ms.ihc.control.fragments.LocationFragment;
-import ms.ihc.control.viewer.IhcManager.ControllerConnection;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
@@ -25,7 +24,7 @@ import android.widget.TableRow;
 import android.widget.TextView;
 
 @SuppressLint("NewApi")
-public class ResourceActivity extends Activity implements OnClickListener, ControllerConnection{
+public class ResourceActivity extends Activity implements OnClickListener{
 
 	private ListView resourceListView;
 	private TableRow resourceTableRow;
@@ -117,24 +116,6 @@ public class ResourceActivity extends Activity implements OnClickListener, Contr
 		}
 	}
 
-	public void onConnectionAccepted() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void onRuntimeVaulesChanged() {
-		Log.v("ResourceActivity", "onRuntimeVaulesChanged");
-		while(soapImp.isInTouchMode)
-			try {
-				Thread.sleep(500);
-				Log.v("ResourceActivity", "onRuntimeVaulesChanged - Sleep for 500 ms");
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		
-		new refreshResourceViewTask().execute();	
-	}
 	
 	private class refreshResourceViewTask extends AsyncTask<Void, Void, Boolean> {
 

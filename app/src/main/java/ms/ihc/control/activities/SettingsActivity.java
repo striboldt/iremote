@@ -1,6 +1,7 @@
 package ms.ihc.control.activities;
 
 
+import com.crashlytics.android.Crashlytics;
 import com.google.android.vending.licensing.AESObfuscator;
 import com.google.android.vending.licensing.LicenseChecker;
 import com.google.android.vending.licensing.LicenseCheckerCallback;
@@ -22,10 +23,11 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 
 
-
-public class MainActivity extends FragmentActivity {
+public class SettingsActivity extends BaseFragmentActivity {
 	private LicenseCheckerCallback mLicenseCheckerCallback;
 	private LicenseChecker mChecker;
 	
@@ -34,17 +36,11 @@ public class MainActivity extends FragmentActivity {
 	private static final String BASE64_PUBLIC_KEY = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAvXLkhAGbLsxdP9DMAmAmg14LbqSirf8zlfAV4NL1qlVkNXxqFy3OvNlhZQSiSXV/Ir2JDJy7gK1nBa2yoeQuf0jyo6iGdY/m68Vt1yrQU8ouqOcpOt8626X/XeconYf+aLg55pEXWba5Uhy8To2dd3tjMDMtW6e/EtvOyRPJPNfhK3DS5sk2o8lOCQntgVOnByUgi8iZj6Bm8VdBra2DWXyXqbvhE7m6EXmFUlezWRsjnD+XswIQyHA5DLZ0ZjZ1bwetMMFIb0Ru3dZ1cmtGIRvFoTyvAgX1XJnSFrhBo/9z0/eHTtNReIWQgnJvq+8e79G6rINdL4Xa+kKjhLQIFwIDAQAB";
 	// Generate 20 random bytes, and put them here.    
 	private static final byte[] SALT = new byte[] { -45, 35, 39, -18, -123, -117, 74, -24, 77, 123, -100, -42, 74, -122, -14, -102, -11, 0, -6, 22};
+    private Button loginButton;
 
 
-    private final BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
 
-            if(intent.getAction() != null && intent.getAction().equalsIgnoreCase(IhcManager.RESOURCE_VALUE_CHANGED)) {
-                // TODO: Update resourcefragment
-            }
-        }
-    };
+
 
 
 	private class MyLicenseCheckerCallback implements LicenseCheckerCallback {
@@ -84,6 +80,8 @@ public class MainActivity extends FragmentActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+        Crashlytics.start(this);
+
 		Thread.setDefaultUncaughtExceptionHandler(new CustomExceptionHandler(null));
 
         sharedPreferences = getSharedPreferences(PREFS_NAME, 0);
@@ -100,23 +98,31 @@ public class MainActivity extends FragmentActivity {
 		}
 
 		if(this.sharedPreferences.getBoolean("hasValidLogin", false)){
-			setContentView(R.layout.main);
+            Intent intent = new Intent(this, LocationActivity.class);
+            startActivity(intent);
 		}
 		else
 			setContentView(R.layout.settings);
+
+        loginButton = (Button)findViewById(R.id.loginbutton);
+
+        loginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
 
 	}
 
     @Override
     protected void onPause() {
         super.onPause();
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(broadcastReceiver);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        LocalBroadcastManager.getInstance(this).registerReceiver(broadcastReceiver, new IntentFilter(IhcManager.RESOURCE_VALUE_CHANGED));
     }
 
     /** Called when the Menu button is pushed */
