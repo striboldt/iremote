@@ -20,6 +20,7 @@ import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import com.google.android.vending.licensing.util.Base64;
@@ -81,70 +82,84 @@ public class IhcManager {
     private ApplicationContext context;
 
 
+
+    private class NetworkAsyncTask extends AsyncTask<Void, Void, Void>{
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            String SOAP_ACTION = "authenticate";
+            String METHOD_NAME = "authenticate1";
+            IHCMESSAGE ihcmessage = null;
+
+            boolean loginWasSuccessful = false;
+            SoapObject request = new SoapObject(NAMESPACE, METHOD_NAME);
+            request.addProperty("username", IhcManager.this.login);
+            request.addProperty("password", IhcManager.this.password);
+
+            if(IhcManager.this.wan)
+                request.addProperty("application", "sceneview");
+            else
+                request.addProperty("application", "treeview");
+
+            Log.i(TAG, "SoapSerializationEnvelope");
+            SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+            envelope.setOutputSoapObject(request);
+
+            IhcManager.this.URI = "https://%IP%/ws/";
+            IhcManager.this.URI = IhcManager.this.URI.replace("%IP%", IhcManager.this.ctrlIp);
+            HttpTransportSE androidHttpTransport = new HttpTransportSE(IhcManager.this.URI + "AuthenticationService");
+            androidHttpTransport.debug = false;
+            Log.i(TAG, "HttpTransportSE");
+            try {
+
+                androidHttpTransport.call(SOAP_ACTION, envelope);
+                IhcManager.this.SESSIONID = androidHttpTransport.sessionCookie;
+                SoapObject soapResponse = (SoapObject) envelope.bodyIn;
+                loginWasSuccessful = (Boolean) soapResponse.getProperty("loginWasSuccessful");
+                if(!loginWasSuccessful){
+                    if((Boolean) soapResponse.getProperty(IHCMESSAGE.CONNECTION_RESTRICTIONS.toString()))
+                        ihcmessage = IHCMESSAGE.CONNECTION_RESTRICTIONS;
+                    else if ((Boolean) soapResponse.getProperty(IHCMESSAGE.INSUFFICIENT_RIGHTS.toString()))
+                        ihcmessage = IHCMESSAGE.INSUFFICIENT_RIGHTS;
+                    else if ((Boolean) soapResponse.getProperty(IHCMESSAGE.INVALID_ACCOUNT.toString()))
+                        ihcmessage = IHCMESSAGE.INVALID_ACCOUNT;
+                }
+                isConnected = true;
+                Log.i(TAG, "isConnected");
+
+            }
+            catch (SocketTimeoutException socketTimeout){
+                ihcmessage = IHCMESSAGE.SOCKET_TIMEOUT;
+            }
+            catch (Exception e) {
+                Log.e(TAG, e.getMessage());
+            }
+            finally{
+                androidHttpTransport.reset();
+            }
+
+            if(loginWasSuccessful)
+                sendBroadcast(IHCEVENTS.CONNECTED, null);
+            else
+                sendBroadcast(IHCEVENTS.DISCONNECTED, ihcmessage);
+            return null;
+        }
+    }
+
     public IhcManager(ApplicationContext applicationContext){
         this.context = applicationContext;
     }
 
 	
-	public void authenticate(final String username, final String Password, final String ip, final Boolean WAN) {
+	public void authenticate(final String username, final String password, final String ip, final Boolean WAN) {
 
-		this.login = username;
-		this.password = Password;
-		this.ctrlIp = ip;
-		this.wan = WAN;
+        this.login = username;
+        this.password = password;
+        this.ctrlIp = ip;
+        this.wan = WAN;
+        Log.i(TAG, "before");
+        new NetworkAsyncTask().execute();
 
-		String SOAP_ACTION = "authenticate";
-		String METHOD_NAME = "authenticate1";
-        IHCMESSAGE ihcmessage = null;
-
-		boolean loginWasSuccessful = false;
-		SoapObject request = new SoapObject(NAMESPACE, METHOD_NAME);
-		request.addProperty("username", username);
-		request.addProperty("password", Password);
-
-		if(WAN)
-			request.addProperty("application", "sceneview");
-		else
-			request.addProperty("application", "treeview");
-
-		SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
-		envelope.setOutputSoapObject(request);
-
-		this.URI = "https://%IP%/ws/";
-		this.URI = this.URI.replace("%IP%", ip);
-		HttpTransportSE androidHttpTransport = new HttpTransportSE(this.URI + "AuthenticationService");
-
-		try {
-
-			androidHttpTransport.call(SOAP_ACTION, envelope);
-			this.SESSIONID = androidHttpTransport.sessionCookie;
-			SoapObject soapResponse = (SoapObject) envelope.bodyIn;
-			loginWasSuccessful = (Boolean) soapResponse.getProperty("loginWasSuccessful");
-			if(!loginWasSuccessful){
-				if((Boolean) soapResponse.getProperty(IHCMESSAGE.CONNECTION_RESTRICTIONS.toString()))
-					ihcmessage = IHCMESSAGE.CONNECTION_RESTRICTIONS;
-				else if ((Boolean) soapResponse.getProperty(IHCMESSAGE.INSUFFICIENT_RIGHTS.toString()))
-                    ihcmessage = IHCMESSAGE.INSUFFICIENT_RIGHTS;
-				else if ((Boolean) soapResponse.getProperty(IHCMESSAGE.INVALID_ACCOUNT.toString()))
-                    ihcmessage = IHCMESSAGE.INVALID_ACCOUNT;
-			}
-			isConnected = true;
-
-		}
-		catch (SocketTimeoutException socketTimeout){
-            ihcmessage = IHCMESSAGE.SOCKET_TIMEOUT;
-		}
-		catch (Exception e) {
-            Log.e(TAG, e.getMessage());
-		}
-		finally{
-			androidHttpTransport.reset();
-		}
-
-        if(loginWasSuccessful)
-            sendBroadcast(IHCEVENTS.CONNECTED, null);
-        else
-            sendBroadcast(IHCEVENTS.DISCONNECTED, ihcmessage);
 	}
 
     // TODO: Setup algorithm for connection retry and timeout. And notify upstream Activities in case of failure

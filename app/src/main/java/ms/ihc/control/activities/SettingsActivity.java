@@ -8,18 +8,14 @@ import com.google.android.vending.licensing.LicenseCheckerCallback;
 import com.google.android.vending.licensing.ServerManagedPolicy;
 
 import ms.ihc.control.fragments.AlertDialogFragment;
-import ms.ihc.control.viewer.CustomExceptionHandler;
+import ms.ihc.control.viewer.ApplicationContext;
 import ms.ihc.control.viewer.IhcManager;
 import ms.ihc.control.viewer.R;
-import android.content.BroadcastReceiver;
-import android.content.Context;
+
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
 import android.provider.Settings.Secure;
 import android.content.SharedPreferences;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.content.LocalBroadcastManager;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -37,10 +33,6 @@ public class SettingsActivity extends BaseFragmentActivity {
 	// Generate 20 random bytes, and put them here.    
 	private static final byte[] SALT = new byte[] { -45, 35, 39, -18, -123, -117, 74, -24, 77, 123, -100, -42, 74, -122, -14, -102, -11, 0, -6, 22};
     private Button loginButton;
-
-
-
-
 
 
 	private class MyLicenseCheckerCallback implements LicenseCheckerCallback {
@@ -82,8 +74,6 @@ public class SettingsActivity extends BaseFragmentActivity {
 		super.onCreate(savedInstanceState);
         Crashlytics.start(this);
 
-		Thread.setDefaultUncaughtExceptionHandler(new CustomExceptionHandler(null));
-
         sharedPreferences = getSharedPreferences(PREFS_NAME, 0);
 
 		if(!this.sharedPreferences.getBoolean("isLicensed", false))
@@ -109,7 +99,7 @@ public class SettingsActivity extends BaseFragmentActivity {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                ((ApplicationContext) getApplicationContext()).getInstaceIhcManager().authenticate("admin","ospekos4u!","striboldt.lgnas.com",true);
             }
         });
 
