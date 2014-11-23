@@ -16,6 +16,7 @@ import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapPrimitive;
 import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.HttpTransportSE;
+import org.ksoap2.transport.HttpsTransportSE;
 import org.ksoap2.transport.KeepAliveHttpsTransportSE;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -108,8 +109,9 @@ public class IhcManager {
 
             IhcManager.this.URI = "https://%IP%/ws/";
             IhcManager.this.URI = IhcManager.this.URI.replace("%IP%", IhcManager.this.ctrlIp);
-            KeepAliveHttpsTransportSE androidHttpTransport = new KeepAliveHttpsTransportSE(IhcManager.this.URI + "AuthenticationService");
-            androidHttpTransport.debug = false;
+            //KeepAliveHttpsTransportSE androidHttpTransport = new KeepAliveHttpsTransportSE(IhcManager.this.ctrlIp,"AuthenticationService",20000);//IhcManager.this.URI + "AuthenticationService");
+            HttpTransportSE androidHttpTransport = new HttpTransportSE(IhcManager.this.URI + "AuthenticationService");
+            androidHttpTransport.debug = true;
             Log.i(TAG, "HttpTransportSE");
             try {
 

@@ -8,7 +8,7 @@ buildscript {
         maven { url 'http://download.crashlytics.com/maven' }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:0.12.2'
+        classpath 'com.android.tools.build:gradle:0.14.4'
 //        classpath 'com.squareup.gradle:gradle-android-test-plugin:0.9.1-SNAPSHOT' // Enables the test plugin used below.
         classpath 'com.crashlytics.tools.gradle:crashlytics-gradle:1.+'
     }
@@ -22,18 +22,17 @@ apply plugin: 'crashlytics'
 dependencies {
     repositories {
         maven { url 'https://ksoap2-android.googlecode.com/svn/m2-repo' }
-        maven { url 'https://oss.sonatype.org/content/repositories/snapshots/'}
+        maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
         mavenCentral()
-        maven { url 'http://download.crashlytics.com/maven'}
+        maven { url 'http://download.crashlytics.com/maven' }
 
-        }
+    }
     compile 'com.android.support:appcompat-v7:20.0.0'
     compile project(':ksoap2-android:ksoap2-android')
     compile project(':ksoap2-android:ksoap2-base')
     compile project(':ksoap2-android:ksoap2-j2se')
     compile project(':Google-LVL')
     compile 'com.crashlytics.android:crashlytics:1.+'
-
 }
 
 
@@ -45,6 +44,7 @@ android {
     defaultConfig {
         minSdkVersion 8
         targetSdkVersion 19
+        signingConfig signingConfigs.debug
     }
 
     sourceSets {
@@ -58,9 +58,7 @@ android {
            // assets.srcDirs = ['assets']
         }
 
-        beta {
-            //manifest.srcFile 'AndroidManifest_beta.xml'
-        }
+
 
  //       instrumentTest.setRoot('src/test')
 
@@ -72,6 +70,7 @@ android {
         // by a similar customization.
         debug.setRoot('build-types/debug')
         release.setRoot('build-types/release')
+        beta.setRoot('build-types/beta')
     }
 
     signingConfigs {
@@ -85,25 +84,23 @@ android {
             storeFile file("debug.keystore")
         }
         beta {
-            storeFile file("release.keystore")
-            keyAlias "striboldt"
-            storePassword System.getenv("KEYSTORE_PASSWORD")
-            keyPassword System.getenv("KEY_PASSWORD")
+            storeFile file('debug.keystore')
         }
     }
 
     buildTypes {
-        beta {
-            applicationIdSuffix ".beta"
-            signingConfig signingConfigs.beta
-        }
-
         release {
             signingConfig signingConfigs.release
-            runProguard true
+            minifyEnabled true
         }
         debug {
             applicationIdSuffix ".debug"
+            signingConfig signingConfigs.debug
+        }
+        beta {
+            signingConfig signingConfigs.beta
+            applicationIdSuffix ".beta"
+            debuggable true
         }
     }
 
