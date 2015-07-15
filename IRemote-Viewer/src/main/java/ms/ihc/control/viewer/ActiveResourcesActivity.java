@@ -23,7 +23,7 @@ public class ActiveResourcesActivity extends Activity implements OnClickListener
 	private ListView resourceListView;
 	private TableRow resourceTableRow;
 	private TextView resourceTextView;
-	private IhcManager ihcManager = null;
+	private ConnectionManager connectionManager = null;
 	private ResourceAdapter resourceAdapter;
 	private ApplicationContext appContext;
 	
@@ -33,8 +33,8 @@ public class ActiveResourcesActivity extends Activity implements OnClickListener
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.resources);
 		appContext = (ApplicationContext) getApplication();
-		ihcManager = appContext.getInstaceIhcManager();
-		if(ihcManager == null)
+		connectionManager = appContext.getIHCConnectionManager();
+		if(connectionManager == null)
 			this.finish();
 		else
 		{
@@ -42,7 +42,7 @@ public class ActiveResourcesActivity extends Activity implements OnClickListener
 			resourceTableRow = (TableRow) findViewById(R.id.HeaderTableRow);
 			resourceTextView = (TextView) findViewById(R.id.locationtext1);
 	
-			resourceAdapter = new ResourceAdapter(getApplicationContext(), ihcManager);
+			resourceAdapter = new ResourceAdapter(getApplicationContext(), connectionManager);
 	
 			Iterator<IHCLocation> iLocations = appContext.getIHCHome().locations.iterator();
 			while (iLocations.hasNext()) {
@@ -102,7 +102,7 @@ public class ActiveResourcesActivity extends Activity implements OnClickListener
 		@Override
 		protected Boolean doInBackground(Void... params) {
 			Log.v("waitForResourceValueChangesTask", "Waiting for valuechanges");
-			return ihcManager.waitForResourceValueChanges(LocationFragment.resourceMap);
+			return connectionManager.waitForResourceValueChanges(LocationFragment.resourceMap);
 		}
 
 		@Override
@@ -127,7 +127,7 @@ public class ActiveResourcesActivity extends Activity implements OnClickListener
 
 		@Override
 		protected void onPostExecute(Boolean result) {
-			if (resourceAdapter != null && !ihcManager.isInTouchMode) {
+			if (resourceAdapter != null && !connectionManager.isInTouchMode) {
 				Log.v("refresjResourceViewTask", "Refreshing view...");
 				resourceAdapter.notifyDataSetChanged();
 			}

@@ -9,6 +9,7 @@ import java.net.SocketTimeoutException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.logging.Handler;
 import java.util.zip.GZIPInputStream;
 import org.ksoap2.*;
 import org.ksoap2.serialization.KvmSerializable;
@@ -16,8 +17,6 @@ import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapPrimitive;
 import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.HttpTransportSE;
-import org.ksoap2.transport.HttpsTransportSE;
-import org.ksoap2.transport.KeepAliveHttpsTransportSE;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
@@ -30,9 +29,9 @@ import ms.ihc.control.devices.wireless.IHCResource;
 import ms.ihc.control.devices.wireless.ResourceFactory;
 
 
-public class IhcManager {
+public class ConnectionManager {
 
-    private static final String TAG = IhcManager.class.getPackage().getName();
+    private static final String TAG = ConnectionManager.class.getPackage().getName();
 
     public enum IHCEVENTS {
         RESOURCE_VALUE_CHANGED("ms.ihc.control.viewer.resource_value_changed"),
@@ -73,12 +72,12 @@ public class IhcManager {
 
 	private static final String NAMESPACE = "utcs";
 	public Boolean isInTouchMode = false;
-    private String URI;
+    private static String URI;
 	private String SESSIONID = "";
-	private String login;
-	private String password;
-	private String ctrlIp;
-	private Boolean wan;
+	private static String login;
+	private static String password;
+	private static String ctrlIp;
+	private static Boolean wan;
 	//private String msg;
 	private Boolean isConnected = false;
     private ApplicationContext context;
@@ -95,10 +94,10 @@ public class IhcManager {
 
             boolean loginWasSuccessful = false;
             SoapObject request = new SoapObject(NAMESPACE, METHOD_NAME);
-            request.addProperty("username", IhcManager.this.login);
-            request.addProperty("password", IhcManager.this.password);
+            request.addProperty("username", login);
+            request.addProperty("password", password);
 
-            if(IhcManager.this.wan)
+            if(ConnectionManager.this.wan)
                 request.addProperty("application", "sceneview");
             else
                 request.addProperty("application", "treeview");
@@ -107,16 +106,15 @@ public class IhcManager {
             SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
             envelope.setOutputSoapObject(request);
 
-            IhcManager.this.URI = "https://%IP%/ws/";
-            IhcManager.this.URI = IhcManager.this.URI.replace("%IP%", IhcManager.this.ctrlIp);
+            ConnectionManager.this.URI = "https://%IP%/ws/";
+            ConnectionManager.this.URI = ConnectionManager.this.URI.replace("%IP%", ctrlIp);
             //KeepAliveHttpsTransportSE androidHttpTransport = new KeepAliveHttpsTransportSE(IhcManager.this.ctrlIp,"AuthenticationService",20000);//IhcManager.this.URI + "AuthenticationService");
-            HttpTransportSE androidHttpTransport = new HttpTransportSE(IhcManager.this.URI + "AuthenticationService");
+            HttpTransportSE androidHttpTransport = new HttpTransportSE(ConnectionManager.this.URI + "AuthenticationService");
             androidHttpTransport.debug = true;
-            Log.i(TAG, "HttpTransportSE");
             try {
 
                 androidHttpTransport.call(SOAP_ACTION, envelope);
-                IhcManager.this.SESSIONID = androidHttpTransport.sessionCookie;
+                ConnectionManager.this.SESSIONID = androidHttpTransport.sessionCookie;
                 SoapObject soapResponse = (SoapObject) envelope.bodyIn;
                 loginWasSuccessful = (Boolean) soapResponse.getProperty("loginWasSuccessful");
                 if(!loginWasSuccessful){
@@ -149,17 +147,17 @@ public class IhcManager {
         }
     }
 
-    public IhcManager(ApplicationContext applicationContext){
+    public ConnectionManager(ApplicationContext applicationContext){
         this.context = applicationContext;
     }
 
 	
-	public void authenticate(final String username, final String password, final String ip, final Boolean WAN) {
+	public void connect(final String username, String pwd, final String ip, final Boolean WAN) {
 
-        this.login = username;
-        this.password = password;
-        this.ctrlIp = ip;
-        this.wan = WAN;
+        login = username;
+        password = pwd;
+        ctrlIp = ip;
+        wan = WAN;
         Log.i(TAG, "before");
         new NetworkAsyncTask().execute();
 
@@ -168,7 +166,7 @@ public class IhcManager {
     // TODO: Setup algorithm for connection retry and timeout. And notify upstream Activities in case of failure
 	public void reAuthenticate()
 	{
-		 this.authenticate(this.login, this.password, this.ctrlIp, this.wan);
+		 this.connect(this.login, this.password, this.ctrlIp, this.wan);
 	}
 
 	public Boolean ping() {
@@ -378,7 +376,7 @@ public class IhcManager {
 		return decodedStream;
 	}
 	
-	public IHCHome getIHCProject(boolean isSimulationMode, InputStream instream) {
+	public IHCHome loadIHCProject(boolean isSimulationMode, InputStream instream) {
 		IHCHome home = new IHCHome();
 		if(isSimulationMode)
 		{

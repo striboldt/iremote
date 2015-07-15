@@ -13,7 +13,7 @@ import android.widget.Toast;
 
 public class ApplicationContext extends Application{
 	
-	private IhcManager ihcManager;
+	private ConnectionManager connectionManager;
 	private IHCHome home;
 	private Boolean isAppRestarted;
 	private Boolean waitingForValueChanges;
@@ -25,11 +25,11 @@ public class ApplicationContext extends Application{
 	}
 
 
-	public IhcManager getInstaceIhcManager() {
-		if(ihcManager == null)
-            return new IhcManager(this);
+	public ConnectionManager getIHCConnectionManager() {
+		if(connectionManager == null)
+            return new ConnectionManager(this);
         else
-            return ihcManager;
+            return connectionManager;
 
 	}
 

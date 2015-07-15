@@ -3,7 +3,7 @@ package ms.ihc.control.devices.dataline;
 import java.io.IOException;
 import java.util.HashMap;
 
-import ms.ihc.control.viewer.IhcManager;
+import ms.ihc.control.viewer.ConnectionManager;
 import ms.ihc.control.viewer.R;
 import ms.ihc.control.viewer.ResourceAdapter.ViewHolder;
 import ms.ihc.control.devices.wireless.IHCResource;
@@ -76,7 +76,7 @@ public class Panel3Button_Fuga extends ioResource implements IHCResource, java.i
 		return this.state;
 	}
 
-	public void setDimmerValue(IhcManager ihcCtrl) {
+	public void setDimmerValue(ConnectionManager ihcCtrl) {
 		//this.dimmerValue = dimmerValue;
 
 	}
@@ -142,7 +142,7 @@ public class Panel3Button_Fuga extends ioResource implements IHCResource, java.i
 	}
 	
 	@Override
-	public void setInputClicked(boolean OnOff, int inputID, IhcManager ihcCtrl) {
+	public void setInputClicked(boolean OnOff, int inputID, ConnectionManager ihcCtrl) {
 		int resourceClicked = 0;
 		if(inputID == 1)
 			resourceClicked = this.upper_left_id;
@@ -179,7 +179,7 @@ public class Panel3Button_Fuga extends ioResource implements IHCResource, java.i
 	}
 	
 	@Override
-	public void inputClicked(int inputID, IhcManager ihcCtrl) {
+	public void inputClicked(int inputID, ConnectionManager ihcCtrl) {
 		int resourceClicked = 0;
 		
 		if(inputID == 1)
@@ -233,7 +233,7 @@ public class Panel3Button_Fuga extends ioResource implements IHCResource, java.i
 		
 	}
 
-	public View getView(LayoutInflater layoutInf, IhcManager ihcCtrl) {
+	public View getView(LayoutInflater layoutInf, ConnectionManager ihcCtrl) {
 		View ConvertView = layoutInf.inflate(R.layout.panel4button, null);
 		ViewHolder holder = new ViewHolder();
 		holder.position = (TextView)ConvertView.findViewById(R.id.position);

@@ -10,7 +10,8 @@ import ms.ihc.control.devices.dataline.Panel4Button_Fuga;
 import ms.ihc.control.devices.dataline.Panel6Button_Fuga;
 import ms.ihc.control.devices.dataline.Panel8Button;
 import ms.ihc.control.devices.dataline.TemperatureSensor;
-import ms.ihc.control.viewer.IhcManager;
+import ms.ihc.control.viewer.ConnectionManager;
+
 import org.xmlpull.v1.XmlPullParser;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -159,7 +160,7 @@ public interface IHCResource extends View.OnClickListener  {
 	public Boolean isFavourite();
 	
 	
-	public void setDimmerValue(IhcManager ihcCtrl);
+	public void setDimmerValue(ConnectionManager ihcCtrl);
 	public int getDimmerValue();
 	
 	public void setPosition(String position);
@@ -169,9 +170,9 @@ public interface IHCResource extends View.OnClickListener  {
 
 	public Boolean getIsDimmable();
 	
-	public void inputClicked(int inputID, IhcManager ihcCtrl);
+	public void inputClicked(int inputID, ConnectionManager ihcCtrl);
 	
-	public View getView(LayoutInflater layoutInf, IhcManager ihcCtrl);
+	public View getView(LayoutInflater layoutInf, ConnectionManager ihcCtrl);
 	public View updateView(View convertView);
 
 }

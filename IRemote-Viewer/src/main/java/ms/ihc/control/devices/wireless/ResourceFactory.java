@@ -1,11 +1,12 @@
 package ms.ihc.control.devices.wireless;
 
 import android.util.Log;
-import ms.ihc.control.viewer.IhcManager;
+
+import ms.ihc.control.viewer.ConnectionManager;
 
 public class ResourceFactory {
 	
-	public static IHCResource createResource(String deviceId, IhcManager soapImpl) throws IllegalAccessException, InstantiationException, ClassNotFoundException, Exception
+	public static IHCResource createResource(String deviceId, ConnectionManager soapImpl) throws IllegalAccessException, InstantiationException, ClassNotFoundException, Exception
 	{ 
 		IHCResource resource = null;
 		try{

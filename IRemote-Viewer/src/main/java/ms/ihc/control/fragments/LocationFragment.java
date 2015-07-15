@@ -6,9 +6,9 @@ import java.util.Iterator;
 
 import ms.ihc.control.devices.wireless.IHCResource;
 import ms.ihc.control.viewer.ApplicationContext;
+import ms.ihc.control.viewer.ConnectionManager;
 import ms.ihc.control.viewer.IHCHome;
 import ms.ihc.control.viewer.IHCLocation;
-import ms.ihc.control.viewer.IhcManager;
 import ms.ihc.control.viewer.R;
 import ms.ihc.control.viewer.ResourceActivity;
 import ms.ihc.control.viewer.ResourceAdapter;
@@ -32,7 +32,7 @@ public class LocationFragment extends Fragment implements OnItemClickListener{
 
 	private ListView locationListView;
 	private Handler mHandler = new Handler();
-	private IhcManager ihcManager = null;
+	private ConnectionManager connectionManager = null;
 	private IHCHome home = null;
 	public static HashMap<Integer,IHCResource> resourceMap = new HashMap<Integer, IHCResource>();
 	private enableRuntimeValueNotificationsTask runtimeTask = null;
@@ -48,8 +48,8 @@ public class LocationFragment extends Fragment implements OnItemClickListener{
 		
 		final View view = inflater.inflate(R.layout.locations,container);
 		appContext = (ApplicationContext) getActivity().getApplicationContext();
-		ihcManager = appContext.getInstaceIhcManager();
-		if(ihcManager == null)
+		connectionManager = appContext.getIHCConnectionManager();
+		if(connectionManager == null)
 			this.getActivity().finish();
 		else
 		{
@@ -159,7 +159,7 @@ public class LocationFragment extends Fragment implements OnItemClickListener{
 			HashMap<String,String> map = list.get(position);
 			String selectedResource = map.get("location");
 			
-			resourceAdapter = new ResourceAdapter(getActivity().getApplicationContext(), ihcManager);
+			resourceAdapter = new ResourceAdapter(getActivity().getApplicationContext(), connectionManager);
 
 			Iterator<IHCLocation> iLocations = home.getLocations().iterator();
 			while (iLocations.hasNext()) {
@@ -193,7 +193,7 @@ public class LocationFragment extends Fragment implements OnItemClickListener{
 						resourceMap = resource.getResourceIds(resourceMap);
 					}
 			}
-			ihcManager.enableRuntimeValueNotifications(resourceMap);
+			connectionManager.enableRuntimeValueNotifications(resourceMap);
 			return true;
 		}
 	}
@@ -240,7 +240,7 @@ public class LocationFragment extends Fragment implements OnItemClickListener{
 		@Override
 		protected Boolean doInBackground(Void... params) {
 			Log.v("waitForResourceValueChangesTask-LocationActivity", "Waiting for valuechanges");
-			return ihcManager.waitForResourceValueChanges(LocationFragment.resourceMap);
+			return connectionManager.waitForResourceValueChanges(LocationFragment.resourceMap);
 		}
 
 		@Override
@@ -263,7 +263,7 @@ public class LocationFragment extends Fragment implements OnItemClickListener{
 
 		@Override
 		protected void onPostExecute(Boolean result) {
-			if (LocationFragment.resourceAdapter != null && !ihcManager.isInTouchMode) {
+			if (LocationFragment.resourceAdapter != null && !connectionManager.isInTouchMode) {
 				Log.v("refresjResourceViewTask-ResourceActivity", "Refreshing view...");
 				LocationFragment.resourceAdapter.notifyDataSetChanged();
 			}

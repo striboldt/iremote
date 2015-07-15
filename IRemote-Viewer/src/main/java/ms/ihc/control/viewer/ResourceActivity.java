@@ -28,7 +28,7 @@ public class ResourceActivity extends Activity implements OnClickListener{
 
 	private ListView resourceListView;
 	private TableRow resourceTableRow;
-	private IhcManager soapImp = null;
+	private ConnectionManager soapImp = null;
 	private ApplicationContext appContext;
 	private TextView resourceTextView1;
 	private TextView resourceTextView2;

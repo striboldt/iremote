@@ -79,7 +79,7 @@ public class HttpTransportSE extends Transport {
         os.write(requestData, 0, requestData.length);
         os.flush();
         os.close();
-        requestData = null;
+        //requestData = null;
         BufferedInputStream is;
 
         try {
@@ -107,7 +107,34 @@ public class HttpTransportSE extends Transport {
         parseResponse(envelope, is);
     }
 
-    protected ServiceConnection getServiceConnection() throws IOException {
-        return new ServiceConnectionSE(url);
+
+    /**
+     * Get a service connection. Returns an implementation of {@link org.ksoap2.transport.ServiceConnectionSE} that
+     * ignores "Connection: close" request property setting and has "Connection: keep-alive" always set and is uses
+     * a https connection.
+     * @see org.ksoap2.transport.HttpTransportSE#getServiceConnection()
+     */
+    //@Override
+    protected ServiceConnection getServiceConnection() throws IOException
+    {
+        connection = new ServiceConnectionSE(url) //HttpsServiceConnectionSE(host, port, file, timeout)
+        {
+            @Override
+            public void setRequestProperty(String key, String value) {
+                // We want to ignore any setting of "Connection: close" because
+                // it is buggy with Android SSL.
+                if ("Connection".equalsIgnoreCase(key) && "close".equalsIgnoreCase(value)) {
+                    return;
+                } else {
+                    super.setRequestProperty(key, value);
+                }
+            }
+        };
+        connection.setRequestProperty("Connection", "keep-alive");
+        return connection;
     }
+
+    /*protected ServiceConnection getServiceConnection() throws IOException {
+        return new ServiceConnectionSE(url);
+    }*/
 }

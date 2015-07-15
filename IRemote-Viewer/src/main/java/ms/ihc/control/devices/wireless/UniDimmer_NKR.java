@@ -3,7 +3,7 @@ package ms.ihc.control.devices.wireless;
 import java.io.IOException;
 import java.util.HashMap;
 
-import ms.ihc.control.viewer.IhcManager;
+import ms.ihc.control.viewer.ConnectionManager;
 import ms.ihc.control.viewer.R;
 import ms.ihc.control.viewer.ResourceAdapter.ViewHolder;
 import ms.ihc.control.valueTypes.DeviceType;
@@ -81,7 +81,7 @@ public class UniDimmer_NKR extends ioResource implements IHCResource,java.io.Ser
 	}
 
 	@Override
-	public void setDimmerValue(IhcManager ihcCtrl) {
+	public void setDimmerValue(ConnectionManager ihcCtrl) {
 		String METHOD_NAME = "setResourceValue1";
 		WSIntegerValue wsIntegerVal = new WSIntegerValue(this.dimmerValue, 0, 100);
 		PropertyInfo pi = new PropertyInfo();
@@ -156,7 +156,7 @@ public class UniDimmer_NKR extends ioResource implements IHCResource,java.io.Ser
 	}
 
 	@Override
-	public void setInputClicked(boolean OnOff, int inputID, IhcManager ihcCtrl) {
+	public void setInputClicked(boolean OnOff, int inputID, ConnectionManager ihcCtrl) {
 		int resourceClicked = 0;
 
 		resourceClicked = this.touchId;
@@ -187,7 +187,7 @@ public class UniDimmer_NKR extends ioResource implements IHCResource,java.io.Ser
 	}
 	
 	@Override
-	public void inputClicked(int inputID, IhcManager ihcCtrl) {
+	public void inputClicked(int inputID, ConnectionManager ihcCtrl) {
 		int resourceClicked = 0;
 
 		resourceClicked = this.touchId;
@@ -234,7 +234,7 @@ public class UniDimmer_NKR extends ioResource implements IHCResource,java.io.Ser
 		
 	}
 
-	public View getView(LayoutInflater layoutInf, IhcManager ihcCtrl) {
+	public View getView(LayoutInflater layoutInf, ConnectionManager ihcCtrl) {
 		View ConvertView = layoutInf.inflate(R.layout.dimmable1button, null);
 		ViewHolder holder = new ViewHolder();
 		holder.position = (TextView)ConvertView.findViewById(R.id.position);
@@ -273,13 +273,13 @@ public class UniDimmer_NKR extends ioResource implements IHCResource,java.io.Ser
 	}
 
 	public void onStartTrackingTouch(SeekBar seekBar) {
-		IhcManager ihcCtrl = (IhcManager)seekBar.getTag();
+		ConnectionManager ihcCtrl = (ConnectionManager)seekBar.getTag();
 		ihcCtrl.isInTouchMode = true;
 		
 	}
 
 	public void onStopTrackingTouch(SeekBar seekBar) {
-		IhcManager ihcCtrl = (IhcManager)seekBar.getTag();
+		ConnectionManager ihcCtrl = (ConnectionManager)seekBar.getTag();
 		ihcCtrl.isInTouchMode = false;
 		new SetDimmerEvent().execute(ihcCtrl);
 	}

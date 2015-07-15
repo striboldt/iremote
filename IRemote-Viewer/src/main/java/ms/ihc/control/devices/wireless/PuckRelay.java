@@ -3,7 +3,7 @@ package ms.ihc.control.devices.wireless;
 import java.io.IOException;
 import java.util.HashMap;
 
-import ms.ihc.control.viewer.IhcManager;
+import ms.ihc.control.viewer.ConnectionManager;
 import ms.ihc.control.viewer.R;
 import ms.ihc.control.viewer.ResourceAdapter.ViewHolder;
 import ms.ihc.control.valueTypes.DeviceType;
@@ -72,7 +72,7 @@ public class PuckRelay extends ioResource implements IHCResource, java.io.Serial
 		return this.state;
 	}
 
-	public void setDimmerValue(IhcManager ihcCtrl) {
+	public void setDimmerValue(ConnectionManager ihcCtrl) {
 		//this.dimmerValue = dimmerValue;
 
 	}
@@ -127,12 +127,12 @@ public class PuckRelay extends ioResource implements IHCResource, java.io.Serial
 	}
 
 	@Override
-	public void setInputClicked(boolean OnOff, int inputID, IhcManager ihcCtrl) {
+	public void setInputClicked(boolean OnOff, int inputID, ConnectionManager ihcCtrl) {
 		// Not implemented
 	}
 	
 	@Override
-	public void inputClicked(int inputID, IhcManager ihcCtrl) {
+	public void inputClicked(int inputID, ConnectionManager ihcCtrl) {
 		Boolean value = true;
 		
 		if(inputID == 2)
@@ -157,7 +157,7 @@ public class PuckRelay extends ioResource implements IHCResource, java.io.Serial
 		
 	}
 
-	public View getView(LayoutInflater layoutInf, IhcManager ihcCtrl) {
+	public View getView(LayoutInflater layoutInf, ConnectionManager ihcCtrl) {
 		View ConvertView = layoutInf.inflate(R.layout.panel2button, null);
 		ViewHolder holder = new ViewHolder();
         holder.position = (TextView)ConvertView.findViewById(R.id.position);

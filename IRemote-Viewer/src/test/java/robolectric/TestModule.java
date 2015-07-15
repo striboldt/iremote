@@ -27,7 +27,7 @@ public class robolectric.TestModule  {
     @Before
     public void setup() {
         this.activity = Robolectric.buildActivity(SettingsActivity.class).get();
-        this.ihcManager = ((ApplicationContext)activity.getApplicationContext()).getInstaceIhcManager();
+        this.ihcManager = ((ApplicationContext)activity.getApplicationContext()).getIHCConnectionManager();
     }
 
     @Test

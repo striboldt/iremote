@@ -28,7 +28,7 @@ public class FavouritesActivity extends Activity implements OnClickListener {
 	private ListView favouritesListView;
 	private TableRow favouritesTableRow;
 	private TextView favouritesTextView;
-	private IhcManager soapImp = null;
+	private ConnectionManager soapImp = null;
 	private ResourceAdapter resourceAdapter;
 	private ApplicationContext appContext;
 	

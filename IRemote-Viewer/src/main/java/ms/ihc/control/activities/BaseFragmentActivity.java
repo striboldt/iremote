@@ -8,28 +8,30 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
-import ms.ihc.control.viewer.IhcManager;
+import ms.ihc.control.viewer.ConnectionManager;
 
 /**
  * Created by mortenstriboldt on 02/02/14.
  */
 public class BaseFragmentActivity extends FragmentActivity {
-    private static final String TAG = BaseFragmentActivity.class.getPackage().getName();
+    private static final String TAG = BaseFragmentActivity.class.getSimpleName();
 
 
     private final BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
 
-            if(intent.getAction() != null && intent.getAction().equalsIgnoreCase(IhcManager.IHCEVENTS.RESOURCE_VALUE_CHANGED.toString())) {
+            if(intent.getAction() != null && intent.getAction().equalsIgnoreCase(ConnectionManager.IHCEVENTS.RESOURCE_VALUE_CHANGED.toString())) {
                 Log.d(TAG,"RESOURCE_VALUE_CHANGED ");
             }
-            else if (intent.getAction() != null && intent.getAction().equalsIgnoreCase(IhcManager.IHCEVENTS.CONNECTED.toString())) {
+            else if (intent.getAction() != null && intent.getAction().equalsIgnoreCase(ConnectionManager.IHCEVENTS.CONNECTED.toString())) {
                 Log.d(TAG,"CONNECTED ");
+                onMessage(ConnectionManager.IHCEVENTS.CONNECTED);
             }
-            else if (intent.getAction() != null && intent.getAction().equalsIgnoreCase(IhcManager.IHCEVENTS.DISCONNECTED.toString())) {
+            else if (intent.getAction() != null && intent.getAction().equalsIgnoreCase(ConnectionManager.IHCEVENTS.DISCONNECTED.toString())) {
                 Log.d(TAG,"DISCONNECTED ");
             }
+
         }
     };
 
@@ -42,9 +44,11 @@ public class BaseFragmentActivity extends FragmentActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        LocalBroadcastManager.getInstance(this).registerReceiver(broadcastReceiver, new IntentFilter(IhcManager.IHCEVENTS.RESOURCE_VALUE_CHANGED.toString()));
-        LocalBroadcastManager.getInstance(this).registerReceiver(broadcastReceiver, new IntentFilter(IhcManager.IHCEVENTS.CONNECTED.toString()));
-        LocalBroadcastManager.getInstance(this).registerReceiver(broadcastReceiver, new IntentFilter(IhcManager.IHCEVENTS.DISCONNECTED.toString()));
+        LocalBroadcastManager.getInstance(this).registerReceiver(broadcastReceiver, new IntentFilter(ConnectionManager.IHCEVENTS.RESOURCE_VALUE_CHANGED.toString()));
+        LocalBroadcastManager.getInstance(this).registerReceiver(broadcastReceiver, new IntentFilter(ConnectionManager.IHCEVENTS.CONNECTED.toString()));
+        LocalBroadcastManager.getInstance(this).registerReceiver(broadcastReceiver, new IntentFilter(ConnectionManager.IHCEVENTS.DISCONNECTED.toString()));
     }
+
+    protected void onMessage(ConnectionManager.IHCEVENTS event){}
 
 }

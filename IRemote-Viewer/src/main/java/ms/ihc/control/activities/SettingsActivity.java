@@ -9,7 +9,7 @@ import com.google.android.vending.licensing.ServerManagedPolicy;
 
 import ms.ihc.control.fragments.AlertDialogFragment;
 import ms.ihc.control.viewer.ApplicationContext;
-import ms.ihc.control.viewer.IhcManager;
+import ms.ihc.control.viewer.ConnectionManager;
 import ms.ihc.control.viewer.R;
 
 import android.content.Intent;
@@ -76,7 +76,7 @@ public class SettingsActivity extends BaseFragmentActivity {
 
         sharedPreferences = getSharedPreferences(PREFS_NAME, 0);
 
-		if(!this.sharedPreferences.getBoolean("isLicensed", false))
+		if(!this.sharedPreferences.getBoolean("isLicensed", true))
 		{
             final String deviceId = Secure.getString(this.getContentResolver(),Secure.ANDROID_ID);
 			// Construct the LicenseCheckerCallback. The library calls this when done.
@@ -99,7 +99,7 @@ public class SettingsActivity extends BaseFragmentActivity {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ((ApplicationContext) getApplicationContext()).getInstaceIhcManager().authenticate("admin","ospekos4u!","striboldt.lgnas.com",true);
+                ((ApplicationContext) getApplicationContext()).getIHCConnectionManager().connect("admin", "ospekos4u!", "192.168.1.3", true);
             }
         });
 
@@ -113,6 +113,14 @@ public class SettingsActivity extends BaseFragmentActivity {
     @Override
     protected void onResume() {
         super.onResume();
+    }
+
+    @Override
+    protected void onMessage(ConnectionManager.IHCEVENTS event) {
+        super.onMessage(event);
+        if(event == ConnectionManager.IHCEVENTS.CONNECTED){
+           // IHCHome ihcHome = ((ApplicationContext) getApplicationContext()).getIHCConnectionManager().loadIHCProject(false, null);
+        }
     }
 
     /** Called when the Menu button is pushed */

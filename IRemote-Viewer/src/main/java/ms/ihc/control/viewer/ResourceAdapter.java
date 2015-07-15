@@ -20,11 +20,11 @@ import android.widget.TextView;
 public class ResourceAdapter extends BaseAdapter {
 
 	private LayoutInflater mInflater;
-	private IhcManager ihcCtrl;
+	private ConnectionManager ihcCtrl;
 
 	private ArrayList<IHCResource> resourceData = new ArrayList<IHCResource>();
 
-	public ResourceAdapter(Context context, IhcManager ctrl) {
+	public ResourceAdapter(Context context, ConnectionManager ctrl) {
 		mInflater = LayoutInflater.from(context);
 		ihcCtrl = ctrl;
 	}
