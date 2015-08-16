@@ -47,7 +47,7 @@ public class ResourceListFragment extends Fragment implements OnItemClickListene
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 
-		final View view = inflater.inflate(layout.locations,container);
+		final View view = inflater.inflate(layout.location_listview,container);
 		appContext = (ApplicationContext) getActivity().getApplicationContext();
 		appContext.setIsWaitingForValueChanges(false);
 		connectionManager = appContext.getIHCConnectionManager();

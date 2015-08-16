@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
+import ms.ihc.control.activities.BaseFragmentActivity;
 import ms.ihc.control.devices.wireless.IHCResource;
 import ms.ihc.control.viewer.ApplicationContext;
 import ms.ihc.control.viewer.ConnectionManager;
@@ -30,6 +31,7 @@ import android.widget.AdapterView.OnItemClickListener;
 
 public class LocationFragment extends Fragment implements OnItemClickListener{
 
+	private final static String TAG = LocationFragment.class.getName();
 	private ListView locationListView;
 	private Handler mHandler = new Handler();
 	private ConnectionManager connectionManager = null;
@@ -40,17 +42,22 @@ public class LocationFragment extends Fragment implements OnItemClickListener{
 	private SimpleAdapter locationAdapter;
 	ArrayList<HashMap<String,String>> list;
 	private ApplicationContext appContext;
-	
-	
+
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		appContext = (ApplicationContext) getActivity().getApplicationContext();
+	}
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		
-		final View view = inflater.inflate(R.layout.locations,container);
-		appContext = (ApplicationContext) getActivity().getApplicationContext();
+		final View view = inflater.inflate(R.layout.location_listview,container,false);
+
 		connectionManager = appContext.getIHCConnectionManager();
 		if(connectionManager == null)
-			this.getActivity().finish();
+			getActivity().finish();
 		else
 		{
 			home = appContext.getIHCHome();
@@ -62,7 +69,7 @@ public class LocationFragment extends Fragment implements OnItemClickListener{
 					HashMap<String, String> map = new HashMap<String, String>();
                     // TODO: Refactor locations to reflect new fragment design
 					map.put("location", location.getName());
-				//	map.put("resources", getResources().getString(R.string.resources) + String.valueOf(location.resources.size()));
+					map.put("resources", getResources().getString(R.string.resources) + String.valueOf(location.getResources().size()));
 					list.add(map);
 				}
 			}
@@ -81,7 +88,7 @@ public class LocationFragment extends Fragment implements OnItemClickListener{
 				runtimeTask.execute();
 			}
 			
-			locationAdapter = new SimpleAdapter(getActivity().getApplicationContext(), list, R.layout.location_list_item, from,to );
+			locationAdapter = new SimpleAdapter(appContext, list, R.layout.location_list_item, from,to );
 			locationListView.setAdapter(locationAdapter);
 		}
 		
@@ -159,7 +166,7 @@ public class LocationFragment extends Fragment implements OnItemClickListener{
 			HashMap<String,String> map = list.get(position);
 			String selectedResource = map.get("location");
 			
-			resourceAdapter = new ResourceAdapter(getActivity().getApplicationContext(), connectionManager);
+			resourceAdapter = new ResourceAdapter(appContext, connectionManager);
 
 			Iterator<IHCLocation> iLocations = home.getLocations().iterator();
 			while (iLocations.hasNext()) {
@@ -174,7 +181,7 @@ public class LocationFragment extends Fragment implements OnItemClickListener{
 				}
 			}
 			
-			Intent intent = new Intent(getActivity().getApplicationContext(),ResourceActivity.class);
+			Intent intent = new Intent(appContext, ResourceActivity.class);
 			intent.putExtra("location", selectedResource);
 			startActivity(intent);
 	}
@@ -202,15 +209,15 @@ public class LocationFragment extends Fragment implements OnItemClickListener{
     // Called when app is resumed from background
     @Override
     public void onResume() {
-        super.onResume();
-        mHandler.postDelayed(waitForResourceValuesChange, 100);
+		super.onResume();
+       // mHandler.postDelayed(waitForResourceValuesChange, 100);
     }
 
 	// Called when app is put into background
 	@Override
 	public void onPause() {
 		super.onPause();
-		mHandler.removeCallbacks(waitForResourceValuesChange);
+		//mHandler.removeCallbacks(waitForResourceValuesChange);
 	}
 
     // TODO: Not used, but test impact on application
@@ -239,14 +246,14 @@ public class LocationFragment extends Fragment implements OnItemClickListener{
 
 		@Override
 		protected Boolean doInBackground(Void... params) {
-			Log.v("waitForResourceValueChangesTask-LocationActivity", "Waiting for valuechanges");
+			Log.v(TAG, "Waiting for valuechanges");
 			return connectionManager.waitForResourceValueChanges(LocationFragment.resourceMap);
 		}
 
 		@Override
 		protected void onPostExecute(Boolean refreshListView) {
 			appContext.setIsWaitingForValueChanges(false);			
-			Log.v("waitForResourceValueChangesTask-LocationActivity", "Done");
+			Log.v(TAG, "Done");
 		}
 	}
 	
@@ -264,7 +271,7 @@ public class LocationFragment extends Fragment implements OnItemClickListener{
 		@Override
 		protected void onPostExecute(Boolean result) {
 			if (LocationFragment.resourceAdapter != null && !connectionManager.isInTouchMode) {
-				Log.v("refresjResourceViewTask-ResourceActivity", "Refreshing view...");
+				Log.v(TAG, "Refreshing view...");
 				LocationFragment.resourceAdapter.notifyDataSetChanged();
 			}
 		}

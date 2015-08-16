@@ -6,16 +6,16 @@ import com.google.android.vending.licensing.AESObfuscator;
 import com.google.android.vending.licensing.LicenseChecker;
 import com.google.android.vending.licensing.LicenseCheckerCallback;
 import com.google.android.vending.licensing.ServerManagedPolicy;
-
 import ms.ihc.control.fragments.AlertDialogFragment;
 import ms.ihc.control.viewer.ApplicationContext;
 import ms.ihc.control.viewer.ConnectionManager;
 import ms.ihc.control.viewer.R;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Settings.Secure;
 import android.content.SharedPreferences;
+import android.support.v7.app.ActionBar;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -94,7 +94,16 @@ public class SettingsActivity extends BaseFragmentActivity {
 		else
 			setContentView(R.layout.settings);
 
-        loginButton = (Button)findViewById(R.id.loginbutton);
+		// Set a toolbar to replace the action bar.
+		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+		setSupportActionBar(toolbar);
+
+        getSupportActionBar().setTitle(R.string.settings);
+        //getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_HOME_AS_UP);
+        //getSupportActionBar().setHomeButtonEnabled(false);
+        getSupportActionBar().setDisplayShowTitleEnabled(true);
+
+        loginButton = (Button) findViewById(R.id.loginbutton);
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -119,8 +128,18 @@ public class SettingsActivity extends BaseFragmentActivity {
     protected void onMessage(ConnectionManager.IHCEVENTS event) {
         super.onMessage(event);
         if(event == ConnectionManager.IHCEVENTS.CONNECTED){
-           // IHCHome ihcHome = ((ApplicationContext) getApplicationContext()).getIHCConnectionManager().loadIHCProject(false, null);
+			((ApplicationContext) getApplicationContext()).getIHCConnectionManager().loadIHCProject(false, null);
         }
+		else if(event == ConnectionManager.IHCEVENTS.PROJECT_LOADED){
+			Intent locationIntent = new Intent(this, LocationActivity.class);
+			startActivity(locationIntent);
+		}
+    }
+
+    // Don't show the options menu
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        return false;
     }
 
     /** Called when the Menu button is pushed */

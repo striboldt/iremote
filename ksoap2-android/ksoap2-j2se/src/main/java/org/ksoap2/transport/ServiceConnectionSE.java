@@ -21,12 +21,14 @@
 
 package org.ksoap2.transport;
 
-import java.io.*;
-import java.net.*;
-import java.util.logging.Logger;
 
 import javax.net.ssl.*;
-import org.apache.http.conn.ssl.AllowAllHostnameVerifier;
+import org.apache.http.conn.ssl.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.URL;
+import java.security.KeyStore;
 
 
 /**
@@ -34,47 +36,40 @@ import org.apache.http.conn.ssl.AllowAllHostnameVerifier;
  */
 public class ServiceConnectionSE implements ServiceConnection {
 
-	private TrustManager[] trustAllCerts = new TrustManager[] { new X509TrustManager() {
-		public java.security.cert.X509Certificate[] getAcceptedIssuers() {
-			return null;
-		}
-
-		public void checkClientTrusted(
-				java.security.cert.X509Certificate[] certs, String authType) {
-		}
-
-		public void checkServerTrusted(
-				java.security.cert.X509Certificate[] certs, String authType) {
-		}
-	} };
-
-	private HttpURLConnection connection;
+	private HttpsURLConnection connection;
 
 	/**
 	 * Constructor taking the url to the endpoint for this soap communication
-	 * 
+	 *
 	 * @param url
 	 *            the url to open the connection to.
+	 * @param trustedKeystore
 	 */
-	public ServiceConnectionSE(String url) throws IOException {
-		try {
-			SSLContext sc = SSLContext.getInstance("TLS");
-			sc.init(null, trustAllCerts, new java.security.SecureRandom());
-			HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
-		} catch (Exception e) {
-			e.getMessage();
-		}
+	public ServiceConnectionSE(String url, KeyStore trustedKeystore) throws IOException {
+
+            try {
+                // Create a TrustManager that trusts the CAs in our KeyStore
+                String tmfAlgorithm = TrustManagerFactory.getDefaultAlgorithm();
+                TrustManagerFactory tmf = TrustManagerFactory.getInstance(tmfAlgorithm);
+                tmf.init(trustedKeystore);
 
 
-		connection = (HttpsURLConnection) new URL(url).openConnection();
-		((HttpsURLConnection) connection).setHostnameVerifier(new AllowAllHostnameVerifier());
-		connection.setConnectTimeout(10000);
-		HttpsURLConnection.setFollowRedirects(false);
-		connection.setUseCaches(false);
-		connection.setDoOutput(true);
-		connection.setDoInput(true);
-		
-	}
+                SSLContext tlsContext = SSLContext.getInstance("TLS");
+                tlsContext.init(null, tmf.getTrustManagers(), null);
+
+                connection = (HttpsURLConnection) new URL(url).openConnection();
+                connection.setSSLSocketFactory(tlsContext.getSocketFactory());
+                connection.setHostnameVerifier(new AllowAllHostnameVerifier());
+                connection.setConnectTimeout(10000);
+                connection.setUseCaches(false);
+                connection.setDoOutput(true);
+                connection.setDoInput(true);
+                HttpsURLConnection.setFollowRedirects(false);
+
+            } catch (Exception e) {
+                e.getMessage();
+            }
+    }
 
 	public void connect() throws IOException {
 		connection.connect();

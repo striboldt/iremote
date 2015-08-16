@@ -25,7 +25,7 @@ import java.io.*;
 
 import org.xmlpull.v1.*;
 
-public class MarshalFloat implements Marshal {
+public class MarshalFloat implements    Marshal {
 
     public Object readInstance(XmlPullParser parser, String namespace, String name, PropertyInfo propertyInfo) throws IOException, XmlPullParserException {
         String stringValue = parser.nextText();

@@ -17,13 +17,15 @@
         android:name="ms.ihc.control.viewer.ApplicationContext"
         android:allowBackup="false"
         android:icon="@drawable/remote"
-        android:label="@string/app_name" >
+        android:label="@string/app_name"
+        android:theme="@style/Theme.AppCompat.NoActionBar">
         <activity
             android:name="ms.ihc.control.activities.SettingsActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/app_name"
             android:noHistory="true"
-            android:screenOrientation="sensor" >
+            android:screenOrientation="sensor"
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -32,7 +34,14 @@
         <activity
             android:name="ms.ihc.control.activities.LocationActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:screenOrientation="sensor" >
+            android:screenOrientation="sensor"
+            >
+        </activity>
+        <activity
+            android:name="ms.ihc.control.viewer.ResourceActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="sensor"
+            >
         </activity>
         <meta-data android:name="com.crashlytics.ApiKey" android:value="1b7e419e1e57e4a03bc3adca36ab9087ab1d3c95"/>
     </application>

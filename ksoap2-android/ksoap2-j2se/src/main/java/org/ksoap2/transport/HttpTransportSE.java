@@ -25,7 +25,9 @@
 package org.ksoap2.transport;
 
 import java.io.*;
+import java.security.KeyStore;
 
+import org.apache.commons.logging.Log;
 import org.ksoap2.*;
 import org.xmlpull.v1.*;
 
@@ -34,7 +36,8 @@ import org.xmlpull.v1.*;
  */
 public class HttpTransportSE extends Transport {
 
-	private ServiceConnection connection;
+	private static ServiceConnection connection;
+    private KeyStore trustedKeystore;
 
     /**
      * Creates instance of HttpTransportSE with set url
@@ -42,8 +45,10 @@ public class HttpTransportSE extends Transport {
      * @param url
      *            the destination to POST SOAP data
      */
-    public HttpTransportSE(String url) {
+    public HttpTransportSE(String url, KeyStore trustedKeystore) {
         super(url);
+        this.trustedKeystore = trustedKeystore;
+
     }
 
 
@@ -56,12 +61,14 @@ public class HttpTransportSE extends Transport {
      *            the envelope containing the information for the soap call.
      */
     public void call(String soapAction, SoapEnvelope envelope) throws IOException, XmlPullParserException {
+        long rtt_start = System.currentTimeMillis();
+
         if (soapAction == null)
             soapAction = "\"\"";
         byte[] requestData = createRequestData(envelope);
         requestDump = debug ? new String(requestData) : null;
         responseDump = null;
-        
+
         this.connection = getServiceConnection();
 
         if(this.sessionCookie != null)
@@ -73,13 +80,11 @@ public class HttpTransportSE extends Transport {
         connection.setRequestProperty("Connection", "keep-alive");
         connection.setRequestProperty("Content-Length", "" + requestData.length);
         connection.setRequestMethod("POST");
-        connection.connect();
         
         BufferedOutputStream os = new BufferedOutputStream(connection.openOutputStream(),8192);
         os.write(requestData, 0, requestData.length);
         os.flush();
         os.close();
-        //requestData = null;
         BufferedInputStream is;
 
         try {
@@ -105,6 +110,10 @@ public class HttpTransportSE extends Transport {
             is = new BufferedInputStream(new ByteArrayInputStream(buf), 8192);
         }
         parseResponse(envelope, is);
+        connection.disconnect();
+        long rtt = System.currentTimeMillis() - rtt_start;
+        System.out.println( soapAction +" network rtt: " + rtt );
+
     }
 
 
@@ -117,7 +126,7 @@ public class HttpTransportSE extends Transport {
     //@Override
     protected ServiceConnection getServiceConnection() throws IOException
     {
-        connection = new ServiceConnectionSE(url) //HttpsServiceConnectionSE(host, port, file, timeout)
+        connection = new ServiceConnectionSE(url, trustedKeystore)
         {
             @Override
             public void setRequestProperty(String key, String value) {
@@ -134,7 +143,4 @@ public class HttpTransportSE extends Transport {
         return connection;
     }
 
-    /*protected ServiceConnection getServiceConnection() throws IOException {
-        return new ServiceConnectionSE(url);
-    }*/
 }

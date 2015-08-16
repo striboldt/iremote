@@ -11,7 +11,7 @@
         android:layout_width="254dp"
         android:layout_height="wrap_content"
         class="ms.ihc.control.fragments.LocationFragment"
-        tools:layout="@layout/locations" />
+        tools:layout="@layout/location_listview" />
 
     <fragment
         android:id="@+id/resourcefragment"
