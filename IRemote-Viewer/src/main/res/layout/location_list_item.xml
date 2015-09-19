@@ -1,18 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	 android:layout_height="wrap_content"  android:layout_width="fill_parent" android:padding="6px">
-		<TableLayout android:id="@+id/TableLayout01" android:layout_height="wrap_content" android:layout_width="fill_parent" android:layout_weight="1">
-			<TableRow>
-			<TextView android:id="@+id/location" android:layout_width="wrap_content" android:text="Room" 
-				android:layout_height="wrap_content" android:layout_weight="1" android:textSize="20dp"
-				android:layout_centerVertical="true" android:textColor="#FFFFFF">
-			</TextView>
-			</TableRow>
-			<TableRow>
-			<TextView android:id="@+id/resources" android:layout_width="wrap_content"  android:textSize="12dp" android:textColor="#848484"
-				android:layout_height="wrap_content" android:layout_weight="1" android:layout_centerVertical="true" android:text="Resources: 0">
-			</TextView>
-			</TableRow>
-		</TableLayout>
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/location"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_weight="1"
+        android:text="Room"
+        android:textColor="#FFFFFF"
+        android:textSize="20sp"></TextView>
+
+    <TextView
+        android:id="@+id/resources"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginBottom="5dp"
+        android:layout_weight="1"
+        android:text="Resources: 0"
+        android:textColor="#FFFFFF"
+        android:textSize="12sp"></TextView>
 </LinearLayout>
 

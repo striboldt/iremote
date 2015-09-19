@@ -13,6 +13,8 @@ import ms.ihc.control.devices.dataline.TemperatureSensor;
 import ms.ihc.control.viewer.ConnectionManager;
 
 import org.xmlpull.v1.XmlPullParser;
+
+import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import ms.ihc.control.valueTypes.*;
@@ -144,7 +146,7 @@ public interface IHCResource extends View.OnClickListener  {
 	
 	public void setupResources(XmlPullParser xpp, String endTag);
 	public void setResourceValue(int resourceId, Object value);
-	public HashMap<Integer, IHCResource> getResourceIds(HashMap<Integer, IHCResource> resourceIdsMap);
+	public SparseArray<IHCResource> getResourceIds(SparseArray<IHCResource> resourceIdsMap);
 	
 	public void setDeviceId(int id);
 	public int getDeviceId();

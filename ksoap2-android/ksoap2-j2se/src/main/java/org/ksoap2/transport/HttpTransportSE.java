@@ -36,7 +36,7 @@ import org.xmlpull.v1.*;
  */
 public class HttpTransportSE extends Transport {
 
-	private static ServiceConnection connection;
+	private ServiceConnection connection;
     private KeyStore trustedKeystore;
 
     /**
@@ -69,7 +69,7 @@ public class HttpTransportSE extends Transport {
         requestDump = debug ? new String(requestData) : null;
         responseDump = null;
 
-        this.connection = getServiceConnection();
+        this.connection = new ServiceConnectionSE(url,trustedKeystore);
 
         if(this.sessionCookie != null)
         	connection.setRequestProperty("Cookie", this.sessionCookie);
@@ -114,33 +114,6 @@ public class HttpTransportSE extends Transport {
         long rtt = System.currentTimeMillis() - rtt_start;
         System.out.println( soapAction +" network rtt: " + rtt );
 
-    }
-
-
-    /**
-     * Get a service connection. Returns an implementation of {@link org.ksoap2.transport.ServiceConnectionSE} that
-     * ignores "Connection: close" request property setting and has "Connection: keep-alive" always set and is uses
-     * a https connection.
-     * @see org.ksoap2.transport.HttpTransportSE#getServiceConnection()
-     */
-    //@Override
-    protected ServiceConnection getServiceConnection() throws IOException
-    {
-        connection = new ServiceConnectionSE(url, trustedKeystore)
-        {
-            @Override
-            public void setRequestProperty(String key, String value) {
-                // We want to ignore any setting of "Connection: close" because
-                // it is buggy with Android SSL.
-                if ("Connection".equalsIgnoreCase(key) && "close".equalsIgnoreCase(value)) {
-                    return;
-                } else {
-                    super.setRequestProperty(key, value);
-                }
-            }
-        };
-        connection.setRequestProperty("Connection", "keep-alive");
-        return connection;
     }
 
 }

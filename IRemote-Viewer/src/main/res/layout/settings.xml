@@ -1,120 +1,154 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:layout_marginLeft="5dp"
     android:layout_marginRight="5dp"
+    android:background="@drawable/default_background"
     android:orientation="vertical">
 
-    <include
-        layout="@layout/custom_toolbar"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content" />
-
-    <RelativeLayout
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
-        <EditText
-            android:id="@+id/lan_ip"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-
-            android:hint="@string/lan_host_help"/>
-
-        <TextView
-            android:id="@+id/lan_host"
+        <FrameLayout
+            android:id="@+id/progressLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="20dp"
-            android:layout_marginTop="20dp"
-            android:padding="3dp"
-            android:text="@string/lan_host"/>
+            android:layout_gravity="center_horizontal|center_vertical"
+            android:orientation="vertical">
 
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal|center_vertical"
+                android:src="@drawable/remote" />
+            <ProgressBar
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:id="@+id/progressBar"
+                style="?android:attr/progressBarStyleLarge"
+                android:indeterminate="true"
+                android:indeterminateDrawable="@drawable/progressbar"
+                android:layout_gravity="center_horizontal|center_vertical" />
+        </FrameLayout>
 
-
-        <TextView
-            android:id="@+id/wan_host"
-            android:layout_marginTop="20dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/lan_host"
-            android:padding="3dp"
-            android:text="@string/wan_host" />
-
-        <EditText
-            android:id="@+id/wan_ip"
+        <RelativeLayout
+            android:id="@+id/settingsLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@id/wan_host"
-            android:layout_below="@id/lan_ip"
-            android:layout_alignLeft="@id/lan_ip"
-            android:hint="@string/wan_host_help" />
+            android:visibility="gone">
 
-        <TextView
-            android:id="@+id/username_text"
-            android:layout_marginTop="20dp"
-            android:layout_below="@id/wan_host"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="3dp"
-            android:text="@string/username"/>
+            <include
+                android:id="@+id/custom_toolbar"
+                layout="@layout/custom_toolbar"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" />
 
-        <EditText
-            android:id="@+id/username"
-            android:layout_below="@id/wan_ip"
-            android:layout_alignLeft="@id/wan_ip"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            <TextView
+                android:id="@+id/lan_host"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/custom_toolbar"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="20dp"
+                android:padding="3dp"
+                android:text="@string/lan_host" />
 
-        <TextView
-            android:id="@+id/password_text"
-            android:layout_marginTop="20dp"
-            android:layout_below="@id/username_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="3dp"
-            android:text="@string/password" />
+            <EditText
+                android:id="@+id/lan_ip"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/custom_toolbar"
+                android:layout_marginTop="10dp"
+                android:layout_toRightOf="@id/lan_host"
+                android:hint="@string/lan_host_help" />
 
-        <EditText
-            android:id="@+id/password"
-            android:layout_below="@id/username"
-            android:layout_alignLeft="@id/username"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textPassword" />
+            <TextView
+                android:id="@+id/wan_host"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/lan_host"
+                android:layout_marginTop="20dp"
+                android:padding="3dp"
+                android:text="@string/wan_host" />
+
+            <EditText
+                android:id="@+id/wan_ip"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@id/lan_ip"
+                android:layout_below="@id/lan_ip"
+                android:layout_toRightOf="@id/wan_host"
+                android:hint="@string/wan_host_help" />
+
+            <TextView
+                android:id="@+id/username_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/wan_host"
+                android:layout_marginTop="20dp"
+                android:padding="3dp"
+                android:text="@string/username" />
+
+            <EditText
+                android:id="@+id/username"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@id/wan_ip"
+                android:layout_below="@id/wan_ip" />
+
+            <TextView
+                android:id="@+id/password_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/username_text"
+                android:layout_marginTop="20dp"
+                android:padding="3dp"
+                android:text="@string/password" />
+
+            <EditText
+                android:id="@+id/password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@id/username"
+                android:layout_below="@id/username"
+                android:inputType="textPassword" />
 
 
-    </RelativeLayout>
-
-    <Switch
-        android:id="@+id/WanOnly"
-        android:padding="3dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="20dp"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/default_connection_type"
-        android:textOff="@string/lan"
-        android:textOn="@string/wan" />
-
-
-    <Switch
-        android:id="@+id/reloadProject"
-        android:padding="3dp"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/reload_project" />
+            <Switch
+                android:id="@+id/WanOnly"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/password"
+                android:layout_marginBottom="20dp"
+                android:layout_marginTop="20dp"
+                android:padding="3dp"
+                android:text="@string/default_connection_type"
+                android:textOff="@string/lan"
+                android:textOn="@string/wan" />
 
 
-    <Button
-        android:id="@+id/loginbutton"
-        android:layout_marginTop="10dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/loginbutton" />
+            <Switch
+                android:id="@+id/reloadProject"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/WanOnly"
+                android:padding="3dp"
+                android:text="@string/reload_project" />
+
+
+            <Button
+                android:id="@+id/loginbutton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/reloadProject"
+                android:layout_marginTop="10dp"
+                android:text="@string/loginbutton" />
+        </RelativeLayout>
+
+
+    </FrameLayout>
 
 </LinearLayout>
 

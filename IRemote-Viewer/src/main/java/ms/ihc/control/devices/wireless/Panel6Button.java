@@ -1,11 +1,10 @@
 package ms.ihc.control.devices.wireless;
 
 import java.io.IOException;
-import java.util.HashMap;
 
 import ms.ihc.control.viewer.ConnectionManager;
 import ms.ihc.control.viewer.R;
-import ms.ihc.control.viewer.ResourceAdapter.ViewHolder;
+import ms.ihc.control.Resource.ResourceAdapter.ViewHolder;
 import ms.ihc.control.valueTypes.DeviceType;
 import ms.ihc.control.valueTypes.WSBooleanValue;
 
@@ -15,6 +14,7 @@ import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
 import android.util.Log;
+import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -42,7 +42,7 @@ public class Panel6Button extends ioResource implements IHCResource, java.io.Ser
 	public void setResourceValue(int resourceId, Object value) {
 	}
 
-	public HashMap<Integer, IHCResource> getResourceIds(HashMap<Integer, IHCResource> resourceIdsMap) {
+	public SparseArray<IHCResource> getResourceIds(SparseArray<IHCResource> resourceIdsMap) {
 		return resourceIdsMap;
 	}
 	

@@ -3,24 +3,21 @@ package ms.ihc.control.fragments;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-
-import ms.ihc.control.activities.BaseFragmentActivity;
+import ms.ihc.control.Resource.ResourceActivity;
 import ms.ihc.control.devices.wireless.IHCResource;
 import ms.ihc.control.viewer.ApplicationContext;
 import ms.ihc.control.viewer.ConnectionManager;
 import ms.ihc.control.viewer.IHCHome;
 import ms.ihc.control.viewer.IHCLocation;
 import ms.ihc.control.viewer.R;
-import ms.ihc.control.viewer.ResourceActivity;
-import ms.ihc.control.viewer.ResourceAdapter;
-//import ms.ihc.control.viewer.IhcManager.ControllerConnection;
-
+import ms.ihc.control.Resource.ResourceAdapter;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,7 +33,7 @@ public class LocationFragment extends Fragment implements OnItemClickListener{
 	private Handler mHandler = new Handler();
 	private ConnectionManager connectionManager = null;
 	private IHCHome home = null;
-	public static HashMap<Integer,IHCResource> resourceMap = new HashMap<Integer, IHCResource>();
+	public static SparseArray<IHCResource> resourceMap = new SparseArray<IHCResource>();
 	private enableRuntimeValueNotificationsTask runtimeTask = null;
 	public static ResourceAdapter resourceAdapter;
 	private SimpleAdapter locationAdapter;
@@ -95,70 +92,7 @@ public class LocationFragment extends Fragment implements OnItemClickListener{
 		return view;
 	}
 
-    /** Called when the Menu button is pushed */
-	/*
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		MenuInflater inflater = getMenuInflater();
-		inflater.inflate(R.menu.locationsmenu, menu);
-		return true;
-	}
-	
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		Context context = this;
-		Intent intent = null;
-		// Handle item selection
-		switch (item.getItemId()) {
-		case R.menu.settings:
-			((ApplicationContext) getApplication()).setIsAppRestarted(false);
-			this.finish();
-			return true;
-			
-		case R.menu.active_resources:
-			intent = new Intent(this,ActiveResourcesActivity.class);
-			startActivity(intent);
-			return true;
-			
-		case R.menu.favourites:
-			intent = new Intent(this,FavouritesActivity.class);
-			startActivity(intent);
-			return true;
-			
-		case R.menu.about:
-			Dialog dialog = new Dialog(context);
-			dialog.setContentView(R.layout.about);
-			dialog.setTitle(getResources().getString(R.string.about));
-			String version = "";
-			int icon = 0;
-			try {
-				version = getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
-				icon = getPackageManager().getPackageInfo(getPackageName(), 0).applicationInfo.icon;
-			} catch (NameNotFoundException e) {
-				e.printStackTrace();
-			}
-			
-			
-			TextView email = (TextView) dialog.findViewById(R.id.email);
-			TextView author = (TextView) dialog.findViewById(R.id.author);
-			TextView text = (TextView) dialog.findViewById(R.id.text);
-			TextView versionView = (TextView) dialog.findViewById(R.id.version);
-			
-			email.setText(getResources().getString(R.string.email));
-			author.setText(getResources().getString(R.string.author));
-			text.setText(getResources().getString(R.string.aboutText));
-			versionView.setText("Version: " + version);
-			ImageView image = (ImageView) dialog.findViewById(R.id.image);
-			image.setImageResource(icon);
-			dialog.setCanceledOnTouchOutside(true);
-			dialog.show();
-			
-			return true;
-		default:
-			return super.onOptionsItemSelected(item);
 
-		}
-	}*/
 	
 	
 	// Click on ListView item
@@ -190,7 +124,7 @@ public class LocationFragment extends Fragment implements OnItemClickListener{
 
 		@Override
 		protected Boolean doInBackground(Void... params) {
-			resourceMap = new HashMap<Integer, IHCResource>();
+			resourceMap = new SparseArray<>();
 			Iterator<IHCLocation> iLocations = home.getLocations().iterator();
 			while (iLocations.hasNext()) {
 				IHCLocation location = iLocations.next();

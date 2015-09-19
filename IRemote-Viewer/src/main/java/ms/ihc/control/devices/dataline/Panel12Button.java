@@ -1,11 +1,10 @@
 package ms.ihc.control.devices.dataline;
 
 import java.io.IOException;
-import java.util.HashMap;
 
 import ms.ihc.control.viewer.ConnectionManager;
 import ms.ihc.control.viewer.R;
-import ms.ihc.control.viewer.ResourceAdapter.ViewHolder;
+import ms.ihc.control.Resource.ResourceAdapter.ViewHolder;
 import ms.ihc.control.devices.wireless.IHCResource;
 import ms.ihc.control.devices.wireless.ioResource;
 import ms.ihc.control.valueTypes.DeviceType;
@@ -16,6 +15,7 @@ import org.ksoap2.serialization.SoapObject;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
+import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -49,7 +49,7 @@ public class Panel12Button extends ioResource implements IHCResource, java.io.Se
 	public void setResourceValue(int resourceId, Object value) {
 	}
 
-	public HashMap<Integer, IHCResource> getResourceIds(HashMap<Integer, IHCResource> resourceIdsMap) {
+	public SparseArray<IHCResource> getResourceIds(SparseArray<IHCResource> resourceIdsMap) {
 		return resourceIdsMap;
 	}
 	

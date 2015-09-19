@@ -17,6 +17,7 @@ public class ApplicationContext extends Application{
 	private IHCHome home;
 	private Boolean isAppRestarted;
 	private Boolean waitingForValueChanges;
+    private static final String ihcFilename = "iremote.data";
 	
 	public ApplicationContext()
 	{
@@ -26,8 +27,10 @@ public class ApplicationContext extends Application{
 
 
 	public ConnectionManager getIHCConnectionManager() {
-		if(connectionManager == null)
-            return new ConnectionManager(this);
+		if(connectionManager == null){
+            connectionManager = new ConnectionManager(this);
+			return connectionManager;
+		}
         else
             return connectionManager;
 
@@ -35,6 +38,7 @@ public class ApplicationContext extends Application{
 
 	public void setIHCHome(IHCHome home) {
 		this.home = home;
+        writeDataFile(ihcFilename);
 	}
 
 	public IHCHome getIHCHome() {
@@ -107,7 +111,7 @@ public class ApplicationContext extends Application{
 			return success;
 	 }
 	 
-	 public Boolean dataFileExists(String filename)
+	 public Boolean dataFileExists()
 	 {
 		 Boolean exists = true;
 		 FileInputStream f_in = null;
@@ -115,7 +119,7 @@ public class ApplicationContext extends Application{
 			try
 			{
 				// Read from disk using FileInputStream.
-				f_in = openFileInput(filename);
+				f_in = openFileInput(ihcFilename);
 
 				// Read object using ObjectInputStream.
 				obj_in = new ObjectInputStream (f_in);

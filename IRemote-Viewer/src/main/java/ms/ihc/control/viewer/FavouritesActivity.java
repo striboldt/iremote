@@ -2,6 +2,7 @@ package ms.ihc.control.viewer;
 
 import java.util.Iterator;
 
+import ms.ihc.control.Resource.ResourceAdapter;
 import ms.ihc.control.devices.wireless.IHCResource;
 import ms.ihc.control.fragments.LocationFragment;
 
@@ -19,15 +20,13 @@ import android.view.ContextMenu.ContextMenuInfo;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.TableRow;
-import android.widget.TextView;
 
 
 public class FavouritesActivity extends Activity implements OnClickListener {
 
 	private ListView favouritesListView;
-	private TableRow favouritesTableRow;
-	private TextView favouritesTextView;
+	//private TableRow favouritesTableRow;
+//	private TextView favouritesTextView;
 	private ConnectionManager soapImp = null;
 	private ResourceAdapter resourceAdapter;
 	private ApplicationContext appContext;
@@ -45,8 +44,8 @@ public class FavouritesActivity extends Activity implements OnClickListener {
 		{
 	//		soapImp.setControlerConnectionListener(this);
 			favouritesListView = (ListView) findViewById(R.id.resourcelist);
-			favouritesTableRow = (TableRow) findViewById(R.id.HeaderTableRow);
-			favouritesTextView = (TextView) findViewById(R.id.locationtext1);
+	//		favouritesTableRow = (TableRow) findViewById(R.id.HeaderTableRow);
+		//	favouritesTextView = (TextView) findViewById(R.id.locationtext1);
 	
 			resourceAdapter = new ResourceAdapter(getApplicationContext(),soapImp);
 	
@@ -63,11 +62,11 @@ public class FavouritesActivity extends Activity implements OnClickListener {
 				}
 			}
 			
-			favouritesTextView.setText("< Back");	
+	//		favouritesTextView.setText("< Back");
 			registerForContextMenu(favouritesListView);
 			favouritesListView.setAdapter(resourceAdapter);
 			favouritesListView.setOnCreateContextMenuListener(this);
-			favouritesTableRow.setOnClickListener(this);
+		//	favouritesTableRow.setOnClickListener(this);
 		}
 
 	}

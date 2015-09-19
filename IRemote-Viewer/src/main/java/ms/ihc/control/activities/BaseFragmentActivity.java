@@ -4,7 +4,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -22,14 +21,14 @@ public class BaseFragmentActivity extends AppCompatActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
 
-            if(intent.getAction() != null && intent.getAction().equalsIgnoreCase(ConnectionManager.IHCEVENTS.RESOURCE_VALUE_CHANGED.toString())) {
+            if(intent.getAction() != null && intent.getAction().equalsIgnoreCase(ConnectionManager.IHC_EVENTS.RESOURCE_VALUE_CHANGED.toString())) {
                 Log.d(TAG,"RESOURCE_VALUE_CHANGED ");
             }
-            else if (intent.getAction() != null && intent.getAction().equalsIgnoreCase(ConnectionManager.IHCEVENTS.CONNECTED.toString())) {
+            else if (intent.getAction() != null && intent.getAction().equalsIgnoreCase(ConnectionManager.IHC_EVENTS.CONNECTED.toString())) {
                 Log.d(TAG,"CONNECTED ");
-                onMessage(ConnectionManager.IHCEVENTS.CONNECTED);
+                onMessage(ConnectionManager.IHC_EVENTS.CONNECTED);
             }
-            else if (intent.getAction() != null && intent.getAction().equalsIgnoreCase(ConnectionManager.IHCEVENTS.DISCONNECTED.toString())) {
+            else if (intent.getAction() != null && intent.getAction().equalsIgnoreCase(ConnectionManager.IHC_EVENTS.DISCONNECTED.toString())) {
 
                 if(intent.hasExtra(ConnectionManager.IHCMESSAGE.class.getName())){
                     String message = intent.getStringExtra(ConnectionManager.IHCMESSAGE.class.getName());
@@ -39,7 +38,7 @@ public class BaseFragmentActivity extends AppCompatActivity {
                 }
 
             }
-            else if (intent.getAction() != null && intent.getAction().equalsIgnoreCase(ConnectionManager.IHCEVENTS.PROJECT_LOADED.toString())) {
+            else if (intent.getAction() != null && intent.getAction().equalsIgnoreCase(ConnectionManager.IHC_EVENTS.PROJECT_LOADED.toString())) {
 
                 if(intent.hasExtra(ConnectionManager.IHCMESSAGE.class.getName())){
                     String message = intent.getStringExtra(ConnectionManager.IHCMESSAGE.class.getName());
@@ -47,7 +46,7 @@ public class BaseFragmentActivity extends AppCompatActivity {
                 } else {
                     Log.d(TAG, "Project Loaded.");
                 }
-                onMessage(ConnectionManager.IHCEVENTS.PROJECT_LOADED);
+                onMessage(ConnectionManager.IHC_EVENTS.PROJECT_LOADED);
 
             }
 
@@ -63,12 +62,12 @@ public class BaseFragmentActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        LocalBroadcastManager.getInstance(this).registerReceiver(broadcastReceiver, new IntentFilter(ConnectionManager.IHCEVENTS.RESOURCE_VALUE_CHANGED.toString()));
-        LocalBroadcastManager.getInstance(this).registerReceiver(broadcastReceiver, new IntentFilter(ConnectionManager.IHCEVENTS.CONNECTED.toString()));
-        LocalBroadcastManager.getInstance(this).registerReceiver(broadcastReceiver, new IntentFilter(ConnectionManager.IHCEVENTS.DISCONNECTED.toString()));
-        LocalBroadcastManager.getInstance(this).registerReceiver(broadcastReceiver, new IntentFilter(ConnectionManager.IHCEVENTS.PROJECT_LOADED.toString()));
+        LocalBroadcastManager.getInstance(this).registerReceiver(broadcastReceiver, new IntentFilter(ConnectionManager.IHC_EVENTS.RESOURCE_VALUE_CHANGED.toString()));
+        LocalBroadcastManager.getInstance(this).registerReceiver(broadcastReceiver, new IntentFilter(ConnectionManager.IHC_EVENTS.CONNECTED.toString()));
+        LocalBroadcastManager.getInstance(this).registerReceiver(broadcastReceiver, new IntentFilter(ConnectionManager.IHC_EVENTS.DISCONNECTED.toString()));
+        LocalBroadcastManager.getInstance(this).registerReceiver(broadcastReceiver, new IntentFilter(ConnectionManager.IHC_EVENTS.PROJECT_LOADED.toString()));
     }
 
-    protected void onMessage(ConnectionManager.IHCEVENTS event){}
+    protected void onMessage(ConnectionManager.IHC_EVENTS event){}
 
 }

@@ -2,6 +2,7 @@ package ms.ihc.control.viewer;
 
 import java.util.Iterator;
 
+import ms.ihc.control.Resource.ResourceAdapter;
 import ms.ihc.control.devices.wireless.IHCResource;
 import ms.ihc.control.fragments.LocationFragment;
 import ms.ihc.control.valueTypes.DeviceType;
@@ -14,15 +15,13 @@ import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ListView;
-import android.widget.TableRow;
-import android.widget.TextView;
 
 
 public class ActiveResourcesActivity extends Activity implements OnClickListener{
 
 	private ListView resourceListView;
-	private TableRow resourceTableRow;
-	private TextView resourceTextView;
+//	private TableRow resourceTableRow;
+//	private TextView resourceTextView;
 	private ConnectionManager connectionManager = null;
 	private ResourceAdapter resourceAdapter;
 	private ApplicationContext appContext;
@@ -39,8 +38,8 @@ public class ActiveResourcesActivity extends Activity implements OnClickListener
 		else
 		{
 			resourceListView = (ListView) findViewById(R.id.resourcelist);
-			resourceTableRow = (TableRow) findViewById(R.id.HeaderTableRow);
-			resourceTextView = (TextView) findViewById(R.id.locationtext1);
+			/*resourceTableRow = (TableRow) findViewById(R.id.HeaderTableRow);
+			resourceTextView = (TextView) findViewById(R.id.locationtext1);*/
 	
 			resourceAdapter = new ResourceAdapter(getApplicationContext(), connectionManager);
 	
@@ -59,9 +58,9 @@ public class ActiveResourcesActivity extends Activity implements OnClickListener
 				}
 			}
 			
-			resourceTextView.setText("< Back");
+			//resourceTextView.setText("< Back");
 			resourceListView.setAdapter(resourceAdapter);
-			resourceTableRow.setOnClickListener(this);
+			//resourceTableRow.setOnClickListener(this);
 		}
 	}
 

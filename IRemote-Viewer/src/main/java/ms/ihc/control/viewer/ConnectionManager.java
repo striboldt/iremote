@@ -30,6 +30,8 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
+import android.util.SparseArray;
+
 import com.google.android.vending.licensing.util.Base64;
 import ms.ihc.control.devices.wireless.IHCResource;
 import ms.ihc.control.devices.wireless.ResourceFactory;
@@ -39,7 +41,7 @@ public class ConnectionManager {
 
     private static final String TAG = ConnectionManager.class.getPackage().getName();
 
-    public enum IHCEVENTS {
+    public enum IHC_EVENTS {
         RESOURCE_VALUE_CHANGED("ms.ihc.control.viewer.resource_value_changed"),
         CONNECTED("ms.ihc.control.viewer.connected"),
         DISCONNECTED("ms.ihc.control.viewer.disconnected"),
@@ -47,7 +49,7 @@ public class ConnectionManager {
 		PROJECT_LOADED("ms.ihc.control.viewer.project_loaded");
 
         private String pretty;
-        private IHCEVENTS(String pretty) {
+        private IHC_EVENTS(String pretty) {
             this.pretty = pretty;
         }
 
@@ -79,16 +81,16 @@ public class ConnectionManager {
 
 	private static final String NAMESPACE = "utcs";
 	public Boolean isInTouchMode = false;
-    private static String URI;
-	private static String SESSIONID = "";
-	private static String login;
-	private static String password;
-	private static String ctrlIp;
-	private static Boolean wan;
-	//private String msg;
-	private static Boolean isConnected = false;
+    private String URI;
+	private String SESSIONID = "";
+	private String login;
+	private String password;
+	private String ctrlIp;
+	private Boolean wan;
+	private Boolean isConnected = false;
     private ApplicationContext context;
-	private static KeyStore trustedKeystore = null;
+	private KeyStore trustedKeystore = null;
+	private boolean sslDebug = false;
 
 
 	public ConnectionManager(ApplicationContext applicationContext){
@@ -146,7 +148,7 @@ public class ConnectionManager {
             URI = "https://%IP%/ws/";
 			URI = URI.replace("%IP%", ctrlIp);
             HttpTransportSE androidHttpTransport = new HttpTransportSE(URI + "AuthenticationService", trustedKeystore);
-            androidHttpTransport.debug = false;
+            androidHttpTransport.debug = sslDebug;
             try {
 
                 androidHttpTransport.call(SOAP_ACTION, envelope);
@@ -177,9 +179,9 @@ public class ConnectionManager {
 			}
 
             if(loginWasSuccessful)
-                sendBroadcast(IHCEVENTS.CONNECTED, null);
+                sendBroadcast(IHC_EVENTS.CONNECTED, null);
             else
-                sendBroadcast(IHCEVENTS.DISCONNECTED, ihcmessage);
+                sendBroadcast(IHC_EVENTS.DISCONNECTED, ihcmessage);
             return null;
         }
     }
@@ -203,6 +205,11 @@ public class ConnectionManager {
 	public void reAuthenticate()
 	{
 		 this.connect(login, password, ctrlIp, wan);
+	}
+
+	public void startKeepAliveCheck(){
+
+
 	}
 
 	public Boolean ping() {
@@ -324,9 +331,9 @@ public class ConnectionManager {
 			ConnectionManager.this.context.setIHCHome(home);
 
 			if(home != null)
-				sendBroadcast(IHCEVENTS.PROJECT_LOADED, null);
+				sendBroadcast(IHC_EVENTS.PROJECT_LOADED, null);
 			else
-				sendBroadcast(IHCEVENTS.DISCONNECTED, IHCMESSAGE.LOAD_PROJECT_FAILED);
+				sendBroadcast(IHC_EVENTS.DISCONNECTED, IHCMESSAGE.LOAD_PROJECT_FAILED);
 			return null;
 		}
 	}
@@ -439,7 +446,7 @@ public class ConnectionManager {
 			if(androidHttpTransport == null)
 			{
 				androidHttpTransport = new HttpTransportSE(URI+ SERVICE, trustedKeystore);
-				androidHttpTransport.debug = false;
+				androidHttpTransport.debug = sslDebug;
 				androidHttpTransport.sessionCookie = SESSIONID;
 			}
 
@@ -504,7 +511,7 @@ public class ConnectionManager {
 			envelope.setOutputSoapObject(request);
 			HttpTransportSE androidHttpTransport = new HttpTransportSE(URI + SERVICE, trustedKeystore);
 			androidHttpTransport.sessionCookie = SESSIONID;
-			androidHttpTransport.debug = false;
+			androidHttpTransport.debug = sslDebug;
 
 
 			try {
@@ -545,7 +552,7 @@ public class ConnectionManager {
 			envelope.setOutputSoapObject(request);
 			HttpTransportSE androidHttpTransport = new HttpTransportSE(URI + SERVICE, trustedKeystore);
 			androidHttpTransport.sessionCookie = SESSIONID;
-			androidHttpTransport.debug = false;
+			androidHttpTransport.debug = sslDebug;
 
 
 			try {
@@ -597,7 +604,7 @@ public class ConnectionManager {
 		return null;
 	}
 	
-	public boolean waitForResourceValueChanges(HashMap<Integer, IHCResource> resourceIds)
+	public boolean waitForResourceValueChanges(SparseArray<IHCResource> resourceIds)
 	{
 		String SOAP_ACTION = "waitForResourceValueChanges";
 		String SERVICE = "ResourceInteractionService";
@@ -610,7 +617,7 @@ public class ConnectionManager {
 		envelope.setOutputSoapObject(request);
 		HttpTransportSE androidHttpTransport = new HttpTransportSE(URI + SERVICE, trustedKeystore);
 		androidHttpTransport.sessionCookie = SESSIONID;
-		androidHttpTransport.debug = false;
+		androidHttpTransport.debug = sslDebug;
 		Log.v(TAG, "START");
 
 		if(isConnected)
@@ -620,7 +627,7 @@ public class ConnectionManager {
 				if(envelope.bodyIn.getClass().getName().equals(SoapFault.class.getName()))
 				{
                     // TODO: Re-authenticate
-					Log.v("waitForResourceValueChanges", "reauthenticate");
+					Log.v(TAG, "waitForResourceValueChanges - reauthenticate");
 					return false;
 				}
 				else
@@ -634,7 +641,7 @@ public class ConnectionManager {
 						SoapObject obj = (SoapObject)soapResponse.getProperty(i);
 						if(obj == null)
 						{
-							Log.v("waitForResourceValueChanges", "obj is null");
+							Log.v(TAG, "waitForResourceValueChanges - obj is null");
 							return false;
 						}
 						int resourceID = (Integer)obj.getProperty("resourceID");
@@ -667,27 +674,29 @@ public class ConnectionManager {
 		return true;
 	}
 	
-	public Boolean enableRuntimeValueNotifications(HashMap<Integer, IHCResource> resourceIds)
+	public Boolean enableRuntimeValueNotifications(SparseArray<IHCResource> resourceIds)
 	{
+        if(URI == null){
+
+        }
+
 		String SOAP_ACTION = "enableRuntimeValueNotifications";
 		String SERVICE = "ResourceInteractionService";
 		String METHOD_NAME = "enableRuntimeValueNotifications1";
 		Boolean bSuccess = false;
 
 		SoapObject request = new SoapObject(NAMESPACE, METHOD_NAME);
-
-		for (Iterator<Integer> iterator = resourceIds.keySet().iterator(); iterator.hasNext();) {
-			int resourceId = iterator.next();
-				request.addProperty("arrayItem",resourceId);
-		}
-
+        for(int i = 0; i < resourceIds.size(); i++) {
+            int key = resourceIds.keyAt(i);
+            request.addProperty("arrayItem",resourceIds.valueAt(key));
+        }
 
 		SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
 
 		envelope.setOutputSoapObject(request);
 		HttpTransportSE androidHttpTransport = new HttpTransportSE(URI+ SERVICE, trustedKeystore);
 		androidHttpTransport.sessionCookie = SESSIONID;
-		androidHttpTransport.debug = false;
+		androidHttpTransport.debug = sslDebug;
 
 		try {
 			androidHttpTransport.call(SOAP_ACTION, envelope);
@@ -779,7 +788,7 @@ public class ConnectionManager {
 	}
 
 
-    private void sendBroadcast(IHCEVENTS action, IHCMESSAGE message) {
+    private void sendBroadcast(IHC_EVENTS action, IHCMESSAGE message) {
         // Inform broadcastreceivers about RuntimeValues has changed.
         Intent intent = new Intent(action.toString());
         if(message != null)

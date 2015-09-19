@@ -1,8 +1,9 @@
-package ms.ihc.control.viewer;
+package ms.ihc.control.Resource;
 
 import java.util.ArrayList;
 
 import ms.ihc.control.devices.wireless.IHCResource;
+import ms.ihc.control.viewer.ConnectionManager;
 
 import android.content.Context;
 import android.view.ContextMenu;
@@ -20,13 +21,13 @@ import android.widget.TextView;
 public class ResourceAdapter extends BaseAdapter {
 
 	private LayoutInflater mInflater;
-	private ConnectionManager ihcCtrl;
+	private ConnectionManager connectionManager;
 
 	private ArrayList<IHCResource> resourceData = new ArrayList<IHCResource>();
 
-	public ResourceAdapter(Context context, ConnectionManager ctrl) {
+	public ResourceAdapter(Context context, ConnectionManager connectionManager) {
 		mInflater = LayoutInflater.from(context);
-		ihcCtrl = ctrl;
+		this.connectionManager = connectionManager;
 	}
 
 	public void removeItem(int position) {
@@ -57,7 +58,7 @@ public class ResourceAdapter extends BaseAdapter {
 
 	public View getView(int position, View convertView, ViewGroup parent) {
 		IHCResource resource = resourceData.get(position);
-		convertView = resource.getView(mInflater, ihcCtrl);
+		convertView = resource.getView(mInflater, connectionManager);
 		convertView.setOnCreateContextMenuListener(new OnCreateContextMenuListener() {		
 			public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
 			}

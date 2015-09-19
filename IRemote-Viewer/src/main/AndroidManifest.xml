@@ -18,7 +18,7 @@
         android:allowBackup="false"
         android:icon="@drawable/remote"
         android:label="@string/app_name"
-        android:theme="@style/Theme.AppCompat.NoActionBar">
+        android:theme="@style/iremote_theme">
         <activity
             android:name="ms.ihc.control.activities.SettingsActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
@@ -38,10 +38,15 @@
             >
         </activity>
         <activity
-            android:name="ms.ihc.control.viewer.ResourceActivity"
+            android:name="ms.ihc.control.Resource.ResourceActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="sensor"
+            android:parentActivityName="ms.ihc.control.activities.LocationActivity"
             >
+            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="ms.ihc.control.activities.LocationActivity" />
         </activity>
         <meta-data android:name="com.crashlytics.ApiKey" android:value="1b7e419e1e57e4a03bc3adca36ab9087ab1d3c95"/>
     </application>

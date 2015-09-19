@@ -22,16 +22,16 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TableRow;
 import android.widget.TextView;
-
+@Deprecated
 @SuppressLint("NewApi")
 public class ResourceActivity extends Activity implements OnClickListener{
 
 	private ListView resourceListView;
-	private TableRow resourceTableRow;
+	//private TableRow resourceTableRow;
 	private ConnectionManager soapImp = null;
 	private ApplicationContext appContext;
-	private TextView resourceTextView1;
-	private TextView resourceTextView2;
+	//private TextView resourceTextView1;
+//	private TextView resourceTextView2;
 	private String selectedLocation = null;
 	
 	Handler mHandler = new Handler();
@@ -51,17 +51,17 @@ public class ResourceActivity extends Activity implements OnClickListener{
 			selectedLocation = i.getStringExtra("location");
 	
 			resourceListView = (ListView) findViewById(R.id.resourcelist);
-			resourceTableRow = (TableRow) findViewById(R.id.HeaderTableRow);
+		/*	resourceTableRow = (TableRow) findViewById(R.id.HeaderTableRow);
 			resourceTextView1 = (TextView) findViewById(R.id.locationtext1);
 			resourceTextView2 = (TextView) findViewById(R.id.locationtext2);
 	
 			resourceTextView1.setText("< Location: ");
-			resourceTextView2.setText(selectedLocation);
+			resourceTextView2.setText(selectedLocation);*/
 			registerForContextMenu(resourceListView);
 			resourceListView.setAdapter(LocationFragment.resourceAdapter);  
 			resourceListView.setOnCreateContextMenuListener(this);
 			
-			resourceTableRow.setOnClickListener(this);
+		//	resourceTableRow.setOnClickListener(this);
 		}
 	}
 

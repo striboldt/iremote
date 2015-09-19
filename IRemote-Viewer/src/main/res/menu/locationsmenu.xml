@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
-	<item android:id="@+menu/settings" android:title="@string/settings" android:icon="@drawable/ic_menu_preferences" />
-	<item android:id="@+menu/active_resources" android:title="@string/active_resources" />
-	<item android:id="@+menu/favourites" android:title="@string/favourites" />
-	<item android:id="@+menu/about" android:title="@string/about" />
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    >
+	<!-- Settings, should always be in the overflow -->
+	<item android:id="@+id/action_settings"
+		android:icon="@drawable/ic_settings_white_36dp"
+        android:showAsAction="always" />
 </menu>

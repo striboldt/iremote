@@ -17,7 +17,7 @@
         android:id="@+id/resourcefragment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        class="ms.ihc.control.fragments.ResourceListFragment"
+        class="ms.ihc.control.Resource.ResourceListFragment"
         tools:layout="@layout/resources" />
 
 </LinearLayout>
