@@ -14,7 +14,6 @@ import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.zip.GZIPInputStream;
 import org.ksoap2.*;
@@ -34,7 +33,7 @@ import android.util.SparseArray;
 
 import com.google.android.vending.licensing.util.Base64;
 import ms.ihc.control.devices.wireless.IHCResource;
-import ms.ihc.control.devices.wireless.ResourceFactory;
+import ms.ihc.control.devices.ResourceFactory;
 
 
 public class ConnectionManager {
@@ -687,8 +686,7 @@ public class ConnectionManager {
 
 		SoapObject request = new SoapObject(NAMESPACE, METHOD_NAME);
         for(int i = 0; i < resourceIds.size(); i++) {
-            int key = resourceIds.keyAt(i);
-            request.addProperty("arrayItem",resourceIds.valueAt(key));
+            request.addProperty("arrayItem",resourceIds.valueAt(i));
         }
 
 		SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);

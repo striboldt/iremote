@@ -1,20 +1,18 @@
 
+description = 'IRemote'
 buildscript {
     repositories {
         mavenCentral()
-        maven {
-            url 'https://oss.sonatype.org/content/repositories/snapshots/'
-        }
+        maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
         maven { url 'http://download.crashlytics.com/maven' }
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:1.3.0'
-//        classpath 'com.squareup.gradle:gradle-android-test-plugin:0.9.1-SNAPSHOT' // Enables the test plugin used below.
         classpath 'com.crashlytics.tools.gradle:crashlytics-gradle:1.+'
     }
 }
 
-apply plugin: 'android'
+apply plugin: 'com.android.application'
 apply plugin: 'crashlytics'
 
 
@@ -27,41 +25,33 @@ dependencies {
         maven { url 'http://download.crashlytics.com/maven' }
 
     }
-    compile 'com.android.support:appcompat-v7:22.2.1'
+    compile 'com.android.support:appcompat-v7:23.1.0'
     compile project(':ksoap2-android:ksoap2-android')
     compile project(':ksoap2-android:ksoap2-base')
     compile project(':ksoap2-android:ksoap2-j2se')
     compile project(':Google-LVL')
     compile 'com.crashlytics.android:crashlytics:1.+'
+
+    // Unit testing dependencies
+    testCompile 'junit:junit:4.12'
+    // Set this dependency if you want to use Mockito
+    testCompile 'org.mockito:mockito-core:1.10.19'
+    // Set this dependency if you want to use Hamcrest matching
+    testCompile 'org.hamcrest:hamcrest-library:1.1'
 }
 
 
 
 android {
-    compileSdkVersion 22
-    buildToolsVersion '19.1.0'
+    compileSdkVersion 23
+    buildToolsVersion '23.0.1'
 
     defaultConfig {
         minSdkVersion 14
-        targetSdkVersion 22
+        targetSdkVersion 23
         signingConfig signingConfigs.debug
     }
 
-    sourceSets {
-
-
- //       instrumentTest.setRoot('src/test')
-
-        // Move the build types to build-types/<type>
-        // For instance, build-types/debug/java, build-types/debug/AndroidManifest.xml, ...
-        // This moves them out of them default location under src/<type>/... which would
-        // conflict with src/ being used by the main source set.
-        // Adding new build types or product flavors should be accompanied
-        // by a similar customization.
-        debug.setRoot('build-types/debug')
-        release.setRoot('build-types/release')
-        beta.setRoot('build-types/beta')
-    }
 
     signingConfigs {
         release {
@@ -101,7 +91,8 @@ allprojects {
     task hello << { task -> println "I'm $task.project.name" }
 }
 
-task wrapper(type: org.gradle.api.tasks.wrapper.Wrapper) {
-    gradleVersion = '1.9'
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.7'
 }
+
 

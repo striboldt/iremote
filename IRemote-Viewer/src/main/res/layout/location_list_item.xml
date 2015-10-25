@@ -12,7 +12,7 @@
         android:layout_weight="1"
         android:text="Room"
         android:textColor="#FFFFFF"
-        android:textSize="20sp"></TextView>
+        android:textSize="20sp"/>
 
     <TextView
         android:id="@+id/resources"
@@ -23,6 +23,6 @@
         android:layout_weight="1"
         android:text="Resources: 0"
         android:textColor="#FFFFFF"
-        android:textSize="12sp"></TextView>
+        android:textSize="12sp"/>
 </LinearLayout>
 

@@ -12,7 +12,7 @@
 		</TableRow> 
 		<TableRow>
 			<SeekBar android:id="@+id/SeekBar01" android:layout_weight="1"
-				android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginBottom="5dp" android:layout_marginLeft="10dp" android:layout_marginRight="10dp"></SeekBar>
+				android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginBottom="5dp" android:layout_marginLeft="10dp" android:layout_marginRight="10dp"/>
 		</TableRow>
 		
 		<TableLayout android:id="@+id/TableLayout02"
@@ -21,7 +21,7 @@
 			<Button android:id="@+id/Button01" style="@style/button01_on"></Button>
 			<TableLayout android:id="@+id/TableLayout02" android:layout_height="wrap_content" android:layout_width="fill_parent" android:layout_weight="1">
 			<TableRow>
-			<TextView android:id="@+id/devicename" android:layout_width="wrap_content"  android:textSize="12dp" android:textColor="#848484"
+			<TextView android:id="@+id/devicename" android:layout_width="wrap_content"  android:textSize="12sp" android:textColor="@color/resourceSubtitleColor"
 				android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center_horizontal|center_vertical">
 			</TextView>
 			</TableRow>

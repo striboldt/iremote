@@ -7,12 +7,12 @@
 		<TableLayout>
 		<TableRow>
 			<TextView android:id="@+id/room"  android:layout_width="wrap_content"
-				android:layout_height="wrap_content" android:layout_weight="0" android:textSize="26dp" android:text="20.0"
-				android:textColor="#DAA520" android:textStyle="bold" android:layout_marginLeft="5dp">
+				android:layout_height="wrap_content" android:layout_weight="0" android:textSize="26sp" android:text="20.0"
+				android:textColor="@color/temperatureTextColor" android:textStyle="bold" android:layout_marginLeft="5dp">
 			</TextView>
 		</TableRow>
 		<TableRow>
-			<TextView android:text="room" android:id="@+id/roomtxt" android:layout_width="wrap_content"  android:textSize="12dp" android:textColor="#848484"
+			<TextView android:text="room" android:id="@+id/roomtxt" android:layout_width="wrap_content"  android:textSize="12sp" android:textColor="@color/resourceSubtitleColor"
 				android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center_horizontal|center_vertical">
 			</TextView>
 		</TableRow>
@@ -25,7 +25,7 @@
 			</TextView>
 			</TableRow>
 			<TableRow>
-			<TextView android:id="@+id/devicename" android:layout_width="wrap_content"  android:textSize="12dp" android:textColor="#848484"
+			<TextView android:id="@+id/devicename" android:layout_width="wrap_content"  android:textSize="12sp" android:textColor="@color/resourceSubtitleColor"
 				android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center_horizontal|center_vertical">
 			</TextView>
 			</TableRow>
@@ -37,11 +37,11 @@
 		<TableRow>
 			<TextView android:id="@+id/floor" android:layout_width="wrap_content" android:textSize="26dp" android:text="20.0" 
 				android:layout_height="wrap_content" android:layout_weight="0"
-				android:textColor="#DAA520"  android:textStyle="bold" android:layout_marginRight="5dp">
+				android:textColor="@color/temperatureTextColor"  android:textStyle="bold" android:layout_marginRight="5dp">
 			</TextView>
 		</TableRow>
 		<TableRow>
-			<TextView android:text="floor" android:id="@+id/floortxt" android:layout_width="wrap_content"  android:textSize="12dp" android:textColor="#848484"
+			<TextView android:text="floor" android:id="@+id/floortxt" android:layout_width="wrap_content"  android:textSize="12sp" android:textColor="@color/resourceSubtitleColor"
 				android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center_horizontal|center_vertical">
 			</TextView>
 		</TableRow>

@@ -41,7 +41,7 @@ public class ActiveResourcesActivity extends Activity implements OnClickListener
 			/*resourceTableRow = (TableRow) findViewById(R.id.HeaderTableRow);
 			resourceTextView = (TextView) findViewById(R.id.locationtext1);*/
 	
-			resourceAdapter = new ResourceAdapter(getApplicationContext(), connectionManager);
+			//resourceAdapter = new ResourceAdapter(getApplicationContext());
 	
 			Iterator<IHCLocation> iLocations = appContext.getIHCHome().locations.iterator();
 			while (iLocations.hasNext()) {

@@ -47,7 +47,7 @@ public class FavouritesActivity extends Activity implements OnClickListener {
 	//		favouritesTableRow = (TableRow) findViewById(R.id.HeaderTableRow);
 		//	favouritesTextView = (TextView) findViewById(R.id.locationtext1);
 	
-			resourceAdapter = new ResourceAdapter(getApplicationContext(),soapImp);
+			//resourceAdapter = new ResourceAdapter(getApplicationContext(),soapImp);
 	
 			Iterator<IHCLocation> iLocations = appContext.getIHCHome().locations.iterator();
 			while (iLocations.hasNext()) {

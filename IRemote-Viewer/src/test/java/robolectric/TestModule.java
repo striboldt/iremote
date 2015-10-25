@@ -1,25 +1,22 @@
 package robolectric;
 
-import org.junit.Test;
+import android.content.Context;
+import android.test.ActivityTestCase;
+
+import org.junit.Before;
 import org.junit.runner.RunWith;
-import org.robolectric.RobolectricTestRunner;
 
-import static org.junit.Assert.assertTrue;
+import ms.ihc.control.viewer.ApplicationContext;
+import ms.ihc.control.viewer.ConnectionManager;
 
-@RunWith(RobolectricTestRunner.class)
-public class TestModule {
 
-    @Test
-    public void shouldFail() {
-        assertTrue(false);
-    }
-}
+
 
 /**
  * Created by mortenstriboldt on 02/02/14.
  */
-/*
-@RunWith(RobolectricTestRunner.class)
+
+/*@RunWith(RobolectricTestRunner .class)
 public class robolectric.TestModule  {
     private SettingsActivity activity;
     private IhcManager ihcManager;
@@ -42,5 +39,4 @@ public class robolectric.TestModule  {
         this.ihcManager.authenticate("admin","ospekos4u!","striboldt.lgnas.com",true);
 
     }
-}
-*/
+}*/

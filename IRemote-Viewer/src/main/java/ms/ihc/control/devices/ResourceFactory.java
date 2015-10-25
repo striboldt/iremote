@@ -1,7 +1,8 @@
-package ms.ihc.control.devices.wireless;
+package ms.ihc.control.devices;
 
 import android.util.Log;
 
+import ms.ihc.control.devices.wireless.IHCResource;
 import ms.ihc.control.viewer.ConnectionManager;
 
 public class ResourceFactory {

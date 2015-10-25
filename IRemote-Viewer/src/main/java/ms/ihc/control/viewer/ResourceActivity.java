@@ -58,7 +58,7 @@ public class ResourceActivity extends Activity implements OnClickListener{
 			resourceTextView1.setText("< Location: ");
 			resourceTextView2.setText(selectedLocation);*/
 			registerForContextMenu(resourceListView);
-			resourceListView.setAdapter(LocationFragment.resourceAdapter);  
+			//resourceListView.setAdapter(LocationFragment.resourceAdapter);
 			resourceListView.setOnCreateContextMenuListener(this);
 			
 		//	resourceTableRow.setOnClickListener(this);
@@ -105,14 +105,14 @@ public class ResourceActivity extends Activity implements OnClickListener{
 
 		@Override
 		protected Boolean doInBackground(Void... params) {
-			Log.v("waitForResourceValueChangesTask-ResourceActivity", "Waiting for valuechanges");
+		//	Log.v("waitForResourceValueChangesTask-ResourceActivity", "Waiting for valuechanges");
 			return soapImp.waitForResourceValueChanges(LocationFragment.resourceMap);
 		}
 
 		@Override
 		protected void onPostExecute(Boolean refreshListView) {
 			appContext.setIsWaitingForValueChanges(false);		
-			Log.v("waitForResourceValueChangesTask-ResourceActivity", "Done");
+			//Log.v("waitForResourceValueChangesTask-ResourceActivity", "Done");
 		}
 	}
 
@@ -130,10 +130,10 @@ public class ResourceActivity extends Activity implements OnClickListener{
 
 		@Override
 		protected void onPostExecute(Boolean result) {
-			if (LocationFragment.resourceAdapter != null) {
+		/*	if (LocationFragment.resourceAdapter != null) {
 				Log.v("refresjResourceViewTask-ResourceActivity", "Refreshing view...");
 				LocationFragment.resourceAdapter.notifyDataSetChanged();
-			}
+			}*/
 		}
 	}
 	
@@ -163,7 +163,7 @@ public class ResourceActivity extends Activity implements OnClickListener{
 				Iterator<IHCResource> iResources = location.getResources().iterator();
 				while (iResources.hasNext()) { 
 					IHCResource ihcResource = iResources.next();
-					if(ihcResource.equals((IHCResource) LocationFragment.resourceAdapter.getItem(info.position)))
+					/*if(ihcResource.equals((IHCResource) LocationFragment.resourceAdapter.getItem(info.position)))
 					{					
 						switch (menuItemIndex) 
 						{
@@ -193,7 +193,7 @@ public class ResourceActivity extends Activity implements OnClickListener{
 						}
 						
 						return true;
-					}
+					}*/
 				}
 			}
 		}

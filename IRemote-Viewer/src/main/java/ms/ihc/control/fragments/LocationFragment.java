@@ -10,7 +10,6 @@ import ms.ihc.control.viewer.ConnectionManager;
 import ms.ihc.control.viewer.IHCHome;
 import ms.ihc.control.viewer.IHCLocation;
 import ms.ihc.control.viewer.R;
-import ms.ihc.control.Resource.ResourceAdapter;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -35,7 +34,6 @@ public class LocationFragment extends Fragment implements OnItemClickListener{
 	private IHCHome home = null;
 	public static SparseArray<IHCResource> resourceMap = new SparseArray<IHCResource>();
 	private enableRuntimeValueNotificationsTask runtimeTask = null;
-	public static ResourceAdapter resourceAdapter;
 	private SimpleAdapter locationAdapter;
 	ArrayList<HashMap<String,String>> list;
 	private ApplicationContext appContext;
@@ -99,22 +97,7 @@ public class LocationFragment extends Fragment implements OnItemClickListener{
 	public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
 			HashMap<String,String> map = list.get(position);
 			String selectedResource = map.get("location");
-			
-			resourceAdapter = new ResourceAdapter(appContext, connectionManager);
 
-			Iterator<IHCLocation> iLocations = home.getLocations().iterator();
-			while (iLocations.hasNext()) {
-				IHCLocation location = iLocations.next();
-				if (location.getName().equals(selectedResource)) {
-					Iterator<IHCResource> iResources = location.getResources().iterator();
-					while (iResources.hasNext()) {
-						IHCResource ihcResource = iResources.next();
-						ihcResource.setLocation("");
-						resourceAdapter.addItem(ihcResource);
-					}
-				}
-			}
-			
 			Intent intent = new Intent(appContext, ResourceActivity.class);
 			intent.putExtra("location", selectedResource);
 			startActivity(intent);
@@ -191,25 +174,7 @@ public class LocationFragment extends Fragment implements OnItemClickListener{
 		}
 	}
 	
-	private class refreshResourceViewTask extends AsyncTask<Void, Void, Boolean> {
 
-		@Override
-		protected void onPreExecute() {
-		}
-
-		@Override
-		protected Boolean doInBackground(Void... params) {
-			return true;
-		}
-
-		@Override
-		protected void onPostExecute(Boolean result) {
-			if (LocationFragment.resourceAdapter != null && !connectionManager.isInTouchMode) {
-				Log.v(TAG, "Refreshing view...");
-				LocationFragment.resourceAdapter.notifyDataSetChanged();
-			}
-		}
-	}
 
 
 	/*public void onConnectionAccepted() {
