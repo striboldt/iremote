@@ -16,12 +16,10 @@ import java.security.cert.X509Certificate;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.zip.GZIPInputStream;
-import org.ksoap2.*;
-import org.ksoap2.serialization.KvmSerializable;
-import org.ksoap2.serialization.SoapObject;
-import org.ksoap2.serialization.SoapPrimitive;
-import org.ksoap2.serialization.SoapSerializationEnvelope;
-import org.ksoap2.transport.HttpTransportSE;
+
+import ms.ihc.control.ksoap2.serialization.*;
+import ms.ihc.control.ksoap2.transport.HttpTransportSE;
+
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
@@ -32,6 +30,9 @@ import android.util.Log;
 import android.util.SparseArray;
 
 import com.google.android.vending.licensing.util.Base64;
+
+import javax.net.ssl.SSLHandshakeException;
+
 import ms.ihc.control.devices.wireless.IHCResource;
 import ms.ihc.control.devices.ResourceFactory;
 
@@ -64,7 +65,8 @@ public class ConnectionManager {
         INSUFFICIENT_RIGHTS("loginFailedDueToInsufficientUserRights"),
         SOCKET_TIMEOUT("socketTimeout"),
         INVALID_ACCOUNT("loginFailedDueToAccountInvalid"),
-		LOAD_PROJECT_FAILED("failToLoadProject");
+		LOAD_PROJECT_FAILED("failToLoadProject"),
+		CERTIFICATE_NOT_TRUSTED("certNotTrusted");
 
 		private String pretty;
         private IHCMESSAGE(String pretty) {
@@ -81,7 +83,6 @@ public class ConnectionManager {
 	private static final String NAMESPACE = "utcs";
 	public Boolean isInTouchMode = false;
     private String URI;
-	private String SESSIONID = "";
 	private String login;
 	private String password;
 	private String ctrlIp;
@@ -90,6 +91,7 @@ public class ConnectionManager {
     private ApplicationContext context;
 	private KeyStore trustedKeystore = null;
 	private boolean sslDebug = false;
+	private HttpTransportSE androidHttpTransport = null;
 
 
 	public ConnectionManager(ApplicationContext applicationContext){
@@ -99,7 +101,7 @@ public class ConnectionManager {
 		try {
 			// loading CAs from an InputStream
 			CertificateFactory cf = CertificateFactory.getInstance("X.509");
-			InputStream cert = context.getResources().openRawResource(R.raw.lk);
+			InputStream cert = context.getResources().openRawResource(R.raw.charles);
 			Certificate ca;
 			try {
 				ca = cf.generateCertificate(cert);
@@ -122,7 +124,7 @@ public class ConnectionManager {
 		}
 	}
 
-    private class NetworkAsyncTask extends AsyncTask<Void, Void, Void>{
+    private class AuthenticationTask extends AsyncTask<Void, Void, Void>{
 
         @Override
         protected Void doInBackground(Void... voids) {
@@ -141,17 +143,21 @@ public class ConnectionManager {
                 request.addProperty("application", "treeview");
 
             Log.i(TAG, "SoapSerializationEnvelope");
-            SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+            SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(ms.ihc.control.ksoap2.serialization.SoapEnvelope.VER11);
             envelope.setOutputSoapObject(request);
 
             URI = "https://%IP%/ws/";
 			URI = URI.replace("%IP%", ctrlIp);
-            HttpTransportSE androidHttpTransport = new HttpTransportSE(URI + "AuthenticationService", trustedKeystore);
+			if(androidHttpTransport == null) {
+				androidHttpTransport = new HttpTransportSE(URI + "AuthenticationService", trustedKeystore);
+			}
+			else {
+				androidHttpTransport.setUrl(URI + "AuthenticationService");
+			}
             androidHttpTransport.debug = sslDebug;
             try {
 
                 androidHttpTransport.call(SOAP_ACTION, envelope);
-                SESSIONID = androidHttpTransport.sessionCookie;
                 SoapObject soapResponse = (SoapObject) envelope.bodyIn;
                 loginWasSuccessful = (Boolean) soapResponse.getProperty("loginWasSuccessful");
                 if(!loginWasSuccessful){
@@ -169,9 +175,12 @@ public class ConnectionManager {
             catch (SocketTimeoutException socketTimeout){
                 ihcmessage = IHCMESSAGE.SOCKET_TIMEOUT;
             }
-            catch (Exception e) {
-                Log.e(TAG, e.getMessage());
-            }
+			catch (SSLHandshakeException e){
+				ihcmessage = IHCMESSAGE.CERTIFICATE_NOT_TRUSTED;
+			}
+			catch (Exception e) {
+				Log.e(TAG, e.getMessage());
+			}
 			finally
 			{
 				androidHttpTransport.reset();
@@ -189,15 +198,13 @@ public class ConnectionManager {
 
 	
 	public void connect(final String username, String pwd, final String ip, final Boolean WAN) {
-
         login = username;
         password = pwd;
         ctrlIp = ip;
         wan = WAN;
         Log.i(TAG, "before");
 
-        new NetworkAsyncTask().execute();
-
+        new AuthenticationTask().execute();
 	}
 
     // TODO: Setup algorithm for connection retry and timeout. And notify upstream Activities in case of failure
@@ -206,21 +213,15 @@ public class ConnectionManager {
 		 this.connect(login, password, ctrlIp, wan);
 	}
 
-	public void startKeepAliveCheck(){
-
-
-	}
-
 	public Boolean ping() {
 		String SOAP_ACTION = "ping";
 		String SERVICE = "AuthenticationService";
 		Boolean resultsRequestSOAP = false;
 
 		SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(
-				SoapEnvelope.VER11);
+				ms.ihc.control.ksoap2.serialization.SoapEnvelope.VER11);
 
 		HttpTransportSE androidHttpTransport = new HttpTransportSE(URI+ SERVICE, trustedKeystore);
-		androidHttpTransport.sessionCookie = SESSIONID;
 
 		try {
 			androidHttpTransport.call(SOAP_ACTION, envelope);
@@ -242,10 +243,9 @@ public class ConnectionManager {
 		String SERVICE = "ControllerService";
 		String response = "";
 
-		SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+		SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(ms.ihc.control.ksoap2.serialization.SoapEnvelope.VER11);
 
 		HttpTransportSE androidHttpTransport = new HttpTransportSE(URI+ SERVICE, trustedKeystore);
-		androidHttpTransport.sessionCookie = SESSIONID;
 
 		try {
 			androidHttpTransport.call(SOAP_ACTION, envelope);
@@ -269,10 +269,9 @@ public class ConnectionManager {
 
 		Boolean response = false;
 
-		final SoapSerializationEnvelope envelope = new SoapSerializationEnvelope( SoapEnvelope.VER11);
+		final SoapSerializationEnvelope envelope = new SoapSerializationEnvelope( ms.ihc.control.ksoap2.serialization.SoapEnvelope.VER11);
 
 		final HttpTransportSE androidHttpTransport = new HttpTransportSE(URI + SERVICE, trustedKeystore);
-		androidHttpTransport.sessionCookie = SESSIONID;
 
 		try {
 			androidHttpTransport.call(SOAP_ACTION, envelope);
@@ -295,15 +294,16 @@ public class ConnectionManager {
 		protected Void doInBackground(Void... voids) {
 			IHCHome home = new IHCHome();
 			int segments = getProjectNumberOfSegments();
+
 			int segmentSize = getSegmentSize();
+
 			int arraySize = segments * segmentSize;
-			ByteArrayOutputStream decoded = new ByteArrayOutputStream(arraySize);
-			Map<String, Integer> projectInfo = getProjectInfo();
+            Map<String, Integer> projectInfo = getProjectInfo();
 
 			int majorRevision = projectInfo.get("projectMajorRevision");
 			int minorRevision = projectInfo.get("projectMinorRevision");
 
-			decoded = getProjectSegment(segments, arraySize, majorRevision, minorRevision);
+            ByteArrayOutputStream decoded = getProjectSegment(segments, arraySize, majorRevision, minorRevision);
 
 			try {
 				// Convert byte array into stream
@@ -343,15 +343,17 @@ public class ConnectionManager {
 		String SERVICE = "ControllerService";
 		int numberOfSegements = 0;
 
-		SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
-		HttpTransportSE androidHttpTransport = new HttpTransportSE(URI + SERVICE, trustedKeystore);
-
-		androidHttpTransport.sessionCookie = SESSIONID;
+		SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(ms.ihc.control.ksoap2.serialization.SoapEnvelope.VER11);
+		if(androidHttpTransport != null){
+			androidHttpTransport.setUrl(URI + SERVICE);
+		} else {
+			androidHttpTransport = new HttpTransportSE(URI + SERVICE, trustedKeystore);
+		}
 
 		try {
 			androidHttpTransport.call(SOAP_ACTION, envelope);
-			if(envelope.bodyIn instanceof SoapFault){
-				SoapFault soapFault = (SoapFault) envelope.bodyIn;
+			if(envelope.bodyIn instanceof ms.ihc.control.ksoap2.serialization.SoapFault){
+				ms.ihc.control.ksoap2.serialization.SoapFault soapFault = (ms.ihc.control.ksoap2.serialization.SoapFault) envelope.bodyIn;
 				Log.e(TAG, soapFault.faultstring);
 			}
 			else {
@@ -375,10 +377,13 @@ public class ConnectionManager {
 		String SERVICE = "ControllerService";
 		HashMap<String, Integer> projectInfo = new HashMap<String, Integer>();
 
-		SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+		SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(ms.ihc.control.ksoap2.serialization.SoapEnvelope.VER11);
 
-		HttpTransportSE androidHttpTransport = new HttpTransportSE(URI + SERVICE, trustedKeystore);
-		androidHttpTransport.sessionCookie = SESSIONID;
+		if(androidHttpTransport != null) {
+			androidHttpTransport.setUrl(URI+SERVICE);
+		} else {
+			androidHttpTransport = new HttpTransportSE(URI + SERVICE, trustedKeystore);
+		}
 
 		try {
 			androidHttpTransport.call(SOAP_ACTION, envelope);
@@ -403,10 +408,13 @@ public class ConnectionManager {
 		String SERVICE = "ControllerService";
 		int segmentSize = 0;
 
-		SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+		SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(ms.ihc.control.ksoap2.serialization.SoapEnvelope.VER11);
 
-		HttpTransportSE androidHttpTransport = new HttpTransportSE(URI + SERVICE, trustedKeystore);
-		androidHttpTransport.sessionCookie = SESSIONID;
+		if(androidHttpTransport != null) {
+			androidHttpTransport.setUrl(URI+SERVICE);
+		} else {
+			androidHttpTransport = new HttpTransportSE(URI + SERVICE, trustedKeystore);
+		}
 
 		try {
 			androidHttpTransport.call(SOAP_ACTION, envelope);
@@ -429,7 +437,6 @@ public class ConnectionManager {
 
 		String SOAP_ACTION = "getIHCProjectSegment";
 		String SERVICE = "ControllerService";
-		HttpTransportSE androidHttpTransport = null;
 
 		for(int i = 0; i<segments; i++)
 		{
@@ -438,15 +445,14 @@ public class ConnectionManager {
 			request.addProperty("getIHCProjectSegment2", majorRevision);
 			request.addProperty("getIHCProjectSegment3", minorRevision);
 
-			SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+			SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(ms.ihc.control.ksoap2.serialization.SoapEnvelope.VER11);
 			envelope.setAddAdornments(false);
 			envelope.setOutputSoapObject(request);
 
-			if(androidHttpTransport == null)
-			{
-				androidHttpTransport = new HttpTransportSE(URI+ SERVICE, trustedKeystore);
-				androidHttpTransport.debug = sslDebug;
-				androidHttpTransport.sessionCookie = SESSIONID;
+			if(androidHttpTransport != null) {
+				androidHttpTransport.setUrl(URI+SERVICE);
+			} else {
+				androidHttpTransport = new HttpTransportSE(URI + SERVICE, trustedKeystore);
 			}
 
 			try
@@ -503,15 +509,16 @@ public class ConnectionManager {
 		Boolean response;
 		if(isConnected)
 		{
-			SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+			SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(ms.ihc.control.ksoap2.serialization.SoapEnvelope.VER11);
 
 			envelope.addMapping("d", type, valueType.getClass());
 
 			envelope.setOutputSoapObject(request);
-			HttpTransportSE androidHttpTransport = new HttpTransportSE(URI + SERVICE, trustedKeystore);
-			androidHttpTransport.sessionCookie = SESSIONID;
-			androidHttpTransport.debug = sslDebug;
-
+			if(androidHttpTransport != null) {
+				androidHttpTransport.setUrl(URI+SERVICE);
+			} else {
+				androidHttpTransport = new HttpTransportSE(URI + SERVICE, trustedKeystore);
+			}
 
 			try {
 				// Send Soap request
@@ -544,15 +551,16 @@ public class ConnectionManager {
 
 		if(this.isConnected)
 		{
-			SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+			SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(ms.ihc.control.ksoap2.serialization.SoapEnvelope.VER11);
 
 			envelope.addMapping("d", type, valueType.getClass());
 
 			envelope.setOutputSoapObject(request);
-			HttpTransportSE androidHttpTransport = new HttpTransportSE(URI + SERVICE, trustedKeystore);
-			androidHttpTransport.sessionCookie = SESSIONID;
-			androidHttpTransport.debug = sslDebug;
-
+			if(androidHttpTransport != null) {
+				androidHttpTransport.setUrl(URI+SERVICE);
+			} else {
+				androidHttpTransport = new HttpTransportSE(URI + SERVICE, trustedKeystore);
+			}
 
 			try {
 				// Send Soap request
@@ -583,11 +591,15 @@ public class ConnectionManager {
 		SoapObject request = new SoapObject(NAMESPACE, METHOD_NAME);
 		request.addProperty("arrayItem", resourceID);
 
-		SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+		SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(ms.ihc.control.ksoap2.serialization.SoapEnvelope.VER11);
 
 		envelope.setOutputSoapObject(request);
-		HttpTransportSE androidHttpTransport = new HttpTransportSE(URI + SERVICE, trustedKeystore);
-		androidHttpTransport.sessionCookie = SESSIONID;
+		if(androidHttpTransport != null) {
+			androidHttpTransport.setUrl(URI+SERVICE);
+		} else {
+			androidHttpTransport = new HttpTransportSE(URI + SERVICE, trustedKeystore);
+		}
+
 
 		try {
 			androidHttpTransport.call(SOAP_ACTION, envelope);
@@ -611,19 +623,22 @@ public class ConnectionManager {
 		SoapObject request = new SoapObject(NAMESPACE, "");
 		request.addProperty("waitForResourceValueChanges1", 10);
 
-		SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+		SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(ms.ihc.control.ksoap2.serialization.SoapEnvelope.VER11);
 
 		envelope.setOutputSoapObject(request);
-		HttpTransportSE androidHttpTransport = new HttpTransportSE(URI + SERVICE, trustedKeystore);
-		androidHttpTransport.sessionCookie = SESSIONID;
-		androidHttpTransport.debug = sslDebug;
+		if(androidHttpTransport != null) {
+			androidHttpTransport.setUrl(URI+SERVICE);
+		} else {
+			androidHttpTransport = new HttpTransportSE(URI + SERVICE, trustedKeystore);
+		}
+
 		Log.v(TAG, "START");
 
 		if(isConnected)
 		{
 			try {
 				androidHttpTransport.call(SOAP_ACTION, envelope);
-				if(envelope.bodyIn.getClass().getName().equals(SoapFault.class.getName()))
+				if(envelope.bodyIn.getClass().getName().equals(ms.ihc.control.ksoap2.serialization.SoapFault.class.getName()))
 				{
                     // TODO: Re-authenticate
 					Log.v(TAG, "waitForResourceValueChanges - reauthenticate");
@@ -689,12 +704,15 @@ public class ConnectionManager {
             request.addProperty("arrayItem",resourceIds.valueAt(i));
         }
 
-		SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+		SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(ms.ihc.control.ksoap2.serialization.SoapEnvelope.VER11);
 
 		envelope.setOutputSoapObject(request);
-		HttpTransportSE androidHttpTransport = new HttpTransportSE(URI+ SERVICE, trustedKeystore);
-		androidHttpTransport.sessionCookie = SESSIONID;
-		androidHttpTransport.debug = sslDebug;
+		if(androidHttpTransport != null) {
+			androidHttpTransport.setUrl(URI+SERVICE);
+		} else {
+			androidHttpTransport = new HttpTransportSE(URI + SERVICE, trustedKeystore);
+		}
+
 
 		try {
 			androidHttpTransport.call(SOAP_ACTION, envelope);

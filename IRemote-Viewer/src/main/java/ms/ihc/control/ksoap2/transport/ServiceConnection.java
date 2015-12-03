@@ -19,7 +19,7 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
  * IN THE SOFTWARE. */
 
-package org.ksoap2.transport;
+package ms.ihc.control.ksoap2.transport;
 
 import java.io.*;
 

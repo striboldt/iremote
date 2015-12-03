@@ -1,4 +1,4 @@
-package org.ksoap2.serialization;
+package ms.ihc.control.ksoap2.serialization;
 
 /**
  * A class that implements only {@link NullSoapObject#toString()}.

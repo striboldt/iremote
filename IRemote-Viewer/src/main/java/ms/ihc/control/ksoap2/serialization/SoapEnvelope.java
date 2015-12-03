@@ -18,10 +18,12 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
  * IN THE SOFTWARE. */
 
-package org.ksoap2;
+package ms.ihc.control.ksoap2.serialization;
 
 import java.io.*;
-import org.kxml2.kdom.*;
+
+import org.kxml2.kdom.Element;
+import org.kxml2.kdom.Node;
 import org.xmlpull.v1.*;
 
 /**

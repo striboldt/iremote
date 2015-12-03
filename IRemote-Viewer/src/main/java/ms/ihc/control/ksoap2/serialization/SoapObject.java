@@ -19,7 +19,7 @@
  * Contributor(s): John D. Beatty, Dave Dash, Andre Gerard, F. Hunter, Renaud Tognelli
  */
 
-package org.ksoap2.serialization;
+package ms.ihc.control.ksoap2.serialization;
 
 import java.util.*;
 
@@ -32,7 +32,7 @@ import java.util.*;
  * Instead of this this class, custom classes can be used if they implement the KvmSerializable interface.
  */
 
-public class SoapObject  extends AttributeContainer implements KvmSerializable {
+public class SoapObject  extends AttributeContainer implements ms.ihc.control.ksoap2.serialization.KvmSerializable {
     /**
      * The namespace of this soap object.
      */
@@ -86,7 +86,7 @@ public class SoapObject  extends AttributeContainer implements KvmSerializable {
         */
 
         for (int propIndex = 0; propIndex < numProperties; propIndex++) {
-            PropertyInfo thisProp = (PropertyInfo) this.properties.elementAt(propIndex);
+            ms.ihc.control.ksoap2.serialization.PropertyInfo thisProp = (ms.ihc.control.ksoap2.serialization.PropertyInfo) this.properties.elementAt(propIndex);
             Object thisPropValue = thisProp.getValue();
             if (!otherSoapObject.hasProperty(thisProp.getName())) {
                 return false;
@@ -113,7 +113,7 @@ public class SoapObject  extends AttributeContainer implements KvmSerializable {
      * @inheritDoc
      */
     public Object getProperty(int index) {
-        return ((PropertyInfo) properties.elementAt(index)).getValue();
+        return ((ms.ihc.control.ksoap2.serialization.PropertyInfo) properties.elementAt(index)).getValue();
     }
 
     /**
@@ -138,12 +138,12 @@ public class SoapObject  extends AttributeContainer implements KvmSerializable {
     /**
      * Get a property without chance of throwing an exception
      *
-     * @return the property if it exists; if not, {@link NullSoapObject} is returned
+     * @return the property if it exists; if not, {@link ms.ihc.control.ksoap2.serialization.NullSoapObject} is returned
      */
     public Object safeGetProperty(final String name) {
         Integer i = propertyIndex(name);
         if (i != null) return getProperty(i.intValue());
-        else return new NullSoapObject();
+        else return new ms.ihc.control.ksoap2.serialization.NullSoapObject();
     }
 
     /**
@@ -161,7 +161,7 @@ public class SoapObject  extends AttributeContainer implements KvmSerializable {
 
     private Integer propertyIndex(String name) {
         for (int i = 0; i < properties.size(); i++) {
-            if (name.equals(((PropertyInfo) properties.elementAt(i)).getName())) return new Integer(i);
+            if (name.equals(((ms.ihc.control.ksoap2.serialization.PropertyInfo) properties.elementAt(i)).getName())) return new Integer(i);
         }
         return null;
     }
@@ -182,7 +182,7 @@ public class SoapObject  extends AttributeContainer implements KvmSerializable {
      * @param propertyInfo designated retainer of desired property
      * @deprecated
      */
-    public void getPropertyInfo(int index, Hashtable properties, PropertyInfo propertyInfo) {
+    public void getPropertyInfo(int index, Hashtable properties, ms.ihc.control.ksoap2.serialization.PropertyInfo propertyInfo) {
         getPropertyInfo(index, propertyInfo);
     }
 
@@ -192,8 +192,8 @@ public class SoapObject  extends AttributeContainer implements KvmSerializable {
      * @param index        index of desired property
      * @param propertyInfo designated retainer of desired property
      */
-    public void getPropertyInfo(int index, PropertyInfo propertyInfo) {
-        PropertyInfo p = (PropertyInfo) properties.elementAt(index);
+    public void getPropertyInfo(int index, ms.ihc.control.ksoap2.serialization.PropertyInfo propertyInfo) {
+        ms.ihc.control.ksoap2.serialization.PropertyInfo p = (ms.ihc.control.ksoap2.serialization.PropertyInfo) properties.elementAt(index);
         propertyInfo.name = p.name;
         propertyInfo.namespace = p.namespace;
         propertyInfo.flags = p.flags;
@@ -210,13 +210,13 @@ public class SoapObject  extends AttributeContainer implements KvmSerializable {
     public SoapObject newInstance() {
         SoapObject o = new SoapObject(namespace, name);
         for (int propIndex = 0; propIndex < properties.size(); propIndex++) {
-            PropertyInfo propertyInfo = (PropertyInfo) properties.elementAt(propIndex);
+            ms.ihc.control.ksoap2.serialization.PropertyInfo propertyInfo = (ms.ihc.control.ksoap2.serialization.PropertyInfo) properties.elementAt(propIndex);
             o.addProperty(propertyInfo);
         }
         for (int attribIndex = 0; attribIndex < getAttributeCount(); attribIndex++) {
-            AttributeInfo newAI = new AttributeInfo();
+            ms.ihc.control.ksoap2.serialization.AttributeInfo newAI = new ms.ihc.control.ksoap2.serialization.AttributeInfo();
             getAttributeInfo(attribIndex, newAI);
-            AttributeInfo attributeInfo = newAI; //(AttributeInfo) attributes.elementAt(attribIndex);
+            ms.ihc.control.ksoap2.serialization.AttributeInfo attributeInfo = newAI; //(AttributeInfo) attributes.elementAt(attribIndex);
             o.addAttribute(attributeInfo);
         }
         return o;
@@ -229,7 +229,7 @@ public class SoapObject  extends AttributeContainer implements KvmSerializable {
      * @param value the new value of the property
      */
     public void setProperty(int index, Object value) {
-        ((PropertyInfo) properties.elementAt(index)).setValue(value);
+        ((ms.ihc.control.ksoap2.serialization.PropertyInfo) properties.elementAt(index)).setValue(value);
     }
 
     /**
@@ -239,9 +239,9 @@ public class SoapObject  extends AttributeContainer implements KvmSerializable {
      * @param value the value of the property
      */
     public SoapObject addProperty(String name, Object value) {
-        PropertyInfo propertyInfo = new PropertyInfo();
+        ms.ihc.control.ksoap2.serialization.PropertyInfo propertyInfo = new ms.ihc.control.ksoap2.serialization.PropertyInfo();
         propertyInfo.name = name;
-        propertyInfo.type = value == null ? PropertyInfo.OBJECT_CLASS : value.getClass();
+        propertyInfo.type = value == null ? ms.ihc.control.ksoap2.serialization.PropertyInfo.OBJECT_CLASS : value.getClass();
         propertyInfo.value = value;
         return addProperty(propertyInfo);
     }
@@ -253,7 +253,7 @@ public class SoapObject  extends AttributeContainer implements KvmSerializable {
      * @param value        the value of the property
      * @deprecated property info now contains the value
      */
-    public SoapObject addProperty(PropertyInfo propertyInfo, Object value) {
+    public SoapObject addProperty(ms.ihc.control.ksoap2.serialization.PropertyInfo propertyInfo, Object value) {
         propertyInfo.setValue(value);
         addProperty(propertyInfo);
         return this;
@@ -264,7 +264,7 @@ public class SoapObject  extends AttributeContainer implements KvmSerializable {
      *
      * @param propertyInfo designated retainer of desired property
      */
-    public SoapObject addProperty(PropertyInfo propertyInfo) {
+    public SoapObject addProperty(ms.ihc.control.ksoap2.serialization.PropertyInfo propertyInfo) {
         properties.addElement(propertyInfo);
         return this;
     }
@@ -276,7 +276,7 @@ public class SoapObject  extends AttributeContainer implements KvmSerializable {
     public String toString() {
         StringBuffer buf = new StringBuffer("" + name + "{");
         for (int i = 0; i < getPropertyCount(); i++) {
-            buf.append("" + ((PropertyInfo) properties.elementAt(i)).getName() + "=" + getProperty(i) + "; ");
+            buf.append("" + ((ms.ihc.control.ksoap2.serialization.PropertyInfo) properties.elementAt(i)).getName() + "=" + getProperty(i) + "; ");
         }
         buf.append("}");
         return buf.toString();

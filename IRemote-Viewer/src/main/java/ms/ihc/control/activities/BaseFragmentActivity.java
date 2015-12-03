@@ -8,6 +8,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
+import de.keyboardsurfer.android.widget.crouton.Crouton;
 import ms.ihc.control.viewer.ConnectionManager;
 
 /**
@@ -21,33 +22,41 @@ public class BaseFragmentActivity extends AppCompatActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
 
+            String message = intent.getStringExtra(ConnectionManager.IHCMESSAGE.class.getName());
+            if(message == null){
+                message = "Ukendt fejl";
+            }
+
             if(intent.getAction() != null && intent.getAction().equalsIgnoreCase(ConnectionManager.IHC_EVENTS.RESOURCE_VALUE_CHANGED.toString())) {
                 Log.d(TAG,"RESOURCE_VALUE_CHANGED ");
             }
             else if (intent.getAction() != null && intent.getAction().equalsIgnoreCase(ConnectionManager.IHC_EVENTS.CONNECTED.toString())) {
                 Log.d(TAG,"CONNECTED ");
-                onMessage(ConnectionManager.IHC_EVENTS.CONNECTED);
+                onMessage(ConnectionManager.IHC_EVENTS.CONNECTED, message);
             }
             else if (intent.getAction() != null && intent.getAction().equalsIgnoreCase(ConnectionManager.IHC_EVENTS.DISCONNECTED.toString())) {
 
                 if(intent.hasExtra(ConnectionManager.IHCMESSAGE.class.getName())){
-                    String message = intent.getStringExtra(ConnectionManager.IHCMESSAGE.class.getName());
                     Log.d(TAG, "DISCONNECTED. Message: " + message );
                 } else {
                     Log.d(TAG, "DISCONNECTED.");
                 }
+                onMessage(ConnectionManager.IHC_EVENTS.DISCONNECTED, message);
 
             }
             else if (intent.getAction() != null && intent.getAction().equalsIgnoreCase(ConnectionManager.IHC_EVENTS.PROJECT_LOADED.toString())) {
 
                 if(intent.hasExtra(ConnectionManager.IHCMESSAGE.class.getName())){
-                    String message = intent.getStringExtra(ConnectionManager.IHCMESSAGE.class.getName());
                     Log.d(TAG, "Project Loaded. Message: " + message );
                 } else {
                     Log.d(TAG, "Project Loaded.");
                 }
-                onMessage(ConnectionManager.IHC_EVENTS.PROJECT_LOADED);
+                onMessage(ConnectionManager.IHC_EVENTS.PROJECT_LOADED, message);
 
+            } else {
+                Log.e(TAG, "Unhandled action in broadcastReceiver");
+                throw new UnsupportedOperationException("Unhandled action in broadcastReceiver");
+                //onMessage(ConnectionManager.IHC_EVENTS.PROJECT_LOADED, message);
             }
 
         }
@@ -68,6 +77,11 @@ public class BaseFragmentActivity extends AppCompatActivity {
         LocalBroadcastManager.getInstance(this).registerReceiver(broadcastReceiver, new IntentFilter(ConnectionManager.IHC_EVENTS.PROJECT_LOADED.toString()));
     }
 
-    protected void onMessage(ConnectionManager.IHC_EVENTS event){}
+    protected void onMessage(ConnectionManager.IHC_EVENTS event, String Extra){}
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Crouton.cancelAllCroutons();
+    }
 }

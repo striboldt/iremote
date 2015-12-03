@@ -4,8 +4,8 @@ import java.io.IOException;
 
 import ms.ihc.control.viewer.ConnectionManager;
 
-import org.ksoap2.serialization.PropertyInfo;
-import org.ksoap2.serialization.SoapObject;
+import ms.ihc.control.ksoap2.serialization.PropertyInfo;
+import ms.ihc.control.ksoap2.serialization.SoapObject;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 

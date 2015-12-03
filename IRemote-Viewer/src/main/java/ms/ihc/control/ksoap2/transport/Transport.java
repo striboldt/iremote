@@ -21,12 +21,9 @@
  * IN THE SOFTWARE. 
  */
 
-package org.ksoap2.transport;
+package ms.ihc.control.ksoap2.transport;
 
 import java.io.*;
-
-import org.ksoap2.*;
-import org.kxml2.io.*;
 import org.xmlpull.v1.*;
 
 /**
@@ -58,8 +55,9 @@ abstract public class Transport {
     /**
      * Sets up the parsing to hand over to the envelope to deserialize.
      */
-    protected void parseResponse(SoapEnvelope envelope, InputStream is) throws XmlPullParserException, IOException {
-        XmlPullParser xp = new KXmlParser();
+    protected void parseResponse(ms.ihc.control.ksoap2.serialization.SoapEnvelope envelope, InputStream is) throws XmlPullParserException, IOException {
+        XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
+        XmlPullParser xp = factory.newPullParser();
         xp.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, true);
         xp.setInput(is, null);
         envelope.parse(xp);
@@ -68,10 +66,11 @@ abstract public class Transport {
     /**
      * Serializes the request.
      */
-    protected byte[] createRequestData(SoapEnvelope envelope) throws IOException {
+    protected byte[] createRequestData(ms.ihc.control.ksoap2.serialization.SoapEnvelope envelope) throws XmlPullParserException, IOException {
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         bos.write(xmlVersionTag.getBytes());
-        XmlSerializer xw = new KXmlSerializer();
+        XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
+        XmlSerializer xw = factory.newSerializer();
         xw.setOutput(bos, null);
         envelope.write(xw);
         xw.flush();
@@ -116,6 +115,6 @@ abstract public class Transport {
      * @param envelope
      *            the envelope the contains the information for the call.
      */
-    abstract public void call(String targetNamespace, SoapEnvelope envelope) throws IOException, XmlPullParserException;
+    abstract public void call(String targetNamespace, ms.ihc.control.ksoap2.serialization.SoapEnvelope envelope) throws IOException, XmlPullParserException;
 
 }

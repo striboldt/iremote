@@ -18,29 +18,41 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
  * IN THE SOFTWARE. */
 
-package org.ksoap2.serialization;
+package ms.ihc.control.ksoap2.serialization;
 
 import java.io.*;
-import org.ksoap2.*;
-import org.kobjects.base64.*;
 import org.xmlpull.v1.*;
 
-/** 
- * Base64 (de)serializer 
+/**
+ * This class is not public, so save a few bytes by using a short class name (DM
+ * stands for DefaultMarshal)...
  */
-public class MarshalBase64 implements Marshal {
-    public static Class BYTE_ARRAY_CLASS = new byte[0].getClass();
+class DM implements Marshal {
 
     public Object readInstance(XmlPullParser parser, String namespace, String name, PropertyInfo expected) throws IOException, XmlPullParserException {
-        return Base64.decode(parser.nextText());
+        String text = parser.nextText();
+        switch (name.charAt(0)) {
+        case 's':
+            return text;
+        case 'i':
+            return new Integer(Integer.parseInt(text));
+        case 'l':
+            return new Long(Long.parseLong(text));
+        case 'b':
+            return new Boolean(SoapEnvelope.stringToBoolean(text));
+        default:
+            throw new RuntimeException();
+        }
     }
 
-    public void writeInstance(XmlSerializer writer, Object obj) throws IOException {
-        writer.text(Base64.encode((byte[]) obj));
+    public void writeInstance(XmlSerializer writer, Object instance) throws IOException {
+        writer.text(instance.toString());
     }
 
     public void register(SoapSerializationEnvelope cm) {
-        cm.addMapping(cm.xsd, "base64Binary", MarshalBase64.BYTE_ARRAY_CLASS, this);
-        cm.addMapping(SoapEnvelope.ENC, "base64", MarshalBase64.BYTE_ARRAY_CLASS, this);
+        cm.addMapping(cm.xsd, "int", PropertyInfo.INTEGER_CLASS, this);
+        cm.addMapping(cm.xsd, "long", PropertyInfo.LONG_CLASS, this);
+        cm.addMapping(cm.xsd, "string", PropertyInfo.STRING_CLASS, this);
+        cm.addMapping(cm.xsd, "boolean", PropertyInfo.BOOLEAN_CLASS, this);
     }
 }

@@ -19,7 +19,7 @@
  * Contributor(s): John D. Beatty, F. Hunter, Renaud Tognelli
  */
 
-package org.ksoap2.serialization;
+package ms.ihc.control.ksoap2.serialization;
 
 /**
  * This class is used to store information about each property an implementation of KvmSerializable exposes.

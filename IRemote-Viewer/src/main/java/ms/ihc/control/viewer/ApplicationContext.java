@@ -29,11 +29,8 @@ public class ApplicationContext extends Application{
 	public ConnectionManager getIHCConnectionManager() {
 		if(connectionManager == null){
             connectionManager = new ConnectionManager(this);
-			return connectionManager;
 		}
-        else
-            return connectionManager;
-
+		return connectionManager;
 	}
 
 	public void setIHCHome(IHCHome home) {

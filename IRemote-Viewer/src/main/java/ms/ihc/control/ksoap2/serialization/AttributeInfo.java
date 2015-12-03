@@ -18,7 +18,7 @@
  * USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package org.ksoap2.serialization;
+package ms.ihc.control.ksoap2.serialization;
 
 /**
  * This class is used to store information about each attribute of an implementation of

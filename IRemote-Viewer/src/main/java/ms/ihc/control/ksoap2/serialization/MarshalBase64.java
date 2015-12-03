@@ -18,30 +18,29 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
  * IN THE SOFTWARE. */
 
-package org.ksoap2.serialization;
+package ms.ihc.control.ksoap2.serialization;
 
-import java.util.Date;
 import java.io.*;
-import org.xmlpull.v1.*;
-import org.kobjects.isodate.*;
 
+import org.kobjects.base64.*;
+import org.xmlpull.v1.*;
 
 /** 
- * Marshal class for Dates. 
+ * Base64 (de)serializer 
  */
-public class MarshalDate implements Marshal {
-    public static Class DATE_CLASS = new Date().getClass();
+public class MarshalBase64 implements Marshal {
+    public static Class BYTE_ARRAY_CLASS = new byte[0].getClass();
 
     public Object readInstance(XmlPullParser parser, String namespace, String name, PropertyInfo expected) throws IOException, XmlPullParserException {
-        return IsoDate.stringToDate(parser.nextText(), IsoDate.DATE_TIME);
+        return Base64.decode(parser.nextText());
     }
 
     public void writeInstance(XmlSerializer writer, Object obj) throws IOException {
-        writer.text(IsoDate.dateToString((Date) obj, IsoDate.DATE_TIME));
+        writer.text(Base64.encode((byte[]) obj));
     }
 
     public void register(SoapSerializationEnvelope cm) {
-        cm.addMapping(cm.xsd, "dateTime", MarshalDate.DATE_CLASS, this);
+        cm.addMapping(cm.xsd, "base64Binary", MarshalBase64.BYTE_ARRAY_CLASS, this);
+        cm.addMapping(SoapEnvelope.ENC, "base64", MarshalBase64.BYTE_ARRAY_CLASS, this);
     }
-
 }

@@ -1,12 +1,14 @@
 package ms.ihc.control.activities;
 
 
-import com.crashlytics.android.Crashlytics;
+
 import com.google.android.vending.licensing.AESObfuscator;
 import com.google.android.vending.licensing.LicenseChecker;
 import com.google.android.vending.licensing.LicenseCheckerCallback;
 import com.google.android.vending.licensing.ServerManagedPolicy;
 
+import de.keyboardsurfer.android.widget.crouton.Crouton;
+import de.keyboardsurfer.android.widget.crouton.Style;
 import ms.ihc.control.fragments.AlertDialogFragment;
 import ms.ihc.control.viewer.ApplicationContext;
 import ms.ihc.control.viewer.ConnectionManager;
@@ -75,7 +77,7 @@ public class SettingsActivity extends BaseFragmentActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Crashlytics.start(this);
+       // Crashlytics.start(this);
 
         setContentView(R.layout.settings);
         progressLayout = (FrameLayout) findViewById(R.id.progressLayout);
@@ -172,8 +174,8 @@ public class SettingsActivity extends BaseFragmentActivity {
     }
 
     @Override
-    protected void onMessage(ConnectionManager.IHC_EVENTS event) {
-        super.onMessage(event);
+    protected void onMessage(ConnectionManager.IHC_EVENTS event, String message) {
+
         if (event == ConnectionManager.IHC_EVENTS.CONNECTED) {
             if(((ApplicationContext)getApplicationContext()).dataFileExists()){
                 this.sharedPreferences.edit().putBoolean("hasValidLogin", true).apply();
@@ -186,7 +188,11 @@ public class SettingsActivity extends BaseFragmentActivity {
             this.sharedPreferences.edit().putBoolean("hasValidLogin", true).apply();
             Intent locationIntent = new Intent(this, LocationActivity.class);
             startActivity(locationIntent);
+        } else if (event == ConnectionManager.IHC_EVENTS.DISCONNECTED) {
+            Crouton.showText(this,String.format("%s %s",getString(R.string.login_failed_msg), message), Style.ALERT);
+            setProgressVisibility(false,null);
         }
+
     }
 
     // Don't show the options menu

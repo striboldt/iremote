@@ -9,7 +9,7 @@ import ms.ihc.control.viewer.R;
 import ms.ihc.control.Resource.ResourceAdapter.ViewHolder;
 import ms.ihc.control.devices.wireless.IHCResource;
 import ms.ihc.control.devices.wireless.ioResource;
-import org.ksoap2.serialization.SoapPrimitive;
+import ms.ihc.control.ksoap2.serialization.SoapPrimitive;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 

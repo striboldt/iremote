@@ -18,7 +18,7 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
  * IN THE SOFTWARE. */
 
-package org.ksoap2.serialization;
+package ms.ihc.control.ksoap2.serialization;
 
 /**
  * @author Stefan Haustein

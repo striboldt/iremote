@@ -18,42 +18,31 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
  * IN THE SOFTWARE. */
 
-package org.ksoap2.serialization;
+package ms.ihc.control.ksoap2.serialization;
 
+import java.util.Date;
 import java.io.*;
-import org.xmlpull.v1.*;
-import org.ksoap2.*;
 
-/**
- * This class is not public, so save a few bytes by using a short class name (DM
- * stands for DefaultMarshal)...
+import org.xmlpull.v1.*;
+import org.kobjects.isodate.*;
+
+
+/** 
+ * Marshal class for Dates. 
  */
-class DM implements Marshal {
+public class MarshalDate implements Marshal {
+    public static Class DATE_CLASS = new Date().getClass();
 
     public Object readInstance(XmlPullParser parser, String namespace, String name, PropertyInfo expected) throws IOException, XmlPullParserException {
-        String text = parser.nextText();
-        switch (name.charAt(0)) {
-        case 's':
-            return text;
-        case 'i':
-            return new Integer(Integer.parseInt(text));
-        case 'l':
-            return new Long(Long.parseLong(text));
-        case 'b':
-            return new Boolean(SoapEnvelope.stringToBoolean(text));
-        default:
-            throw new RuntimeException();
-        }
+        return IsoDate.stringToDate(parser.nextText(), IsoDate.DATE_TIME);
     }
 
-    public void writeInstance(XmlSerializer writer, Object instance) throws IOException {
-        writer.text(instance.toString());
+    public void writeInstance(XmlSerializer writer, Object obj) throws IOException {
+        writer.text(IsoDate.dateToString((Date) obj, IsoDate.DATE_TIME));
     }
 
     public void register(SoapSerializationEnvelope cm) {
-        cm.addMapping(cm.xsd, "int", PropertyInfo.INTEGER_CLASS, this);
-        cm.addMapping(cm.xsd, "long", PropertyInfo.LONG_CLASS, this);
-        cm.addMapping(cm.xsd, "string", PropertyInfo.STRING_CLASS, this);
-        cm.addMapping(cm.xsd, "boolean", PropertyInfo.BOOLEAN_CLASS, this);
+        cm.addMapping(cm.xsd, "dateTime", MarshalDate.DATE_CLASS, this);
     }
+
 }

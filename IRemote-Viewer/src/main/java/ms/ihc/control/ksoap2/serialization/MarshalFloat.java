@@ -19,13 +19,13 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
  * IN THE SOFTWARE. */
 
-package org.ksoap2.serialization;
+package ms.ihc.control.ksoap2.serialization;
 
 import java.io.*;
 
 import org.xmlpull.v1.*;
 
-public class MarshalFloat implements    Marshal {
+public class MarshalFloat implements Marshal {
 
     public Object readInstance(XmlPullParser parser, String namespace, String name, PropertyInfo propertyInfo) throws IOException, XmlPullParserException {
         String stringValue = parser.nextText();

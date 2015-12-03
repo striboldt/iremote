@@ -17,7 +17,7 @@
  * USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package org.ksoap2;
+package ms.ihc.control.ksoap2.serialization;
 
 import java.io.IOException;
 

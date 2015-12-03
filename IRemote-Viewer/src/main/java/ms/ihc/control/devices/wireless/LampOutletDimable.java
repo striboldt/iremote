@@ -9,8 +9,8 @@ import ms.ihc.control.valueTypes.DeviceType;
 import ms.ihc.control.valueTypes.WSBooleanValue;
 import ms.ihc.control.valueTypes.WSIntegerValue;
 
-import org.ksoap2.serialization.PropertyInfo;
-import org.ksoap2.serialization.SoapObject;
+import ms.ihc.control.ksoap2.serialization.PropertyInfo;
+import ms.ihc.control.ksoap2.serialization.SoapObject;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 

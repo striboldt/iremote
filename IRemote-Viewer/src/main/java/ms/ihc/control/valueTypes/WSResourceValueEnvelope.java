@@ -2,8 +2,8 @@ package ms.ihc.control.valueTypes;
 
 import java.util.Hashtable;
 
-import org.ksoap2.serialization.KvmSerializable;
-import org.ksoap2.serialization.PropertyInfo;
+import ms.ihc.control.ksoap2.serialization.KvmSerializable;
+import ms.ihc.control.ksoap2.serialization.PropertyInfo;
 
 public class WSResourceValueEnvelope implements KvmSerializable {
 

@@ -17,10 +17,8 @@
  * USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package org.ksoap2.serialization;
+package ms.ihc.control.ksoap2.serialization;
 
-import org.ksoap2.SoapEnvelope;
-import org.ksoap2.SoapFault;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlSerializer;
@@ -49,7 +47,7 @@ public class SoapSerializationEnvelope extends SoapEnvelope
 	private static final String TYPE_LABEL = "type";
 	private static final String ITEM_LABEL = "item";
 	private static final String ARRAY_TYPE_LABEL = "arrayType";
-	static final Marshal DEFAULT_MARSHAL = new DM();
+	static final ms.ihc.control.ksoap2.serialization.Marshal DEFAULT_MARSHAL = new DM();
 	public Hashtable properties = new Hashtable();
 
 	Hashtable idMap = new Hashtable();
@@ -85,7 +83,7 @@ public class SoapSerializationEnvelope extends SoapEnvelope
 	public SoapSerializationEnvelope(int version)
 	{
 		super(version);
-		addMapping(enc, ARRAY_MAPPING_NAME, PropertyInfo.VECTOR_CLASS);
+		addMapping(enc, ARRAY_MAPPING_NAME, ms.ihc.control.ksoap2.serialization.PropertyInfo.VECTOR_CLASS);
 		DEFAULT_MARSHAL.register(this);
 	}
 
@@ -123,7 +121,7 @@ public class SoapSerializationEnvelope extends SoapEnvelope
 			{
 				String rootAttr = parser.getAttributeValue(enc, ROOT_LABEL);
 				Object o = read(parser, null, -1, parser.getNamespace(), parser.getName(),
-						PropertyInfo.OBJECT_TYPE);
+						ms.ihc.control.ksoap2.serialization.PropertyInfo.OBJECT_TYPE);
 				if ("1".equals(rootAttr) || bodyIn == null)
 					bodyIn = o;
 				parser.nextTag();
@@ -132,25 +130,25 @@ public class SoapSerializationEnvelope extends SoapEnvelope
 	}
 
 	/** Read a SoapObject. This extracts any attributes and then reads the object as a KvmSerializable. */
-	protected void readSerializable(XmlPullParser parser, SoapObject obj) throws IOException,
+	protected void readSerializable(XmlPullParser parser, ms.ihc.control.ksoap2.serialization.SoapObject obj) throws IOException,
 			XmlPullParserException
 	{
 		for (int counter = 0; counter < parser.getAttributeCount(); counter++)
 		{
 			String attributeName = parser.getAttributeName(counter);
 			String value = parser.getAttributeValue(counter);
-			((SoapObject) obj).addAttribute(attributeName, value);
+			((ms.ihc.control.ksoap2.serialization.SoapObject) obj).addAttribute(attributeName, value);
 		}
-		readSerializable(parser, (KvmSerializable) obj);
+		readSerializable(parser, (ms.ihc.control.ksoap2.serialization.KvmSerializable) obj);
 	}
 
 	/** Read a KvmSerializable. */
-	protected void readSerializable(XmlPullParser parser, KvmSerializable obj) throws IOException,
+	protected void readSerializable(XmlPullParser parser, ms.ihc.control.ksoap2.serialization.KvmSerializable obj) throws IOException,
 			XmlPullParserException
 	{
 		int testIndex = -1; // inc at beg. of loop for perf. reasons
 		int propertyCount = obj.getPropertyCount();
-		PropertyInfo info = new PropertyInfo();
+		ms.ihc.control.ksoap2.serialization.PropertyInfo info = new ms.ihc.control.ksoap2.serialization.PropertyInfo();
 		while (parser.nextTag() != XmlPullParser.END_TAG)
 		{
 			String name = parser.getName();
@@ -161,7 +159,7 @@ public class SoapSerializationEnvelope extends SoapEnvelope
 			// it was really supposed to be doing.
 			// So, here's a little CYA since I think the code is only broken for
 			// implicitTypes
-			if (!implicitTypes || !(obj instanceof SoapObject))
+			if (!implicitTypes || !(obj instanceof ms.ihc.control.ksoap2.serialization.SoapObject))
 			{
 				while (true)
 				{
@@ -187,8 +185,8 @@ public class SoapSerializationEnvelope extends SoapEnvelope
 			{
 				// I can only make this work for SoapObjects - hence the check above
 				// I don't understand namespaces well enough to know whether it is correct in the next line...
-				((SoapObject) obj).addProperty(parser.getName(), read(parser, obj, obj.getPropertyCount(),
-						((SoapObject) obj).getNamespace(), name, PropertyInfo.OBJECT_TYPE));
+				((ms.ihc.control.ksoap2.serialization.SoapObject) obj).addProperty(parser.getName(), read(parser, obj, obj.getPropertyCount(),
+						((ms.ihc.control.ksoap2.serialization.SoapObject) obj).getNamespace(), name, ms.ihc.control.ksoap2.serialization.PropertyInfo.OBJECT_TYPE));
 			}
 		}
 		parser.require(XmlPullParser.END_TAG, null, null);
@@ -216,7 +214,7 @@ public class SoapSerializationEnvelope extends SoapEnvelope
         Vector attributeInfoVector = new Vector();
         for (int attributeCount = 0; attributeCount < parser.getAttributeCount(); attributeCount ++)
         {
-            AttributeInfo attributeInfo = new AttributeInfo();
+            ms.ihc.control.ksoap2.serialization.AttributeInfo attributeInfo = new ms.ihc.control.ksoap2.serialization.AttributeInfo();
             attributeInfo.setName(parser.getAttributeName(attributeCount));
             attributeInfo.setValue(parser.getAttributeValue(attributeCount));
             attributeInfo.setNamespace(parser.getAttributeNamespace(attributeCount));
@@ -230,20 +228,20 @@ public class SoapSerializationEnvelope extends SoapEnvelope
 		if (parser.getEventType() == XmlPullParser.TEXT)
 		{
 			text = parser.getText();
-            SoapPrimitive sp = new SoapPrimitive(typeNamespace, typeName, text);
+            ms.ihc.control.ksoap2.serialization.SoapPrimitive sp = new ms.ihc.control.ksoap2.serialization.SoapPrimitive(typeNamespace, typeName, text);
 			result = sp;
               // apply all the cached attribute info list before we add the property and descend further for parsing
             for (int i = 0; i < attributeInfoVector.size(); i++) {
-                sp.addAttribute((AttributeInfo) attributeInfoVector.elementAt(i));
+                sp.addAttribute((ms.ihc.control.ksoap2.serialization.AttributeInfo) attributeInfoVector.elementAt(i));
             }
 			parser.next();
 		}
 		else if (parser.getEventType() == XmlPullParser.END_TAG)
 		{
-            SoapObject so = new SoapObject(typeNamespace, typeName);
+            ms.ihc.control.ksoap2.serialization.SoapObject so = new ms.ihc.control.ksoap2.serialization.SoapObject(typeNamespace, typeName);
             // apply all the cached attribute info list before we add the property and descend further for parsing
             for (int i = 0; i < attributeInfoVector.size(); i++) {
-                so.addAttribute((AttributeInfo) attributeInfoVector.elementAt(i));
+                so.addAttribute((ms.ihc.control.ksoap2.serialization.AttributeInfo) attributeInfoVector.elementAt(i));
             }
 			result = so;
 		}
@@ -254,16 +252,16 @@ public class SoapSerializationEnvelope extends SoapEnvelope
 			{
 				throw new RuntimeException("Malformed input: Mixed content");
 			}
-			SoapObject so = new SoapObject(typeNamespace, typeName);
+			ms.ihc.control.ksoap2.serialization.SoapObject so = new ms.ihc.control.ksoap2.serialization.SoapObject(typeNamespace, typeName);
             // apply all the cached attribute info list before we add the property and descend further for parsing
             for (int i = 0; i < attributeInfoVector.size(); i++) {
-                so.addAttribute((AttributeInfo) attributeInfoVector.elementAt(i));
+                so.addAttribute((ms.ihc.control.ksoap2.serialization.AttributeInfo) attributeInfoVector.elementAt(i));
             }
 
 			while (parser.getEventType() != XmlPullParser.END_TAG)
 			{
 				so.addProperty(parser.getName(), read(parser, so, so.getPropertyCount(), null, null,
-						PropertyInfo.OBJECT_TYPE));
+						ms.ihc.control.ksoap2.serialization.PropertyInfo.OBJECT_TYPE));
 				parser.nextTag();
 			}
 			result = so;
@@ -280,7 +278,7 @@ public class SoapSerializationEnvelope extends SoapEnvelope
 				value.length() - 1));
 	}
 
-	protected void readVector(XmlPullParser parser, Vector v, PropertyInfo elementType) throws IOException,
+	protected void readVector(XmlPullParser parser, Vector v, ms.ihc.control.ksoap2.serialization.PropertyInfo elementType) throws IOException,
 			XmlPullParserException
 	{
 		String namespace = null;
@@ -303,7 +301,7 @@ public class SoapSerializationEnvelope extends SoapEnvelope
 			}
 		}
 		if (elementType == null)
-			elementType = PropertyInfo.OBJECT_TYPE;
+			elementType = ms.ihc.control.ksoap2.serialization.PropertyInfo.OBJECT_TYPE;
 		parser.nextTag();
 		int position = getIndex(parser.getAttributeValue(enc, "offset"), 0, 0);
 		while (parser.getEventType() != XmlPullParser.END_TAG)
@@ -329,7 +327,7 @@ public class SoapSerializationEnvelope extends SoapEnvelope
 	 */
 
 	public Object read(XmlPullParser parser, Object owner, int index, String namespace, String name,
-			PropertyInfo expected) throws IOException, XmlPullParserException
+			ms.ihc.control.ksoap2.serialization.PropertyInfo expected) throws IOException, XmlPullParserException
 	{
 		String elementName = parser.getName();
 		String href = parser.getAttributeValue(null, HREF_LABEL);
@@ -340,10 +338,10 @@ public class SoapSerializationEnvelope extends SoapEnvelope
 				throw new RuntimeException("href at root level?!?");
 			href = href.substring(1);
 			obj = idMap.get(href);
-			if (obj == null || obj instanceof FwdRef)
+			if (obj == null || obj instanceof ms.ihc.control.ksoap2.serialization.FwdRef)
 			{
-				FwdRef f = new FwdRef();
-				f.next = (FwdRef) obj;
+				ms.ihc.control.ksoap2.serialization.FwdRef f = new ms.ihc.control.ksoap2.serialization.FwdRef();
+				f.next = (ms.ihc.control.ksoap2.serialization.FwdRef) obj;
 				f.obj = owner;
 				f.index = index;
 				idMap.put(href, f);
@@ -401,13 +399,13 @@ public class SoapSerializationEnvelope extends SoapEnvelope
 			if (id != null)
 			{
 				Object hlp = idMap.get(id);
-				if (hlp instanceof FwdRef)
+				if (hlp instanceof ms.ihc.control.ksoap2.serialization.FwdRef)
 				{
-					FwdRef f = (FwdRef) hlp;
+					ms.ihc.control.ksoap2.serialization.FwdRef f = (ms.ihc.control.ksoap2.serialization.FwdRef) hlp;
 					do
 					{
-						if (f.obj instanceof KvmSerializable)
-							((KvmSerializable) f.obj).setProperty(f.index, obj);
+						if (f.obj instanceof ms.ihc.control.ksoap2.serialization.KvmSerializable)
+							((ms.ihc.control.ksoap2.serialization.KvmSerializable) f.obj).setProperty(f.index, obj);
 						else
 							((Vector) f.obj).setElementAt(obj, f.index);
 						f = f.next;
@@ -428,21 +426,21 @@ public class SoapSerializationEnvelope extends SoapEnvelope
 	 * Returns a new object read from the given parser. If no mapping is found, null is returned. This method
 	 * is used by the SoapParser in order to convert the XML code to Java objects.
 	 */
-	public Object readInstance(XmlPullParser parser, String namespace, String name, PropertyInfo expected)
+	public Object readInstance(XmlPullParser parser, String namespace, String name, ms.ihc.control.ksoap2.serialization.PropertyInfo expected)
 			throws IOException, XmlPullParserException
 	{
-		Object obj = qNameToClass.get(new SoapPrimitive(namespace, name, null));
+		Object obj = qNameToClass.get(new ms.ihc.control.ksoap2.serialization.SoapPrimitive(namespace, name, null));
 		if (obj == null)
 			return null;
-		if (obj instanceof Marshal)
-			return ((Marshal) obj).readInstance(parser, namespace, name, expected);
-		else if (obj instanceof SoapObject)
+		if (obj instanceof ms.ihc.control.ksoap2.serialization.Marshal)
+			return ((ms.ihc.control.ksoap2.serialization.Marshal) obj).readInstance(parser, namespace, name, expected);
+		else if (obj instanceof ms.ihc.control.ksoap2.serialization.SoapObject)
 		{
-			obj = ((SoapObject) obj).newInstance();
+			obj = ((ms.ihc.control.ksoap2.serialization.SoapObject) obj).newInstance();
 		}
-		else if (obj == SoapObject.class)
+		else if (obj == ms.ihc.control.ksoap2.serialization.SoapObject.class)
 		{
-			obj = new SoapObject(namespace, name);
+			obj = new ms.ihc.control.ksoap2.serialization.SoapObject(namespace, name);
 		}
 		else
 		{
@@ -456,10 +454,10 @@ public class SoapSerializationEnvelope extends SoapEnvelope
 			}
 		}
 		// ok, obj is now the instance, fill it....
-		if (obj instanceof SoapObject)
-			readSerializable(parser, (SoapObject) obj);
-		else if (obj instanceof KvmSerializable)
-			readSerializable(parser, (KvmSerializable) obj);
+		if (obj instanceof ms.ihc.control.ksoap2.serialization.SoapObject)
+			readSerializable(parser, (ms.ihc.control.ksoap2.serialization.SoapObject) obj);
+		else if (obj instanceof ms.ihc.control.ksoap2.serialization.KvmSerializable)
+			readSerializable(parser, (ms.ihc.control.ksoap2.serialization.KvmSerializable) obj);
 		else if (obj instanceof Vector)
 			readVector(parser, (Vector) obj, expected.elementType);
 		else
@@ -476,22 +474,22 @@ public class SoapSerializationEnvelope extends SoapEnvelope
 	{
 		if (type == null)
 		{
-			if (instance instanceof SoapObject || instance instanceof SoapPrimitive)
+			if (instance instanceof ms.ihc.control.ksoap2.serialization.SoapObject || instance instanceof ms.ihc.control.ksoap2.serialization.SoapPrimitive)
 				type = instance;
 			else
 				type = instance.getClass();
 		}
-		if (type instanceof SoapObject)
+		if (type instanceof ms.ihc.control.ksoap2.serialization.SoapObject)
 		{
-			SoapObject so = (SoapObject) type;
+			ms.ihc.control.ksoap2.serialization.SoapObject so = (ms.ihc.control.ksoap2.serialization.SoapObject) type;
 			return new Object[] { so.getNamespace(), so.getName(), null, null };
 		}
-		if (type instanceof SoapPrimitive)
+		if (type instanceof ms.ihc.control.ksoap2.serialization.SoapPrimitive)
 		{
-			SoapPrimitive sp = (SoapPrimitive) type;
+			ms.ihc.control.ksoap2.serialization.SoapPrimitive sp = (ms.ihc.control.ksoap2.serialization.SoapPrimitive) type;
 			return new Object[] { sp.getNamespace(), sp.getName(), null, DEFAULT_MARSHAL };
 		}
-		if ((type instanceof Class) && type != PropertyInfo.OBJECT_CLASS)
+		if ((type instanceof Class) && type != ms.ihc.control.ksoap2.serialization.PropertyInfo.OBJECT_CLASS)
 		{
 			Object[] tmp = (Object[]) classToQName.get(((Class) type).getName());
 			if (tmp != null)
@@ -504,10 +502,10 @@ public class SoapSerializationEnvelope extends SoapEnvelope
 	 * Defines a direct mapping from a namespace and name to a java class (and vice versa), using the given
 	 * marshal mechanism
 	 */
-	public void addMapping(String namespace, String name, Class clazz, Marshal marshal)
+	public void addMapping(String namespace, String name, Class clazz, ms.ihc.control.ksoap2.serialization.Marshal marshal)
 	{
 		qNameToClass
-				.put(new SoapPrimitive(namespace, name, null), marshal == null ? (Object) clazz : marshal);
+				.put(new ms.ihc.control.ksoap2.serialization.SoapPrimitive(namespace, name, null), marshal == null ? (Object) clazz : marshal);
 		classToQName.put(clazz.getName(), new Object[] { namespace, name, null, marshal });
 	}
 
@@ -523,9 +521,9 @@ public class SoapSerializationEnvelope extends SoapEnvelope
 	 * Adds a SoapObject to the class map. During parsing, objects of the given type (namespace/name) will be
 	 * mapped to corresponding copies of the given SoapObject, maintaining the structure of the template.
 	 */
-	public void addTemplate(SoapObject so)
+	public void addTemplate(ms.ihc.control.ksoap2.serialization.SoapObject so)
 	{
-		qNameToClass.put(new SoapPrimitive(so.namespace, so.name, null), so);
+		qNameToClass.put(new ms.ihc.control.ksoap2.serialization.SoapPrimitive(so.namespace, so.name, null), so);
 	}
 
 	/**
@@ -541,7 +539,7 @@ public class SoapSerializationEnvelope extends SoapEnvelope
 		{
 			throw (SoapFault) bodyIn;
 		}
-		KvmSerializable ks = (KvmSerializable) bodyIn;
+		ms.ihc.control.ksoap2.serialization.KvmSerializable ks = (ms.ihc.control.ksoap2.serialization.KvmSerializable) bodyIn;
 		return ks.getPropertyCount() == 0 ? null : ks.getProperty(0);
 	}
 
@@ -551,7 +549,7 @@ public class SoapSerializationEnvelope extends SoapEnvelope
 	 */
 	public Object getResult()
 	{
-		KvmSerializable ks = (KvmSerializable) bodyIn;
+		ms.ihc.control.ksoap2.serialization.KvmSerializable ks = (ms.ihc.control.ksoap2.serialization.KvmSerializable) bodyIn;
 		return ks.getPropertyCount() == 0 ? null : ks.getProperty(0);
 	}
 
@@ -590,30 +588,30 @@ public class SoapSerializationEnvelope extends SoapEnvelope
 	 * Writes the body of an SoapObject. This method write the attributes and then calls
 	 * "writeObjectBody (writer, (KvmSerializable)obj);"
 	 */
-	public void writeObjectBody(XmlSerializer writer, SoapObject obj) throws IOException
+	public void writeObjectBody(XmlSerializer writer, ms.ihc.control.ksoap2.serialization.SoapObject obj) throws IOException
 	{
-		SoapObject soapObject = (SoapObject) obj;
+		ms.ihc.control.ksoap2.serialization.SoapObject soapObject = (ms.ihc.control.ksoap2.serialization.SoapObject) obj;
 		for (int counter = 0; counter < soapObject.getAttributeCount(); counter++)
 		{
-			AttributeInfo attributeInfo = new AttributeInfo();
+			ms.ihc.control.ksoap2.serialization.AttributeInfo attributeInfo = new ms.ihc.control.ksoap2.serialization.AttributeInfo();
 			soapObject.getAttributeInfo(counter, attributeInfo);
 			writer.attribute(attributeInfo.getNamespace(), attributeInfo.getName(), attributeInfo.getValue()
 					.toString());
 		}
-		writeObjectBody(writer, (KvmSerializable) obj);
+		writeObjectBody(writer, (ms.ihc.control.ksoap2.serialization.KvmSerializable) obj);
 	}
 
 	/**
 	 * Writes the body of an KvmSerializable object. This method is public for access from Marshal subclasses.
 	 */
-	public void writeObjectBody(XmlSerializer writer, KvmSerializable obj) throws IOException
+	public void writeObjectBody(XmlSerializer writer, ms.ihc.control.ksoap2.serialization.KvmSerializable obj) throws IOException
 	{
-		PropertyInfo info = new PropertyInfo();
+		ms.ihc.control.ksoap2.serialization.PropertyInfo info = new ms.ihc.control.ksoap2.serialization.PropertyInfo();
 		int cnt = obj.getPropertyCount();
 		for (int i = 0; i < cnt; i++)
 		{
 			obj.getPropertyInfo(i, properties, info);
-			if ((info.flags & PropertyInfo.TRANSIENT) == 0)
+			if ((info.flags & ms.ihc.control.ksoap2.serialization.PropertyInfo.TRANSIENT) == 0)
 			{
 				writer.startTag(info.namespace, info.name);
 				writeProperty(writer, obj.getProperty(i), info);
@@ -622,7 +620,7 @@ public class SoapSerializationEnvelope extends SoapEnvelope
 		}
 	}
 
-	protected void writeProperty(XmlSerializer writer, Object obj, PropertyInfo type) throws IOException
+	protected void writeProperty(XmlSerializer writer, Object obj, ms.ihc.control.ksoap2.serialization.PropertyInfo type) throws IOException
 	{
 		if (obj == null)
 		{
@@ -651,22 +649,22 @@ public class SoapSerializationEnvelope extends SoapEnvelope
 		}
 	}
 
-	private void writeElement(XmlSerializer writer, Object element, PropertyInfo type, Object marshal)
+	private void writeElement(XmlSerializer writer, Object element, ms.ihc.control.ksoap2.serialization.PropertyInfo type, Object marshal)
 			throws IOException
 	{
 		if (marshal != null)
-			((Marshal) marshal).writeInstance(writer, element);
-		else if (element instanceof SoapObject)
-			writeObjectBody(writer, (SoapObject) element);
-		else if (element instanceof KvmSerializable)
-			writeObjectBody(writer, (KvmSerializable) element);
+			((ms.ihc.control.ksoap2.serialization.Marshal) marshal).writeInstance(writer, element);
+		else if (element instanceof ms.ihc.control.ksoap2.serialization.SoapObject)
+			writeObjectBody(writer, (ms.ihc.control.ksoap2.serialization.SoapObject) element);
+		else if (element instanceof ms.ihc.control.ksoap2.serialization.KvmSerializable)
+			writeObjectBody(writer, (ms.ihc.control.ksoap2.serialization.KvmSerializable) element);
 		else if (element instanceof Vector)
 			writeVectorBody(writer, (Vector) element, type.elementType);
 		else
 			throw new RuntimeException("Cannot serialize: " + element);
 	}
 
-	protected void writeVectorBody(XmlSerializer writer, Vector vector, PropertyInfo elementType)
+	protected void writeVectorBody(XmlSerializer writer, Vector vector, ms.ihc.control.ksoap2.serialization.PropertyInfo elementType)
 			throws IOException
 	{
 		String itemsTagName = ITEM_LABEL;
@@ -674,9 +672,9 @@ public class SoapSerializationEnvelope extends SoapEnvelope
 	
 		if (elementType == null)
 		{
-			elementType = PropertyInfo.OBJECT_TYPE;
+			elementType = ms.ihc.control.ksoap2.serialization.PropertyInfo.OBJECT_TYPE;
 		}
-		else if (elementType instanceof PropertyInfo)
+		else if (elementType instanceof ms.ihc.control.ksoap2.serialization.PropertyInfo)
 		{
 			if (elementType.name != null)
 			{
