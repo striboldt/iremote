@@ -1,8 +1,11 @@
 package ms.ihc.control.ksoap2.transport;
 
+import android.util.Log;
+
 import com.squareup.okhttp.Response;
 
 import java.io.*;
+import java.net.ConnectException;
 import java.security.KeyStore;
 import org.xmlpull.v1.*;
 import ms.ihc.control.ksoap2.serialization.SoapEnvelope;
@@ -14,6 +17,7 @@ public class HttpTransportSE extends Transport {
 
     private OkHttpWrapper connection;
     private KeyStore trustedKeystore;
+    private final String TAG = HttpTransportSE.class.getName();
 
     /**
      * Creates instance of HttpTransportSE with set url
@@ -22,8 +26,8 @@ public class HttpTransportSE extends Transport {
      */
     public HttpTransportSE(String url, KeyStore trustedKeystore) {
         super(url);
-        System.setProperty("http.keepAlive", "true");
-        System.setProperty("http.maxConnections", "5");
+        //System.setProperty("http.keepAlive", "true");
+        //System.setProperty("http.maxConnections", "5");
         this.trustedKeystore = trustedKeystore;
     }
 
@@ -58,7 +62,10 @@ public class HttpTransportSE extends Transport {
             this.sessionCookie = response.header("set-cookie");
             parseResponse(envelope, response.body().byteStream());
         } else {
-            throw new IOException("Unexpected code " + response);
+            Log.e(TAG, "call failed: " + response);
+            if (response.code() != 200 ){
+                throw new ConnectException("Response error code: " + response.code() + ". Detailed message: " + response.message());
+            } else throw new IOException(response.message());
         }
 
         long rtt = System.currentTimeMillis() - rtt_start;

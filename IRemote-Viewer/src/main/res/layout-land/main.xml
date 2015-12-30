@@ -11,13 +11,13 @@
         android:layout_width="254dp"
         android:layout_height="wrap_content"
         class="ms.ihc.control.fragments.LocationFragment"
-        tools:layout="@layout/location_listview" />
+        tools:layout="@layout/generic_listview" />
 
     <fragment
         android:id="@+id/resourcefragment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        class="ms.ihc.control.Resource.ResourceListFragment"
+        class="ms.ihc.control.fragments.ResourceListFragment"
         tools:layout="@layout/resources" />
 
 </LinearLayout>

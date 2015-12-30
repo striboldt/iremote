@@ -3,11 +3,10 @@ package ms.ihc.control.viewer;
 import java.util.Iterator;
 
 import ms.ihc.control.Resource.ResourceAdapter;
+import ms.ihc.control.activities.BaseActivity;
 import ms.ihc.control.devices.wireless.IHCResource;
-import ms.ihc.control.fragments.LocationFragment;
 import ms.ihc.control.valueTypes.DeviceType;
 //import ms.ihc.control.viewer.IhcManager.ControllerConnection;
-import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -17,8 +16,9 @@ import android.view.View.OnClickListener;
 import android.widget.ListView;
 
 
-public class ActiveResourcesActivity extends Activity implements OnClickListener{
+public class ActiveResourcesActivity extends BaseActivity implements OnClickListener{
 
+	private static final String TAG = ActiveResourcesActivity.class.getName();
 	private ListView resourceListView;
 //	private TableRow resourceTableRow;
 //	private TextView resourceTextView;
@@ -37,7 +37,7 @@ public class ActiveResourcesActivity extends Activity implements OnClickListener
 			this.finish();
 		else
 		{
-			resourceListView = (ListView) findViewById(R.id.resourcelist);
+			resourceListView = (ListView) findViewById(R.id.listview);
 			/*resourceTableRow = (TableRow) findViewById(R.id.HeaderTableRow);
 			resourceTextView = (TextView) findViewById(R.id.locationtext1);*/
 	
@@ -100,8 +100,11 @@ public class ActiveResourcesActivity extends Activity implements OnClickListener
 
 		@Override
 		protected Boolean doInBackground(Void... params) {
-			Log.v("waitForResourceValueChangesTask", "Waiting for valuechanges");
-			return connectionManager.waitForResourceValueChanges(LocationFragment.resourceMap);
+			Log.v(TAG, "Waiting for valuechanges");
+
+			//TODO Implement in fragment (basefragment)
+			//return connectionManager.waitForResourceValueChanges(LocationFragment.resourceMap);
+			return false;
 		}
 
 		@Override
@@ -109,7 +112,7 @@ public class ActiveResourcesActivity extends Activity implements OnClickListener
 			if(refreshListView)
 				new refreshResourceViewTask().execute();
 			appContext.setIsWaitingForValueChanges(false);
-			Log.v("waitForResourceValueChangesTask", "Done");
+			Log.v(TAG, "Done");
 		}
 	}
 

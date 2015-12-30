@@ -1,29 +1,20 @@
 package ms.ihc.control.Resource;
 
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
-import android.widget.ListView;
-
-import java.util.Iterator;
-
-import ms.ihc.control.activities.BaseFragmentActivity;
-import ms.ihc.control.devices.wireless.IHCResource;
-import ms.ihc.control.fragments.LocationFragment;
-import ms.ihc.control.viewer.ApplicationContext;
-import ms.ihc.control.viewer.IHCLocation;
+import ms.ihc.control.activities.BaseActivity;
+import ms.ihc.control.fragments.ResourceListFragment;
+import ms.ihc.control.viewer.ConnectionManager;
 import ms.ihc.control.viewer.R;
 
 
-public class ResourceActivity extends BaseFragmentActivity {
+public class ResourceActivity extends BaseActivity {
 
     private static final String TAG = ResourceActivity.class.getName();
-    private ResourceAdapter resourceAdapter;
-    private ListView resourceListView;
-
+    ResourceListFragment resourceListFragment;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,35 +23,18 @@ public class ResourceActivity extends BaseFragmentActivity {
         // Set a toolbar to replace the action bar.
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        resourceListFragment = (ResourceListFragment) getFragmentManager().findFragmentById(R.id.resourcefragment);
 
-        final String location = getIntent().getStringExtra("location");
-        ApplicationContext applicationContext = (ApplicationContext)getApplicationContext();
 
-        resourceListView = (ListView) findViewById(R.id.resourcelist);
-        resourceAdapter = new ResourceAdapter(applicationContext);
+        String location = getIntent().getStringExtra("location");
 
-        Log.v(TAG,"Loading resources");
-        Iterator<IHCLocation> iLocations = applicationContext.getIHCHome().getLocations().iterator();
-        while (iLocations.hasNext()) {
-            IHCLocation ihcLocation = iLocations.next();
-            if (ihcLocation.getName().equals(location)) {
-                Iterator<IHCResource> iResources = ihcLocation.getResources().iterator();
-                while (iResources.hasNext()) {
-                    IHCResource ihcResource = iResources.next();
-                    ihcResource.setLocation("");
-                    resourceAdapter.addItem(ihcResource);
-                }
-            }
+        try {
+            getSupportActionBar().setTitle(location);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowTitleEnabled(true);
+        } catch (NullPointerException e){
+            Log.e(TAG, "NPE");
         }
-
-        registerForContextMenu(resourceListView);
-        resourceListView.setAdapter(resourceAdapter);
-        resourceListView.setOnCreateContextMenuListener(this);
-
-
-        getSupportActionBar().setTitle(location);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowTitleEnabled(true);
 
     }
 
@@ -75,24 +49,11 @@ public class ResourceActivity extends BaseFragmentActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private class refreshResourceViewTask extends AsyncTask<Void, Void, Boolean> {
-
-        @Override
-        protected void onPreExecute() {
-        }
-
-        @Override
-        protected Boolean doInBackground(Void... params) {
-            return true;
-        }
-
-        @Override
-        protected void onPostExecute(Boolean result) {
-            //TODO: What if in touch mode
-            if (resourceAdapter != null) {
-                Log.v(TAG, "Refreshing view...");
-                resourceAdapter.notifyDataSetChanged();
-            }
+    @Override
+    protected void onMessage(ConnectionManager.IHC_EVENTS event, String Extra) {
+        super.onMessage(event,Extra);
+        if(event == ConnectionManager.IHC_EVENTS.RESOURCE_VALUE_CHANGED) {
+            resourceListFragment.onResourceChanged();
         }
     }
 }

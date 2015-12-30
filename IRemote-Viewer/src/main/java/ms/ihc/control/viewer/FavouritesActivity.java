@@ -3,11 +3,10 @@ package ms.ihc.control.viewer;
 import java.util.Iterator;
 
 import ms.ihc.control.Resource.ResourceAdapter;
+import ms.ihc.control.activities.BaseActivity;
 import ms.ihc.control.devices.wireless.IHCResource;
-import ms.ihc.control.fragments.LocationFragment;
 
 //import ms.ihc.control.viewer.IhcManager.ControllerConnection;
-import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -22,7 +21,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 
-public class FavouritesActivity extends Activity implements OnClickListener {
+public class FavouritesActivity extends BaseActivity implements OnClickListener {
 
 	private ListView favouritesListView;
 	//private TableRow favouritesTableRow;
@@ -43,7 +42,7 @@ public class FavouritesActivity extends Activity implements OnClickListener {
 		else
 		{
 	//		soapImp.setControlerConnectionListener(this);
-			favouritesListView = (ListView) findViewById(R.id.resourcelist);
+			favouritesListView = (ListView) findViewById(R.id.listview);
 	//		favouritesTableRow = (TableRow) findViewById(R.id.HeaderTableRow);
 		//	favouritesTextView = (TextView) findViewById(R.id.locationtext1);
 	
@@ -109,7 +108,8 @@ public class FavouritesActivity extends Activity implements OnClickListener {
 		@Override
 		protected Boolean doInBackground(Void... params) {
 			Log.v("waitForResourceValueChangesTask", "Waiting for valuechanges");
-			return soapImp.waitForResourceValueChanges(LocationFragment.resourceMap);
+			//return soapImp.waitForResourceValueChanges(LocationFragment.resourceMap);
+			return false;
 		}
 
 		@Override

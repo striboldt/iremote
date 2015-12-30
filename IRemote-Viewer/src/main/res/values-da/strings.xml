@@ -26,12 +26,12 @@
     <string name="loginbutton">Login</string>
     <string name="reload_project">Genindlæs projektfil</string>
     <string name="check_license">Rettighedstjek</string>
-	<string name="checking_license">Tjekker licens...</string>
+	<string name="checking_license">Tjekker licens…</string>
 	<string name="dont_allow">Giv ikke brugeren adgang</string>
 	<string name="allow">Giv brugere adgang</string>
-	<string name="login_msg">Login. Vent venligst...</string>
+	<string name="login_msg">Logger ind…</string>
 	<string name="login_failed_msg">Login fejl: </string>
-	<string name="loading_project_msg">Projekt hentes. Vent venligst...</string>
+	<string name="loading_project_msg">Projekt hentes. Vent venligst…</string>
 	
 	<string name="application_error">Applications fejl: %1$s</string>
 	<!-- Unlicensed dialog messages -->
@@ -52,4 +52,11 @@
     <string-array name="ContextMenuRemoveFav">
 			<item>Slet Favorit</item>
     </string-array>
+    <string name="default_connection_type">Default forbindelse</string>
+    <string name="error_wrong_uri">Forkert IP eller Hostnavn</string>
+    <string name="error_no_network">Tjek netværksforbindelse</string>
+    <string name="missing_host">Lan/Wan host mangler</string>
+    <string name="missing_login_credentials">Brugernavn/Password mangler</string>
+    <string name="lan_not_available">LAN er kun synligt fra WiFi forbindelse</string>
+    <string name="no_route_to_host">Ingen forbindelse til host</string>
 </resources>

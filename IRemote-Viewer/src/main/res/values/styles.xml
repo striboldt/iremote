@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources >
-    <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.NoActionBar">
-        <!-- Customize your theme here. -->
+    <style name="iremote_theme" parent="@style/Theme.AppCompat.NoActionBar" >
+        <item name="colorPrimary">@color/statusBarColor</item>
     </style>
-
-    <style name="iremote_theme" parent="@style/Theme.AppCompat.NoActionBar" />
-
 </resources>

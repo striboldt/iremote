@@ -6,12 +6,12 @@
     <string name="email">Email: ihc@striboldt.com</string>
     <string name="aboutText">IRemote Viewer is a remote control for LK / Schneider Electric IHC (Intelligent House Control).</string>
     <string name="app_name">IRemote Viewer</string>
-    <string name="app_name_beta">IRemote Viewer Beta</string>
+    <string name="app_name_beta" translatable="false">IRemote Viewer Beta</string>
     <string name="lan_host">LAN Host</string>
-    <string name="lan">LAN</string>
+    <string name="lan" translatable="false">LAN</string>
     <string name="lan_host_help">IP or Hostname</string>
     <string name="wan_host">WAN Host</string>
-    <string name="wan">WAN</string>
+    <string name="wan" translatable="false">WAN</string>
     <string name="wan_host_help">IP or Hostname</string>
     <string name="username">Username</string>
     <string name="password">Password</string>
@@ -30,12 +30,12 @@
     <string name="loginbutton">Login</string>
     <string name="reload_project">Reload project</string>
     <string name="check_license">Check license</string>
-    <string name="checking_license">Checking license...</string>
+    <string name="checking_license">Checking license…</string>
     <string name="dont_allow">Don\'t allow the user access</string>
     <string name="allow">Allow the user access</string>
-    <string name="login_msg">Login. Please wait...</string>
+    <string name="login_msg">Loading…</string>
     <string name="login_failed_msg">Login failed: </string>
-    <string name="loading_project_msg">Loading project. Please wait...</string>
+    <string name="loading_project_msg">Loading project. Please wait…</string>
     <string name="application_error">Application error: %1$s</string>
     <!-- Unlicensed dialog messages -->
     <string name="unlicensed_dialog_title">Application not licensed</string>
@@ -56,5 +56,12 @@
     <string-array name="ContextMenuRemoveFav">
         <item>Remove Favourite</item>
     </string-array>
+    <string name="error_wrong_uri">Wrong IP or Hostname</string>
+    <string name="connect_wan_only">Connect with WAN</string>
+    <string name="error_no_network">Check network</string>
+    <string name="missing_login_credentials">Username or password missing</string>
+    <string name="missing_host">Lan/Wan host missing</string>
+    <string name="lan_not_available">LAN can only be accessed from WiFi</string>
+    <string name="no_route_to_host">Host not responding</string>
 
 </resources>

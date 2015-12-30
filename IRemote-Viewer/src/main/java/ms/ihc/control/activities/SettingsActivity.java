@@ -6,28 +6,31 @@ import com.google.android.vending.licensing.AESObfuscator;
 import com.google.android.vending.licensing.LicenseChecker;
 import com.google.android.vending.licensing.LicenseCheckerCallback;
 import com.google.android.vending.licensing.ServerManagedPolicy;
-
-import de.keyboardsurfer.android.widget.crouton.Crouton;
-import de.keyboardsurfer.android.widget.crouton.Style;
+import ms.ihc.control.Utils.NetworkUtil;
+import ms.ihc.control.Utils.SharedPreferencesHelper;
+import ms.ihc.control.Utils.SnackbarHelper;
 import ms.ihc.control.fragments.AlertDialogFragment;
 import ms.ihc.control.viewer.ApplicationContext;
 import ms.ihc.control.viewer.ConnectionManager;
 import ms.ihc.control.viewer.R;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Settings.Secure;
 import android.content.SharedPreferences;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 
-public class SettingsActivity extends BaseFragmentActivity {
+public class SettingsActivity extends BaseActivity {
+    private final String TAG = SettingsActivity.class.getName();
     private LicenseCheckerCallback mLicenseCheckerCallback;
     private LicenseChecker mChecker;
 
@@ -40,6 +43,7 @@ public class SettingsActivity extends BaseFragmentActivity {
 
     private RelativeLayout settingsLayout;
     private FrameLayout progressLayout;
+    private TextView connection_status;
 
 
     private class MyLicenseCheckerCallback implements LicenseCheckerCallback {
@@ -73,20 +77,25 @@ public class SettingsActivity extends BaseFragmentActivity {
         }
     }
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
        // Crashlytics.start(this);
 
         setContentView(R.layout.settings);
+        int preferredHost = NetworkUtil.getPreferredHost(this);
+        Log.i(TAG, "Preferred host: " + preferredHost);
+
         progressLayout = (FrameLayout) findViewById(R.id.progressLayout);
         settingsLayout = (RelativeLayout) findViewById(R.id.settingsLayout);
+        connection_status = (TextView) findViewById(R.id.connection_status);
         setProgressVisibility(true,"");
 
+        // TODO replace getSharedPereferences!!
         sharedPreferences = getSharedPreferences(PREFS_NAME, 0);
+        SharedPreferencesHelper sharedPreferencesHelper = SharedPreferencesHelper.getInstance(this);
 
-        if (!this.sharedPreferences.getBoolean("isLicensed", true)) {
+        if (!sharedPreferences.getBoolean("isLicensed", true)) {
             final String deviceId = Secure.getString(this.getContentResolver(), Secure.ANDROID_ID);
             // Construct the LicenseCheckerCallback. The library calls this when done.
             mLicenseCheckerCallback = new MyLicenseCheckerCallback();
@@ -97,11 +106,25 @@ public class SettingsActivity extends BaseFragmentActivity {
         }
 
 
-        if (this.sharedPreferences.getBoolean("hasValidLogin", false)) {
-            String username = this.sharedPreferences.getString("username", "");
-            String password = this.sharedPreferences.getString("password", "");
-            String ip = this.sharedPreferences.getString("active_ip", "");
-            ((ApplicationContext) getApplicationContext()).getIHCConnectionManager().connect(username, password, ip, false);
+        // Auto login if login is valid
+        if (sharedPreferences.getBoolean("hasValidLogin", false) && preferredHost >= 0) {
+            String username = sharedPreferences.getString("username", "");
+            String password = sharedPreferences.getString("password", "");
+            String ip = "";
+            switch (preferredHost){
+                case NetworkUtil.LAN:
+                    if(sharedPreferencesHelper.hasValidLanIp()){
+                        ip = sharedPreferencesHelper.getLanIp();
+                    }
+                    break;
+                case NetworkUtil.WAN:
+                    if(sharedPreferencesHelper.hasValidWanIp()){
+                        ip = sharedPreferencesHelper.getWanIp();
+                    }
+                    break;
+            }
+            setProgressVisibility(true,getString(R.string.login_msg));
+            ((ApplicationContext) getApplicationContext()).getIHCConnectionManager().connect(username, password, ip, preferredHost == NetworkUtil.WAN);
         } else {
             setProgressVisibility(false,"");
         }
@@ -115,14 +138,14 @@ public class SettingsActivity extends BaseFragmentActivity {
 
         loginButton = (Button) findViewById(R.id.loginbutton);
 
-        if (!(this.sharedPreferences.getString("lan_ip", "")).isEmpty()) {
+        if (sharedPreferencesHelper.hasValidLanIp()) {
             EditText lan_ip = (EditText) findViewById(R.id.lan_ip);
-            lan_ip.setText(this.sharedPreferences.getString("lan_ip", ""));
+            lan_ip.setText(sharedPreferencesHelper.getLanIp());
         }
 
-        if (!(this.sharedPreferences.getString("wan_ip", "")).isEmpty()) {
+        if (sharedPreferencesHelper.hasValidWanIp()) {
             EditText wan_ip = (EditText) findViewById(R.id.wan_ip);
-            wan_ip.setText(this.sharedPreferences.getString("wan_ip", ""));
+            wan_ip.setText(sharedPreferencesHelper.getWanIp());
         }
 
         EditText username = (EditText) findViewById(R.id.username);
@@ -134,18 +157,30 @@ public class SettingsActivity extends BaseFragmentActivity {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                hideSoftKeyboard();
                 String ip;
 
                 String wanip = ((EditText) findViewById(R.id.wan_ip)).getText().toString();
                 String lanip = ((EditText) findViewById(R.id.lan_ip)).getText().toString();
+                String username = ((EditText) findViewById(R.id.username)).getText().toString();
+                String password = ((EditText) findViewById(R.id.password)).getText().toString();
+
+                if(!username.isEmpty() && !password.isEmpty()){
+                    if(!wanip.isEmpty() || !lanip.isEmpty()) {
+                    } else {
+                        SnackbarHelper.createSnack(SettingsActivity.this, String.format("%s %s", getString(R.string.login_failed_msg), getString(R.string.missing_host)));
+                        return;
+                    }
+                } else {
+                    SnackbarHelper.createSnack(SettingsActivity.this, String.format("%s %s", getString(R.string.login_failed_msg), getString(R.string.missing_login_credentials)));
+                    return;
+                }
+
                 if (!lanip.isEmpty()) {
                     ip = lanip;
                 } else {
                     ip = wanip;
                 }
-
-                String username = ((EditText) findViewById(R.id.username)).getText().toString();
-                String password = ((EditText) findViewById(R.id.password)).getText().toString();
 
                 SharedPreferences saveSettings = getSharedPreferences(PREFS_NAME, 0);
                 SharedPreferences.Editor editor = saveSettings.edit();
@@ -153,11 +188,10 @@ public class SettingsActivity extends BaseFragmentActivity {
                 editor.putString("password", password);
                 editor.putString("lan_ip", lanip);
                 editor.putString("wan_ip", wanip);
-                editor.putString("active_ip", ip);
-                //editor.putBoolean("wanonly", this.wanCheckBox.isChecked());
                 editor.apply();
 
                 ((ApplicationContext) getApplicationContext()).getIHCConnectionManager().connect(username, password, ip, false);
+                setProgressVisibility(true,getString(R.string.login_msg));
             }
         });
 
@@ -179,18 +213,26 @@ public class SettingsActivity extends BaseFragmentActivity {
         if (event == ConnectionManager.IHC_EVENTS.CONNECTED) {
             if(((ApplicationContext)getApplicationContext()).dataFileExists()){
                 this.sharedPreferences.edit().putBoolean("hasValidLogin", true).apply();
+                enableRuntimeValueNotifications();
                 Intent locationIntent = new Intent(this, LocationActivity.class);
                 startActivity(locationIntent);
             } else {
+                setProgressVisibility(true,getString(R.string.loading_project_msg));
                 ((ApplicationContext) getApplicationContext()).getIHCConnectionManager().loadIHCProject(false, null);
             }
         } else if (event == ConnectionManager.IHC_EVENTS.PROJECT_LOADED) {
             this.sharedPreferences.edit().putBoolean("hasValidLogin", true).apply();
+            enableRuntimeValueNotifications();
             Intent locationIntent = new Intent(this, LocationActivity.class);
             startActivity(locationIntent);
-        } else if (event == ConnectionManager.IHC_EVENTS.DISCONNECTED) {
-            Crouton.showText(this,String.format("%s %s",getString(R.string.login_failed_msg), message), Style.ALERT);
+        } else if (event == ConnectionManager.IHC_EVENTS.GENERAL_LOGIN_MESSAGE || event == ConnectionManager.IHC_EVENTS.DISCONNECTED) {
             setProgressVisibility(false,null);
+        } else if (event == ConnectionManager.IHC_EVENTS.NETWORK_CHANGE){
+            if (message != "0"){
+                setProgressVisibility(false,"");
+            } else {
+                setProgressVisibility(true,getString(R.string.error_no_network));
+            }
         }
 
     }
@@ -205,11 +247,18 @@ public class SettingsActivity extends BaseFragmentActivity {
         if(visible){
             progressLayout.setVisibility(View.VISIBLE);
             settingsLayout.setVisibility(View.GONE);
+
         } else {
             progressLayout.setVisibility(View.GONE);
             settingsLayout.setVisibility(View.VISIBLE);
         }
+        connection_status.setText(text);
 
+    }
+
+    private void hideSoftKeyboard() {
+        InputMethodManager inputMethodManager = (InputMethodManager) this.getSystemService(SettingsActivity.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(this.getCurrentFocus().getWindowToken(), 0);
     }
 
 }

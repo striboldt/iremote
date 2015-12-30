@@ -1,14 +1,14 @@
-
 description = 'IRemote'
 buildscript {
     repositories {
+        jcenter()
         mavenCentral()
         maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
         maven { url 'http://download.crashlytics.com/maven' }
 
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.0.0-alpha1'
+        classpath 'com.android.tools.build:gradle:2.0.0-alpha3'
         classpath 'com.crashlytics.tools.gradle:crashlytics-gradle:1.+'
     }
 }
@@ -30,15 +30,13 @@ dependencies {
 
     compile group: 'net.sourceforge.kxml', name: 'kxml', version: '2.2.4'
     compile group: 'net.sourceforge.kobjects', name: 'kobjects-j2me', version: '0.0-SNAPSHOT-20040926-2'
-
-    compile project(':Google-LVL')
-    /*compile ('com.crashlytics.android:crashlytics:1.+'){
-        exclude module: 'okhttp'
-    }*/
-    //Crouton (alternative to Toast messages)
-    compile 'de.keyboardsurfer.android.widget:crouton:1.8.5@aar'
     compile 'com.squareup.okhttp:okhttp:2.6.0'
+    compile project(':Google-LVL')
+    compile('com.crashlytics.android:crashlytics:1.+') {
+        //exclude module: 'okhttp'
+    }
 
+    compile 'com.android.support:design:23.1.1'
     // Unit testing dependencies
     testCompile 'junit:junit:4.12'
     // Set this dependency if you want to use Mockito
@@ -91,6 +89,10 @@ android {
         }
     }
 
+    packagingOptions {
+        exclude 'META-INF/maven/com.squareup.okhttp/okhttp/pom.properties'
+        exclude 'META-INF/maven/com.squareup.okhttp/okhttp/pom.xml'
+    }
 }
 
 

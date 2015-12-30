@@ -1,16 +1,17 @@
 package ms.ihc.control.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
-import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 
+import ms.ihc.control.viewer.ConnectionManager;
+import ms.ihc.control.viewer.IHCHome;
 import ms.ihc.control.viewer.R;
 
 
-public class LocationActivity extends BaseFragmentActivity {
+public class LocationActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,8 +25,10 @@ public class LocationActivity extends BaseFragmentActivity {
        // getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_HOME_AS_UP);
        // getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(true);
-        
+
     }
+
+
 
 
     /** Called when the Menu button is pushed */
@@ -94,4 +97,8 @@ public class LocationActivity extends BaseFragmentActivity {
 		}
 	}*/
 
+    @Override
+    protected void onMessage(ConnectionManager.IHC_EVENTS event, String Extra) {
+        super.onMessage(event, Extra);
+    }
 }

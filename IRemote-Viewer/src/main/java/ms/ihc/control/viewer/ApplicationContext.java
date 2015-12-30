@@ -8,20 +8,23 @@ import java.io.ObjectOutputStream;
 
 import android.app.Application;
 import android.content.Context;
+import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
+
+import com.crashlytics.android.Crashlytics;
+
+import ms.ihc.control.Utils.SnackbarHelper;
 
 public class ApplicationContext extends Application{
 	
 	private ConnectionManager connectionManager;
 	private IHCHome home;
-	private Boolean isAppRestarted;
-	private Boolean waitingForValueChanges;
+	private Boolean waitingForValueChanges = false;
     private static final String ihcFilename = "iremote.data";
 	
 	public ApplicationContext()
 	{
-		this.isAppRestarted = true;
 		Log.v("ApplicationContext", "Instantiating app context");
 	}
 
@@ -40,16 +43,6 @@ public class ApplicationContext extends Application{
 
 	public IHCHome getIHCHome() {
 		return home;
-	}
-	
-	public Boolean getIsAppRestarted()
-	{
-		return this.isAppRestarted;
-	}
-
-	public void setIsAppRestarted(Boolean isAppRestarted)
-	{
-		this.isAppRestarted = isAppRestarted;
 	}
 	
 	public Boolean getIsWaitingForValueChanges()
@@ -147,6 +140,5 @@ public class ApplicationContext extends Application{
 			return exists;
 		 
 	 }
-	
 
 }

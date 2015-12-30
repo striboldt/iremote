@@ -1,14 +1,19 @@
 buildscript {
-    repositories {
-        mavenCentral()
-    }
+    buildscript {
+        repositories {
+            jcenter()
+            mavenCentral()
+            maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
+            maven { url 'http://download.crashlytics.com/maven' }
+        }
 
-    dependencies {
-        classpath 'com.android.tools.build:gradle:2.0.0-alpha1'
+        dependencies {
+            classpath 'com.android.tools.build:gradle:2.0.0-alpha3'
+        }
     }
 }
 
-apply plugin: 'android-library'
+apply plugin: 'com.android.library'
 
 
 android {

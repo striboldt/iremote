@@ -87,7 +87,7 @@ public class OkHttpWrapper {
             connection = new OkHttpClient();
             connection.setSslSocketFactory(getSSLContext(trustedKeystore).getSocketFactory());
             connection.setHostnameVerifier(new AllowAllHostnameVerifier());
-            connection.setConnectTimeout(10000, TimeUnit.MILLISECONDS);
+            connection.setConnectTimeout(12000, TimeUnit.MILLISECONDS);
             connection.setFollowRedirects(false);
         }
     }
@@ -105,13 +105,8 @@ public class OkHttpWrapper {
         request = request.newBuilder().post(body).build();
     }
 
-    public Response call() {
-        Response response = null;
-        try {
-            response = connection.newCall(request).execute();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public Response call() throws IOException {
+        Response response = connection.newCall(request).execute();
         return response;
     }
 
