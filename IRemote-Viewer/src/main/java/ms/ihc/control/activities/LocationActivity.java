@@ -5,6 +5,10 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.View;
+import android.widget.FrameLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import ms.ihc.control.viewer.ConnectionManager;
 import ms.ihc.control.viewer.IHCHome;
@@ -13,10 +17,16 @@ import ms.ihc.control.viewer.R;
 
 public class LocationActivity extends BaseActivity {
 
+    private FrameLayout progressLayout;
+    private TextView connection_status;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.locations);
+
+        progressLayout = (FrameLayout) findViewById(R.id.progressLayout);
+        connection_status = (TextView) findViewById(R.id.connection_status);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -100,5 +110,16 @@ public class LocationActivity extends BaseActivity {
     @Override
     protected void onMessage(ConnectionManager.IHC_EVENTS event, String Extra) {
         super.onMessage(event, Extra);
+    }
+
+    @Override
+    protected void setProgressVisibility(boolean visible, String text){
+        super.setProgressVisibility(visible,text);
+        if(visible){
+            progressLayout.setVisibility(View.VISIBLE);
+        } else {
+            progressLayout.setVisibility(View.GONE);
+        }
+        connection_status.setText(text);
     }
 }

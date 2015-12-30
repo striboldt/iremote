@@ -4,16 +4,16 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.View;
-import android.widget.FrameLayout;
 
 import ms.ihc.control.Utils.NetworkUtil;
+import ms.ihc.control.Utils.SharedPreferencesHelper;
 import ms.ihc.control.Utils.SnackbarHelper;
 import ms.ihc.control.viewer.ApplicationContext;
 import ms.ihc.control.viewer.ConnectionManager;
@@ -29,12 +29,18 @@ public class BaseActivity extends AppCompatActivity {
     private final String CONNECTIVITY_CHANGE_INTENT_ACTION = "android.net.conn.CONNECTIVITY_CHANGE";
 
     private static int status;
-    private FrameLayout progressLayout;
+    private SharedPreferences sharedPreferences = null;
+    private static final String PREFS_NAME = "IHCSettings";
+    private static int preferredHost;
 
     private final BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
 
+            if (intent.getAction() == null) {
+                Log.e(TAG, "Unhandled action in broadcastReceiver");
+                throw new UnsupportedOperationException("Unhandled action in broadcastReceiver");
+            }
             // Network related messages
             if (intent.getAction().equals(CONNECTIVITY_CHANGE_INTENT_ACTION) || intent.getAction().equals(WIFI_INTENT_ACTION)) {
                 if (NetworkUtil.getConnectivityStatusString(getApplication()) != status) {
@@ -50,17 +56,18 @@ public class BaseActivity extends AppCompatActivity {
                     message = "Ukendt fejl";
                 }
 
-                if (intent.getAction() == null) {
-                    Log.e(TAG, "Unhandled action in broadcastReceiver");
-                    throw new UnsupportedOperationException("Unhandled action in broadcastReceiver");
-                }
-
                 if (intent.getAction().equalsIgnoreCase(ConnectionManager.IHC_EVENTS.RESOURCE_VALUE_CHANGED.toString())) {
                     Log.d(TAG, "RESOURCE_VALUE_CHANGED ");
                     onMessage(ConnectionManager.IHC_EVENTS.RESOURCE_VALUE_CHANGED, message);
-                } else if (intent.getAction() != null && intent.getAction().equalsIgnoreCase(ConnectionManager.IHC_EVENTS.CONNECTED.toString())) {
+                } else if (intent.getAction().equalsIgnoreCase(ConnectionManager.IHC_EVENTS.CONNECTED.toString())) {
                     Log.d(TAG, "CONNECTED ");
                     onMessage(ConnectionManager.IHC_EVENTS.CONNECTED, message);
+                } else if (intent.getAction().equalsIgnoreCase(ConnectionManager.IHC_EVENTS.RECONNECTED.toString())) {
+                    Log.d(TAG, "RECONNECTED ");
+                    onMessage(ConnectionManager.IHC_EVENTS.RECONNECTED, message);
+                } else if (intent.getAction().equalsIgnoreCase(ConnectionManager.IHC_EVENTS.RECONNECTION_FAILED.toString())) {
+                    Log.d(TAG, "RECONNECTION FAILED ");
+                    onMessage(ConnectionManager.IHC_EVENTS.RECONNECTION_FAILED, message);
                 } else if (intent.getAction().equalsIgnoreCase(ConnectionManager.IHC_EVENTS.DISCONNECTED.toString())) {
 
                     if (intent.hasExtra(ConnectionManager.IHCMESSAGE.class.getName())) {
@@ -80,20 +87,20 @@ public class BaseActivity extends AppCompatActivity {
                     }
                     onMessage(ConnectionManager.IHC_EVENTS.PROJECT_LOADED, message);
 
-                } else if (intent.getAction().equalsIgnoreCase(ConnectionManager.IHC_EVENTS.GENERAL_LOGIN_MESSAGE.toString())) {
+                } else if (intent.getAction().equalsIgnoreCase(ConnectionManager.IHC_EVENTS.CONNECTION_FAILED.toString())) {
                     String errorMessage = "";
                     if (intent.hasExtra(ConnectionManager.IHCMESSAGE.class.getName())) {
                         Log.d(TAG, "General Login Message: " + message);
-                        if(message.equalsIgnoreCase(ConnectionManager.IHCMESSAGE.INVALID_URI.toString())){
+                        if (message.equalsIgnoreCase(ConnectionManager.IHCMESSAGE.INVALID_URI.toString())) {
                             errorMessage = getString(R.string.error_wrong_uri);
-                        } else if (message.equalsIgnoreCase(ConnectionManager.IHCMESSAGE.NO_ROUTE_TO_HOST.toString())){
+                        } else if (message.equalsIgnoreCase(ConnectionManager.IHCMESSAGE.NO_ROUTE_TO_HOST.toString())) {
                             errorMessage = getString(R.string.no_route_to_host);
                         }
                     } else {
                         Log.d(TAG, "General Login Message.");
                     }
                     SnackbarHelper.createSnack(BaseActivity.this, String.format("%s %s", getString(R.string.login_failed_msg), errorMessage));
-                    onMessage(ConnectionManager.IHC_EVENTS.GENERAL_LOGIN_MESSAGE, message);
+                    onMessage(ConnectionManager.IHC_EVENTS.CONNECTION_FAILED, message);
                 } else {
                     Log.e(TAG, "Unhandled action in broadcastReceiver");
                     throw new UnsupportedOperationException("Unhandled action in broadcastReceiver");
@@ -131,20 +138,60 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     protected void onMessage(ConnectionManager.IHC_EVENTS event, String Extra) {
-        if (event == ConnectionManager.IHC_EVENTS.NETWORK_CHANGE && Extra == "0" && !(this instanceof SettingsActivity)) {
+        if (event == ConnectionManager.IHC_EVENTS.CONNECTED) {
+            if (((ApplicationContext) getApplicationContext()).dataFileExists()) {
+                this.sharedPreferences.edit().putBoolean("hasValidLogin", true).apply();
+                enableRuntimeValueNotifications();
+                Intent locationIntent = new Intent(this, LocationActivity.class);
+                startActivity(locationIntent);
+            } else {
+                setProgressVisibility(true, getString(R.string.loading_project_msg));
+                ((ApplicationContext) getApplicationContext()).getIHCConnectionManager().loadIHCProject(false, null);
+            }
+        } else if(event == ConnectionManager.IHC_EVENTS.RECONNECTED) {
+            enableRuntimeValueNotifications();
+        }
+        else if (event == ConnectionManager.IHC_EVENTS.PROJECT_LOADED) {
+            this.sharedPreferences.edit().putBoolean("hasValidLogin", true).apply();
+            enableRuntimeValueNotifications();
+            Intent locationIntent = new Intent(this, LocationActivity.class);
+            startActivity(locationIntent);
+        } else if (event == ConnectionManager.IHC_EVENTS.CONNECTION_FAILED || event == ConnectionManager.IHC_EVENTS.DISCONNECTED) {
+            if(!(this instanceof SettingsActivity)){
+                if(!attemptReconnect()){
+                    Intent locationIntent = new Intent(this, SettingsActivity.class);
+                    locationIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(locationIntent);
+                }
+                setProgressVisibility(true, getString(R.string.reconnecting));
+            } else {
+                setProgressVisibility(false, null);
+            }
+        } else if(event == ConnectionManager.IHC_EVENTS.RECONNECTION_FAILED) {
             Intent locationIntent = new Intent(this, SettingsActivity.class);
             locationIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(locationIntent);
-        } else if(event == ConnectionManager.IHC_EVENTS.GENERAL_LOGIN_MESSAGE && !(this instanceof SettingsActivity)){
-            // Attempt relogin
-            showSpinner(true);
+        }
+        else if (event == ConnectionManager.IHC_EVENTS.NETWORK_CHANGE) {
+            if (!(this instanceof SettingsActivity) && Extra == "0") {
+                Intent locationIntent = new Intent(this, SettingsActivity.class);
+                locationIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(locationIntent);
+            } else {
+                if (Extra != "0") {
+                    setProgressVisibility(false, "");
+                } else {
+                    setProgressVisibility(true, getString(R.string.error_no_network));
+                }
+            }
         }
     }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        progressLayout = (FrameLayout)findViewById(R.id.progressLayout);
+        preferredHost = NetworkUtil.getPreferredHost(this);
+        sharedPreferences = getSharedPreferences(PREFS_NAME, 0);
     }
 
     @Override
@@ -171,13 +218,36 @@ public class BaseActivity extends AppCompatActivity {
         return ((ApplicationContext) getApplicationContext());
     }
 
-    private void showSpinner(boolean showSpinner){
-            if(showSpinner){
-                progressLayout.setVisibility(View.VISIBLE);
-            } else {
-                progressLayout.setVisibility(View.GONE);
-            }
+    protected void setProgressVisibility(boolean visible, String text) {
     }
 
+    protected int getPreferredHost(){
+        return preferredHost;
+    }
+
+    private boolean attemptReconnect(){
+        SharedPreferencesHelper sharedPreferencesHelper = SharedPreferencesHelper.getInstance(this);
+        if (sharedPreferences.getBoolean("hasValidLogin", false) && getPreferredHost() >= 0) {
+            String ip = "";
+            switch (getPreferredHost()){
+                case NetworkUtil.LAN:
+                    if(sharedPreferencesHelper.hasValidLanIp()){
+                        ip = sharedPreferencesHelper.getLanIp();
+                    }
+                    break;
+                case NetworkUtil.WAN:
+                    if(sharedPreferencesHelper.hasValidWanIp()){
+                        ip = sharedPreferencesHelper.getWanIp();
+                    }
+                    break;
+            }
+            setProgressVisibility(true,getString(R.string.login_msg));
+            ((ApplicationContext) getApplicationContext()).getIHCConnectionManager().reconnect(ip, getPreferredHost() == NetworkUtil.WAN);
+            return true;
+        } else {
+            return false;
+        }
+
+    }
 
 }

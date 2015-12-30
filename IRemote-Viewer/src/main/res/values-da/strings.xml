@@ -59,4 +59,5 @@
     <string name="missing_login_credentials">Brugernavn/Password mangler</string>
     <string name="lan_not_available">LAN er kun synligt fra WiFi forbindelse</string>
     <string name="no_route_to_host">Ingen forbindelse til host</string>
+    <string name="reconnecting">Genopretter forbindelse…</string>
 </resources>

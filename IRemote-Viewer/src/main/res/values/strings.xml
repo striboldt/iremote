@@ -63,5 +63,6 @@
     <string name="missing_host">Lan/Wan host missing</string>
     <string name="lan_not_available">LAN can only be accessed from WiFi</string>
     <string name="no_route_to_host">Host not responding</string>
+    <string name="reconnecting">Reconnecting…</string>
 
 </resources>

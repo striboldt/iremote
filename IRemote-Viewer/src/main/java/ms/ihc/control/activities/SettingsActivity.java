@@ -13,7 +13,6 @@ import ms.ihc.control.fragments.AlertDialogFragment;
 import ms.ihc.control.viewer.ApplicationContext;
 import ms.ihc.control.viewer.ConnectionManager;
 import ms.ihc.control.viewer.R;
-import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Settings.Secure;
 import android.content.SharedPreferences;
@@ -83,8 +82,8 @@ public class SettingsActivity extends BaseActivity {
        // Crashlytics.start(this);
 
         setContentView(R.layout.settings);
-        int preferredHost = NetworkUtil.getPreferredHost(this);
-        Log.i(TAG, "Preferred host: " + preferredHost);
+
+        Log.i(TAG, "Preferred host: " + getPreferredHost());
 
         progressLayout = (FrameLayout) findViewById(R.id.progressLayout);
         settingsLayout = (RelativeLayout) findViewById(R.id.settingsLayout);
@@ -107,11 +106,11 @@ public class SettingsActivity extends BaseActivity {
 
 
         // Auto login if login is valid
-        if (sharedPreferences.getBoolean("hasValidLogin", false) && preferredHost >= 0) {
+        if (sharedPreferences.getBoolean("hasValidLogin", false) && getPreferredHost() >= 0) {
             String username = sharedPreferences.getString("username", "");
             String password = sharedPreferences.getString("password", "");
             String ip = "";
-            switch (preferredHost){
+            switch (getPreferredHost()){
                 case NetworkUtil.LAN:
                     if(sharedPreferencesHelper.hasValidLanIp()){
                         ip = sharedPreferencesHelper.getLanIp();
@@ -124,7 +123,7 @@ public class SettingsActivity extends BaseActivity {
                     break;
             }
             setProgressVisibility(true,getString(R.string.login_msg));
-            ((ApplicationContext) getApplicationContext()).getIHCConnectionManager().connect(username, password, ip, preferredHost == NetworkUtil.WAN);
+            ((ApplicationContext) getApplicationContext()).getIHCConnectionManager().connect(username, password, ip, getPreferredHost() == NetworkUtil.WAN);
         } else {
             setProgressVisibility(false,"");
         }
@@ -209,32 +208,7 @@ public class SettingsActivity extends BaseActivity {
 
     @Override
     protected void onMessage(ConnectionManager.IHC_EVENTS event, String message) {
-
-        if (event == ConnectionManager.IHC_EVENTS.CONNECTED) {
-            if(((ApplicationContext)getApplicationContext()).dataFileExists()){
-                this.sharedPreferences.edit().putBoolean("hasValidLogin", true).apply();
-                enableRuntimeValueNotifications();
-                Intent locationIntent = new Intent(this, LocationActivity.class);
-                startActivity(locationIntent);
-            } else {
-                setProgressVisibility(true,getString(R.string.loading_project_msg));
-                ((ApplicationContext) getApplicationContext()).getIHCConnectionManager().loadIHCProject(false, null);
-            }
-        } else if (event == ConnectionManager.IHC_EVENTS.PROJECT_LOADED) {
-            this.sharedPreferences.edit().putBoolean("hasValidLogin", true).apply();
-            enableRuntimeValueNotifications();
-            Intent locationIntent = new Intent(this, LocationActivity.class);
-            startActivity(locationIntent);
-        } else if (event == ConnectionManager.IHC_EVENTS.GENERAL_LOGIN_MESSAGE || event == ConnectionManager.IHC_EVENTS.DISCONNECTED) {
-            setProgressVisibility(false,null);
-        } else if (event == ConnectionManager.IHC_EVENTS.NETWORK_CHANGE){
-            if (message != "0"){
-                setProgressVisibility(false,"");
-            } else {
-                setProgressVisibility(true,getString(R.string.error_no_network));
-            }
-        }
-
+        super.onMessage(event,message);
     }
 
     // Don't show the options menu
@@ -243,7 +217,9 @@ public class SettingsActivity extends BaseActivity {
         return false;
     }
 
-    private void setProgressVisibility(boolean visible, String text){
+    @Override
+    protected void setProgressVisibility(boolean visible, String text){
+        super.setProgressVisibility(visible,text);
         if(visible){
             progressLayout.setVisibility(View.VISIBLE);
             settingsLayout.setVisibility(View.GONE);
@@ -253,7 +229,6 @@ public class SettingsActivity extends BaseActivity {
             settingsLayout.setVisibility(View.VISIBLE);
         }
         connection_status.setText(text);
-
     }
 
     private void hideSoftKeyboard() {

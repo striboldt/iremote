@@ -57,4 +57,5 @@
         <item>Verwijderen favoriet</item>
     </string-array>
     <string name="no_route_to_host">Host niet reageren</string>
+    <string name="reconnecting">Opnieuw verbinding…</string>
 </resources>

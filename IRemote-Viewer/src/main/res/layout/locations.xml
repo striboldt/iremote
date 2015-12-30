@@ -20,6 +20,7 @@
         tools:layout="@layout/generic_listview" />
 
     <FrameLayout
+        android:id="@+id/progressLayout"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:background="#AA000000"
