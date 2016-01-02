@@ -24,7 +24,11 @@ public class BaseFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         appContext = (ApplicationContext) getActivity().getApplicationContext();
-        resources = appContext.getIHCHome().getAllResourceIDs();
+        try {
+            resources = appContext.getIHCHome().getAllResourceIDs();
+        } catch (NullPointerException e){
+            Log.i(TAG, "onCreate: IHCRemote not yet initialized");
+        }
     }
 
     private Runnable waitForResourceValuesChange = new Runnable() {

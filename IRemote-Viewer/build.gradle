@@ -4,17 +4,17 @@ buildscript {
         jcenter()
         mavenCentral()
         maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
-        maven { url 'http://download.crashlytics.com/maven' }
+        maven { url 'https://maven.fabric.io/public' }
 
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:2.0.0-alpha3'
-        classpath 'com.crashlytics.tools.gradle:crashlytics-gradle:1.+'
+        classpath 'io.fabric.tools:gradle:1.+'
     }
 }
 
 apply plugin: 'com.android.application'
-apply plugin: 'crashlytics'
+apply plugin: 'io.fabric'
 
 
 
@@ -23,7 +23,7 @@ dependencies {
         maven { url 'https://ksoap2-android.googlecode.com/svn/m2-repo' }
         maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
         mavenCentral()
-        maven { url 'http://download.crashlytics.com/maven' }
+        maven { url 'https://maven.fabric.io/public' }
     }
 
     compile 'com.android.support:appcompat-v7:23.1.1'
@@ -32,8 +32,10 @@ dependencies {
     compile group: 'net.sourceforge.kobjects', name: 'kobjects-j2me', version: '0.0-SNAPSHOT-20040926-2'
     compile 'com.squareup.okhttp:okhttp:2.6.0'
     compile project(':Google-LVL')
-    compile('com.crashlytics.android:crashlytics:1.+') {
-        //exclude module: 'okhttp'
+
+    // Crashlytics Kit
+    compile('com.crashlytics.sdk.android:crashlytics:2.5.5@aar') {
+        transitive = true
     }
 
     compile 'com.android.support:design:23.1.1'
@@ -81,8 +83,11 @@ android {
         debug {
             applicationIdSuffix ".debug"
             signingConfig signingConfigs.debug
+            minifyEnabled true
+            proguardFiles 'proguard-rules.pro'
         }
         beta {
+            minifyEnabled true
             signingConfig signingConfigs.beta
             applicationIdSuffix ".beta"
             debuggable true
@@ -97,11 +102,12 @@ android {
 
 
 allprojects {
+
     task hello << { task -> println "I'm $task.project.name" }
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '2.7'
+    gradleVersion = '2.8'
 }
 
 

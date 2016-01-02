@@ -233,7 +233,11 @@ public class SettingsActivity extends BaseActivity {
 
     private void hideSoftKeyboard() {
         InputMethodManager inputMethodManager = (InputMethodManager) this.getSystemService(SettingsActivity.INPUT_METHOD_SERVICE);
-        inputMethodManager.hideSoftInputFromWindow(this.getCurrentFocus().getWindowToken(), 0);
+        try {
+            inputMethodManager.hideSoftInputFromWindow(this.getCurrentFocus().getWindowToken(), 0);
+        } catch (NullPointerException e){
+            Log.i(TAG, "hideSoftKeyboard: keyboard not visible");
+        }
     }
 
 }

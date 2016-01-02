@@ -9,6 +9,7 @@ import java.io.ObjectOutputStream;
 import android.app.Application;
 import android.content.Context;
 import android.os.AsyncTask;
+import android.support.annotation.Nullable;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -41,6 +42,7 @@ public class ApplicationContext extends Application{
         writeDataFile(ihcFilename);
 	}
 
+	@Nullable
 	public IHCHome getIHCHome() {
 		return home;
 	}
