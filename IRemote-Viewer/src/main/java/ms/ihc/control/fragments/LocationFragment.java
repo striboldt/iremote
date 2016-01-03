@@ -3,7 +3,7 @@ package ms.ihc.control.fragments;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import ms.ihc.control.Resource.ResourceActivity;
+import ms.ihc.control.resource.ResourceActivity;
 import ms.ihc.control.viewer.ConnectionManager;
 import ms.ihc.control.viewer.IHCHome;
 import ms.ihc.control.viewer.IHCLocation;
@@ -43,7 +43,7 @@ public class LocationFragment extends BaseFragment implements OnItemClickListene
 		{
 			IHCHome home = getApplicationContext().getIHCHome();
 			
-			if(list == null)
+			if(home != null && list == null)
 			{
 				list = new ArrayList<>();
 				for (IHCLocation location : home.getLocations()) {
@@ -62,7 +62,7 @@ public class LocationFragment extends BaseFragment implements OnItemClickListene
 
 			SimpleAdapter locationAdapter = new SimpleAdapter(getApplicationContext(), list, R.layout.location_list_item, from,to );
 			locationListView.setAdapter(locationAdapter);
-
+			//Crashlytics.getInstance().core.setUserIdentifier();
 		}
 
 

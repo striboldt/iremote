@@ -1,4 +1,4 @@
-package ms.ihc.control.Resource;
+package ms.ihc.control.resource;
 
 import java.util.ArrayList;
 

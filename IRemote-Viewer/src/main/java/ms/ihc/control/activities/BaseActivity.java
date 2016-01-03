@@ -150,6 +150,7 @@ public class BaseActivity extends AppCompatActivity {
             }
         } else if(event == ConnectionManager.IHC_EVENTS.RECONNECTED) {
             enableRuntimeValueNotifications();
+            setProgressVisibility(false, null);
         }
         else if (event == ConnectionManager.IHC_EVENTS.PROJECT_LOADED) {
             this.sharedPreferences.edit().putBoolean("hasValidLogin", true).apply();
@@ -160,7 +161,7 @@ public class BaseActivity extends AppCompatActivity {
             if(!(this instanceof SettingsActivity)){
                 if(!attemptReconnect()){
                     Intent locationIntent = new Intent(this, SettingsActivity.class);
-                    locationIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    locationIntent.addFlags((Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
                     startActivity(locationIntent);
                 }
                 setProgressVisibility(true, getString(R.string.reconnecting));
@@ -209,12 +210,14 @@ public class BaseActivity extends AppCompatActivity {
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            getAppContext().getIHCConnectionManager().enableRuntimeValueNotifications(getAppContext().getIHCHome().getAllResourceIDs());
+            if(getAppContext().getIHCHome()!= null) {
+                getAppContext().getIHCConnectionManager().enableRuntimeValueNotifications(getAppContext().getIHCHome().getAllResourceIDs());
+            }
             return true;
         }
     }
 
-    private ApplicationContext getAppContext() {
+    protected ApplicationContext getAppContext() {
         return ((ApplicationContext) getApplicationContext());
     }
 

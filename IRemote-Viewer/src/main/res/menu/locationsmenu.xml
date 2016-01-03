@@ -6,6 +6,9 @@
 		android:title="@string/settings"
 		android:id="@+id/action_settings"
 		android:icon="@drawable/ic_settings_white_36dp"
-        android:showAsAction="always"
         />
+	<item
+		android:title="@string/about"
+		android:id="@+id/action_about"
+		/>
 </menu>

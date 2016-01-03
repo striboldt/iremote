@@ -4,7 +4,7 @@ import java.io.IOException;
 
 import ms.ihc.control.viewer.ConnectionManager;
 import ms.ihc.control.viewer.R;
-import ms.ihc.control.Resource.ResourceAdapter.ViewHolder;
+import ms.ihc.control.resource.ResourceAdapter.ViewHolder;
 import ms.ihc.control.valueTypes.DeviceType;
 import ms.ihc.control.valueTypes.WSBooleanValue;
 import ms.ihc.control.valueTypes.WSIntegerValue;

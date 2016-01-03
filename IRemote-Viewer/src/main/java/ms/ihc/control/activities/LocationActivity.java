@@ -1,17 +1,22 @@
 package ms.ihc.control.activities;
 
+import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
-import android.widget.RelativeLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.Set;
+
 import ms.ihc.control.viewer.ConnectionManager;
-import ms.ihc.control.viewer.IHCHome;
 import ms.ihc.control.viewer.R;
 
 
@@ -50,19 +55,20 @@ public class LocationActivity extends BaseActivity {
         return super.onCreateOptionsMenu(menu);
 	}
 
-    /*
+
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		Context context = this;
-		Intent intent = null;
+		Intent intent;
 		// Handle item selection
 		switch (item.getItemId()) {
-		case R.menu.settings:
-			((ApplicationContext) getApplication()).setIsAppRestarted(false);
-			this.finish();
+		case R.id.action_settings:
+            intent = new Intent(this,SettingsActivity.class);
+            intent.putExtra("autoconnect", false);
+            startActivity(intent);
 			return true;
 
-		case R.menu.active_resources:
+		/*case R.menu.active_resources:
 			intent = new Intent(this,ActiveResourcesActivity.class);
 			startActivity(intent);
 			return true;
@@ -70,10 +76,11 @@ public class LocationActivity extends BaseActivity {
 		case R.menu.favourites:
 			intent = new Intent(this,FavouritesActivity.class);
 			startActivity(intent);
-			return true;
+			return true;*/
 
-		case R.menu.about:
+		case R.id.action_about:
 			Dialog dialog = new Dialog(context);
+			dialog.getWindow().setBackgroundDrawableResource(R.color.statusBarColor);
 			dialog.setContentView(R.layout.about);
 			dialog.setTitle(getResources().getString(R.string.about));
 			String version = "";
@@ -81,7 +88,7 @@ public class LocationActivity extends BaseActivity {
 			try {
 				version = getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
 				icon = getPackageManager().getPackageInfo(getPackageName(), 0).applicationInfo.icon;
-			} catch (NameNotFoundException e) {
+			} catch (PackageManager.NameNotFoundException e) {
 				e.printStackTrace();
 			}
 
@@ -99,13 +106,12 @@ public class LocationActivity extends BaseActivity {
 			image.setImageResource(icon);
 			dialog.setCanceledOnTouchOutside(true);
 			dialog.show();
-
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
 
 		}
-	}*/
+	}
 
     @Override
     protected void onMessage(ConnectionManager.IHC_EVENTS event, String Extra) {

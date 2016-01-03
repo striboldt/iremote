@@ -17,7 +17,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import ms.ihc.control.valueTypes.*;
 import ms.ihc.control.viewer.R;
-import ms.ihc.control.Resource.ResourceAdapter;
+import ms.ihc.control.resource.ResourceAdapter;
 
 public class Panel2Button extends ioResource implements IHCResource, java.io.Serializable {
 

@@ -6,7 +6,7 @@ import java.math.BigDecimal;
 import ms.ihc.control.valueTypes.DeviceType;
 import ms.ihc.control.viewer.ConnectionManager;
 import ms.ihc.control.viewer.R;
-import ms.ihc.control.Resource.ResourceAdapter.ViewHolder;
+import ms.ihc.control.resource.ResourceAdapter.ViewHolder;
 import ms.ihc.control.devices.wireless.IHCResource;
 import ms.ihc.control.devices.wireless.ioResource;
 import ms.ihc.control.ksoap2.serialization.SoapPrimitive;

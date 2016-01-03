@@ -2,7 +2,7 @@ package ms.ihc.control.viewer;
 
 import java.util.Iterator;
 
-import ms.ihc.control.Resource.ResourceAdapter;
+import ms.ihc.control.resource.ResourceAdapter;
 import ms.ihc.control.activities.BaseActivity;
 import ms.ihc.control.devices.wireless.IHCResource;
 import ms.ihc.control.valueTypes.DeviceType;

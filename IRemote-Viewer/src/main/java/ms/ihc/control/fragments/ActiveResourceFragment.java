@@ -13,7 +13,7 @@ import android.widget.SimpleAdapter;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import ms.ihc.control.Resource.ResourceActivity;
+import ms.ihc.control.resource.ResourceActivity;
 import ms.ihc.control.viewer.ConnectionManager;
 import ms.ihc.control.viewer.IHCHome;
 import ms.ihc.control.viewer.IHCLocation;

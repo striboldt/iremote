@@ -14,10 +14,10 @@
 # Note that ProGuard works with Java bytecode (.class),
 # before the dex compiler converts it into Dalvik code (.dex).
 
--injars  bin/classes
--injars  libs
--outjars bin/classes-processed.jar
--dontwarn
+#-injars  bin/classes
+#-injars  libs
+#-outjars bin/classes-processed.jar
+
 #-libraryjars /usr/local/android-sdk/platforms/android-9/android.jar
 #-libraryjars /usr/local/android-sdk/add-ons/google_apis-7_r01/libs/maps.jar
 # ...
@@ -25,7 +25,7 @@
 # Save the obfuscation mapping to a file, so you can de-obfuscate any stack
 # traces later on.
 
--printmapping bin/classes-processed.map
+#-printmapping bin/classes-processed.map
 
 # You can print out the seeds that are matching the keep options below.
 
@@ -147,3 +147,11 @@
 # -keep public class mypackage.MyClass
 # -keep public interface mypackage.MyInterface
 # -keep public class * implements mypackage.MyInterface
+
+
+-dontwarn org.xmlpull.v1.**
+-dontwarn okio.**
+
+#Fabric
+-keep class com.crashlytics.** { *; }
+-keep class com.crashlytics.android.**

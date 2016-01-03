@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="ms.ihc.control.viewer"
     android:versionCode="34"
-    android:versionName="2.0" >
+    android:versionName="Beta 2.0" >
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
@@ -40,7 +40,7 @@
             >
         </activity>
         <activity
-            android:name="ms.ihc.control.Resource.ResourceActivity"
+            android:name="ms.ihc.control.resource.ResourceActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="sensor"
             android:parentActivityName="ms.ihc.control.activities.LocationActivity"

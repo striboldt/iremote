@@ -29,7 +29,6 @@ dependencies {
     compile 'com.android.support:appcompat-v7:23.1.1'
 
     compile group: 'net.sourceforge.kxml', name: 'kxml', version: '2.2.4'
-    compile group: 'net.sourceforge.kobjects', name: 'kobjects-j2me', version: '0.0-SNAPSHOT-20040926-2'
     compile 'com.squareup.okhttp:okhttp:2.6.0'
     compile project(':Google-LVL')
 
@@ -64,14 +63,17 @@ android {
         release {
             storeFile file("release.keystore")
             keyAlias "striboldt"
-            storePassword System.getenv("KEYSTORE_PASSWORD")
-            keyPassword System.getenv("KEY_PASSWORD")
+            storePassword getProperty("release.storepassword")
+            keyPassword getProperty("release.keypassword")
         }
         debug {
             storeFile file("debug.keystore")
         }
         beta {
-            storeFile file('debug.keystore')
+            storeFile file("release.keystore")
+            keyAlias "striboldt"
+            storePassword getProperty("release.storepassword")
+            keyPassword getProperty("release.keypassword")
         }
     }
 
@@ -79,15 +81,17 @@ android {
         release {
             signingConfig signingConfigs.release
             minifyEnabled true
+            proguardFiles 'proguard-rules.pro'
         }
         debug {
             applicationIdSuffix ".debug"
             signingConfig signingConfigs.debug
-            minifyEnabled true
+          //  minifyEnabled true
             proguardFiles 'proguard-rules.pro'
         }
         beta {
             minifyEnabled true
+            proguardFiles 'proguard-rules.pro'
             signingConfig signingConfigs.beta
             applicationIdSuffix ".beta"
             debuggable true

@@ -30,6 +30,8 @@ import android.os.AsyncTask;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.util.SparseArray;
+
+import com.crashlytics.android.Crashlytics;
 import com.google.android.vending.licensing.util.Base64;
 import javax.net.ssl.SSLHandshakeException;
 import ms.ihc.control.devices.wireless.IHCResource;
@@ -216,11 +218,11 @@ public class ConnectionManager {
         return ihcmessage;
     }
 
-    public void connect(final String username, String pwd, final String ip, final Boolean WAN) {
+    public void connect(final String username, String pwd, final String ip, final boolean WAN, boolean reconnect) {
         login = username;
         password = pwd;
         wan = WAN;
-        isReconnecting = false;
+        isReconnecting = reconnect;
         try {
             URI = new URI(String.format("https://%s/ws/", ip));
             new AuthenticationTask().execute();
@@ -233,8 +235,7 @@ public class ConnectionManager {
 
     // TODO: Setup algorithm for connection retry and timeout. And notify upstream Activities in case of failure
     public void reconnect(final String ip, final Boolean WAN) {
-        isReconnecting = true;
-        this.connect(login, password, ip, WAN);
+        this.connect(login, password, ip, WAN, true);
     }
 
     public Boolean ping() {
@@ -377,7 +378,7 @@ public class ConnectionManager {
     private Map<String, Integer> getProjectInfo() {
         String SOAP_ACTION = "getProjectInfo";
         String SERVICE = "ControllerService";
-        HashMap<String, Integer> projectInfo = new HashMap<String, Integer>();
+        HashMap<String, Integer> projectInfo = new HashMap<>();
 
         SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(ms.ihc.control.ksoap2.serialization.SoapEnvelope.VER11);
 
@@ -393,6 +394,8 @@ public class ConnectionManager {
             SoapObject soapResponse = (SoapObject) envelope.bodyIn;
             projectInfo.put("projectMajorRevision", (Integer) soapResponse.getProperty("projectMajorRevision"));
             projectInfo.put("projectMinorRevision", (Integer) soapResponse.getProperty("projectMinorRevision"));
+            Crashlytics.getInstance().core.setUserIdentifier((String) soapResponse.getProperty("customerName"));
+            Log.i(TAG, "getProjectInfo: customer: " + soapResponse.getProperty("customerName"));
         } catch (Exception e) {
             handleException(e);
         }

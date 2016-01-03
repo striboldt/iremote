@@ -1,4 +1,4 @@
-package ms.ihc.control.Resource;
+package ms.ihc.control.resource;
 
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
@@ -7,7 +7,6 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import ms.ihc.control.activities.BaseActivity;

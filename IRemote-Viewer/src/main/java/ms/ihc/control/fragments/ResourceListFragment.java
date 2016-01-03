@@ -2,7 +2,6 @@ package ms.ihc.control.fragments;
 
 import android.os.Bundle;
 import android.util.Log;
-import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,8 +11,9 @@ import android.widget.ListView;
 
 import java.util.Iterator;
 
-import ms.ihc.control.Resource.ResourceAdapter;
+import ms.ihc.control.resource.ResourceAdapter;
 import ms.ihc.control.devices.wireless.IHCResource;
+import ms.ihc.control.viewer.IHCHome;
 import ms.ihc.control.viewer.IHCLocation;
 import ms.ihc.control.viewer.R;
 
@@ -36,22 +36,21 @@ public class ResourceListFragment extends BaseFragment implements OnItemClickLis
 
 
         Log.v(TAG,"Loading resources");
-        Iterator<IHCLocation> iLocations = getApplicationContext().getIHCHome().getLocations().iterator();
-        while (iLocations.hasNext()) {
-            IHCLocation ihcLocation = iLocations.next();
-            if (ihcLocation.getName().equals(location)) {
-                Iterator<IHCResource> iResources = ihcLocation.getResources().iterator();
-                while (iResources.hasNext()) {
-                    IHCResource ihcResource = iResources.next();
-                    ihcResource.setLocation("");
-                    resourceAdapter.addItem(ihcResource);
+        IHCHome ihcHome = getApplicationContext().getIHCHome();
+        if(ihcHome != null) {
+            for (IHCLocation ihcLocation : ihcHome.getLocations()) {
+                if (ihcLocation.getName().equals(location)) {
+                    for (IHCResource ihcResource : ihcLocation.getResources()) {
+                        ihcResource.setLocation("");
+                        resourceAdapter.addItem(ihcResource);
+                    }
                 }
             }
-        }
-        registerForContextMenu(resourceListView);
+            registerForContextMenu(resourceListView);
 
-        resourceListView.setAdapter(resourceAdapter);
-        resourceListView.setOnCreateContextMenuListener(this);
+            resourceListView.setAdapter(resourceAdapter);
+            resourceListView.setOnCreateContextMenuListener(this);
+        }
 
         return view;
     }

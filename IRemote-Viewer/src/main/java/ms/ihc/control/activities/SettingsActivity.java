@@ -39,6 +39,7 @@ public class SettingsActivity extends BaseActivity {
     // Generate 20 random bytes, and put them here.
     private static final byte[] SALT = new byte[]{-45, 35, 39, -18, -123, -117, 74, -24, 77, 123, -100, -42, 74, -122, -14, -102, -11, 0, -6, 22};
     private Button loginButton;
+    private Button reloadProjectButton;
 
     private RelativeLayout settingsLayout;
     private FrameLayout progressLayout;
@@ -83,11 +84,14 @@ public class SettingsActivity extends BaseActivity {
 
         setContentView(R.layout.settings);
 
+        boolean autoconnect = getIntent().getBooleanExtra("autoconnect", true);
         Log.i(TAG, "Preferred host: " + getPreferredHost());
 
         progressLayout = (FrameLayout) findViewById(R.id.progressLayout);
         settingsLayout = (RelativeLayout) findViewById(R.id.settingsLayout);
         connection_status = (TextView) findViewById(R.id.connection_status);
+        loginButton = (Button) findViewById(R.id.loginbutton);
+        reloadProjectButton = (Button) findViewById(R.id.reloadProjectButton);
         setProgressVisibility(true,"");
 
         // TODO replace getSharedPereferences!!
@@ -106,7 +110,7 @@ public class SettingsActivity extends BaseActivity {
 
 
         // Auto login if login is valid
-        if (sharedPreferences.getBoolean("hasValidLogin", false) && getPreferredHost() >= 0) {
+        if (autoconnect && sharedPreferences.getBoolean("hasValidLogin", false) && getPreferredHost() >= 0) {
             String username = sharedPreferences.getString("username", "");
             String password = sharedPreferences.getString("password", "");
             String ip = "";
@@ -123,7 +127,7 @@ public class SettingsActivity extends BaseActivity {
                     break;
             }
             setProgressVisibility(true,getString(R.string.login_msg));
-            ((ApplicationContext) getApplicationContext()).getIHCConnectionManager().connect(username, password, ip, getPreferredHost() == NetworkUtil.WAN);
+            ((ApplicationContext) getApplicationContext()).getIHCConnectionManager().connect(username, password, ip, getPreferredHost() == NetworkUtil.WAN, false);
         } else {
             setProgressVisibility(false,"");
         }
@@ -133,9 +137,6 @@ public class SettingsActivity extends BaseActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(R.string.settings);
         getSupportActionBar().setDisplayShowTitleEnabled(true);
-
-
-        loginButton = (Button) findViewById(R.id.loginbutton);
 
         if (sharedPreferencesHelper.hasValidLanIp()) {
             EditText lan_ip = (EditText) findViewById(R.id.lan_ip);
@@ -189,8 +190,49 @@ public class SettingsActivity extends BaseActivity {
                 editor.putString("wan_ip", wanip);
                 editor.apply();
 
-                ((ApplicationContext) getApplicationContext()).getIHCConnectionManager().connect(username, password, ip, false);
+                ((ApplicationContext) getApplicationContext()).getIHCConnectionManager().connect(username, password, ip, false, false);
                 setProgressVisibility(true,getString(R.string.login_msg));
+            }
+        });
+
+        reloadProjectButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                hideSoftKeyboard();
+                getAppContext().deleteDataFile();
+                String ip;
+
+                String wanip = ((EditText) findViewById(R.id.wan_ip)).getText().toString();
+                String lanip = ((EditText) findViewById(R.id.lan_ip)).getText().toString();
+                String username = ((EditText) findViewById(R.id.username)).getText().toString();
+                String password = ((EditText) findViewById(R.id.password)).getText().toString();
+
+                if(!username.isEmpty() && !password.isEmpty()){
+                    if(!wanip.isEmpty() || !lanip.isEmpty()) {
+                    } else {
+                        SnackbarHelper.createSnack(SettingsActivity.this, String.format("%s %s", getString(R.string.login_failed_msg), getString(R.string.missing_host)));
+                        return;
+                    }
+                } else {
+                    SnackbarHelper.createSnack(SettingsActivity.this, String.format("%s %s", getString(R.string.login_failed_msg), getString(R.string.missing_login_credentials)));
+                    return;
+                }
+
+                if (!lanip.isEmpty()) {
+                    ip = lanip;
+                } else {
+                    ip = wanip;
+                }
+
+                SharedPreferences saveSettings = getSharedPreferences(PREFS_NAME, 0);
+                SharedPreferences.Editor editor = saveSettings.edit();
+                editor.putString("username", username);
+                editor.putString("password", password);
+                editor.putString("lan_ip", lanip);
+                editor.putString("wan_ip", wanip);
+                editor.apply();
+
+                ((ApplicationContext) getApplicationContext()).getIHCConnectionManager().connect(username, password, ip, false, false);
             }
         });
 
