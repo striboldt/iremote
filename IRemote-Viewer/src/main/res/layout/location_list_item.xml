@@ -8,9 +8,9 @@
         android:id="@+id/location"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
         android:layout_weight="1"
         android:text="Room"
+        android:transitionName="@string/transition_location_name"
         android:textColor="#FFFFFF"
         android:textSize="20sp"/>
 

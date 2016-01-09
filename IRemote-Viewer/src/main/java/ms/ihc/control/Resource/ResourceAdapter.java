@@ -65,7 +65,7 @@ public class ResourceAdapter extends BaseAdapter {
 		});
 		convertView.setFocusableInTouchMode(true);
 		convertView.setClickable(true);
-		convertView.setBackgroundResource(android.R.drawable.list_selector_background);
+		//convertView.setBackgroundResource(android.R.drawable.list_selector_background);
 		return convertView;
 	}
 

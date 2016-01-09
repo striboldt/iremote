@@ -65,4 +65,6 @@
     <string name="no_route_to_host">Host not responding</string>
     <string name="reconnecting">Reconnecting…</string>
 
+    <string name="transition_location_name">transition:LOCATION_NAME</string>
+
 </resources>

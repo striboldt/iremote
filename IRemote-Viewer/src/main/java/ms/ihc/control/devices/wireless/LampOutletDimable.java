@@ -227,7 +227,7 @@ public class LampOutletDimable extends ioResource implements IHCResource, java.i
         
         // Set values
         if(this.state)
-        	holder.button1.setBackgroundResource(R.drawable.on_on);
+        	holder.button1.setBackgroundResource(R.drawable.on_active_selector);
         	
         holder.button1.setTag(ihcCtrl);
         holder.button2.setTag(ihcCtrl);

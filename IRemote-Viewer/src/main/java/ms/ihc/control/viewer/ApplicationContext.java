@@ -63,8 +63,7 @@ public class ApplicationContext extends Application {
     }
 
     public void deleteDataFile(){
-        File ihcFile = new File(ihcFilename);
-        ihcFile.delete();
+        deleteFile(ihcFilename);
     }
 
     public Boolean writeDataFile(String filename) {

@@ -46,10 +46,11 @@ public class ResourceListFragment extends BaseFragment implements OnItemClickLis
                     }
                 }
             }
-            registerForContextMenu(resourceListView);
+
 
             resourceListView.setAdapter(resourceAdapter);
-            resourceListView.setOnCreateContextMenuListener(this);
+            /*registerForContextMenu(resourceListView);
+            resourceListView.setOnCreateContextMenuListener(this);*/
         }
 
         return view;

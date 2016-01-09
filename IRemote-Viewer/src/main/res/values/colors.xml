@@ -4,7 +4,11 @@
     <color name="toolbarColor">#0277BD</color>
     <color name="resourceSubtitleColor">#FFFFFF</color>
     <color name="temperatureTextColor">#64dd17</color>
-    <color name="symbolColor">#616161</color>
+
     <color name="colorBackground">#303030</color>
     <color name="transparrentOverlay">#AA000000</color>
+    <color name="activeStartEndColor">#1b5e20</color>
+    <color name="activeCenterColor">#43a047</color>
+    <color name="activeSymbolColor">#fafafa</color>
+    <color name="defaultSymbolColor">#424242</color>
 </resources>

@@ -232,7 +232,7 @@ public class UniDimmer extends ioResource implements IHCResource,java.io.Seriali
         
         // Set values
         if(this.state)
-        	holder.button1.setBackgroundResource(R.drawable.on_on);
+        	holder.button1.setBackgroundResource(R.drawable.on_active_selector);
         holder.button1.setTag(ihcCtrl);
         holder.button2.setTag(ihcCtrl);
         holder.button1.setOnClickListener(this);

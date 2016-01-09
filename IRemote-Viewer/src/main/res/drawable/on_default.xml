@@ -1,0 +1,4 @@
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android" >
+    <item android:drawable="@drawable/button_inactive"/>
+    <item android:drawable="@drawable/rectangle_inactive" android:left="19dp" android:right="19dp" android:bottom="4dp" android:top="4dp"/>
+</layer-list>

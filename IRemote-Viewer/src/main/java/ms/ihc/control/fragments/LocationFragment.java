@@ -10,6 +10,9 @@ import ms.ihc.control.viewer.IHCLocation;
 import ms.ihc.control.viewer.R;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -76,7 +79,17 @@ public class LocationFragment extends BaseFragment implements OnItemClickListene
 
 			Intent intent = new Intent(getApplicationContext(), ResourceActivity.class);
 			intent.putExtra("location", selectedResource);
-			startActivity(intent);
+
+		ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(
+				// the context of the activity
+				getActivity(),
+
+				// For each shared element, add to this method a new Pair item,
+				// which contains the reference of the view we are transitioning *from*,
+				// and the value of the transitionName attribute
+				new Pair<>(v.findViewById(R.id.location), getString(R.string.transition_location_name))
+		);
+		ActivityCompat.startActivity(getActivity(), intent, options.toBundle());
 	}
 	
     // Called when app is resumed from background

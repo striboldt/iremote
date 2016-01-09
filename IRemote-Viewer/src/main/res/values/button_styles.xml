@@ -11,8 +11,8 @@
         <item name="android:layout_height">@dimen/icon_height</item>
     </style>
     
-    <style name="button01_on">
-		<item name="android:background">@drawable/on</item>
+    <style name="button_on">
+		<item name="android:background">@drawable/on_inactive_selector</item>
 		<item name="android:layout_marginTop">@dimen/icon_padding</item>
 		<item name="android:layout_marginLeft">@dimen/icon_padding</item>
 		<item name="android:layout_marginBottom">@dimen/icon_padding</item>
@@ -21,7 +21,7 @@
         <item name="android:layout_height">@dimen/icon_height</item>
     </style>
     
-    <style name="button02_off">
+    <style name="button_off">
 		<item name="android:background">@drawable/off</item>
 		<item name="android:layout_marginTop">@dimen/icon_padding</item>
 		<item name="android:layout_marginRight">@dimen/icon_padding</item>
@@ -33,14 +33,13 @@
     
     <style name="button_left">
 		<item name="android:background">@drawable/off_noicon</item>
-		<item name="android:src">@drawable/off_noicon</item>
 		<item name="android:layout_marginTop">@dimen/icon_padding</item>
 		<item name="android:layout_marginLeft">@dimen/icon_padding</item>
 		<item name="android:layout_marginBottom">@dimen/icon_padding</item>
 		<item name="android:layout_gravity">center_vertical</item>
         <item name="android:layout_width">@dimen/icon_width</item>
         <item name="android:layout_height">@dimen/icon_height</item>
-		<item name="android:textColor">@color/symbolColor</item>
+		<item name="android:textColor">@color/defaultSymbolColor</item>
     </style>
         
     <style name="button_right">
@@ -51,7 +50,7 @@
 		<item name="android:layout_gravity">center_vertical</item>
         <item name="android:layout_width">@dimen/icon_width</item>
         <item name="android:layout_height">@dimen/icon_height</item>
-		<item name="android:textColor">@color/symbolColor</item>
+		<item name="android:textColor">@color/defaultSymbolColor</item>
     </style>
     
     <style name="tablerow_48dp">

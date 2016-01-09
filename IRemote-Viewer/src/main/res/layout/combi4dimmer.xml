@@ -18,7 +18,7 @@
 		<TableLayout android:id="@+id/TableLayout02"
 		android:layout_height="fill_parent" android:layout_width="fill_parent">
 		<TableRow style="@style/tablerow_48dp">
-			<Button android:id="@+id/Button01" style="@style/button01_on"></Button>
+			<Button android:id="@+id/Button01" style="@style/button_on"></Button>
 			<TableLayout android:id="@+id/TableLayout02" android:layout_height="wrap_content" android:layout_width="fill_parent" android:layout_weight="1">
 			<TableRow>
 			<TextView android:id="@+id/devicename" android:layout_width="wrap_content"  android:textSize="12sp" android:textColor="@color/resourceSubtitleColor"
@@ -29,7 +29,7 @@
 			<ImageView android:layout_width="wrap_content" android:id="@+id/favourite_img" android:visibility="gone" android:src="@android:drawable/btn_star_big_on" android:layout_height="wrap_content"/>
 			</TableRow>
 			</TableLayout>
-			<Button android:id="@+id/Button02" style="@style/button02_off"></Button>
+			<Button android:id="@+id/Button02" style="@style/button_off"></Button>
 		</TableRow>
 		<TableRow style="@style/tablerow_48dp">
 			<Button android:id="@+id/Button03" style="@style/button_left"></Button>

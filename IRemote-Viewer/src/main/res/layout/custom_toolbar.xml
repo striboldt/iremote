@@ -7,7 +7,7 @@
         android:background="@color/toolbarColor"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-
+        android:transitionName="@string/transition_location_name"
         />
     <!--<View
         android:id="@+id/toolbar_shadow"

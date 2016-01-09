@@ -80,7 +80,6 @@ public class SettingsActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-       // Crashlytics.start(this);
 
         setContentView(R.layout.settings);
 
@@ -127,7 +126,7 @@ public class SettingsActivity extends BaseActivity {
                     break;
             }
             setProgressVisibility(true,getString(R.string.login_msg));
-            ((ApplicationContext) getApplicationContext()).getIHCConnectionManager().connect(username, password, ip, getPreferredHost() == NetworkUtil.WAN, false);
+            getAppContext().getIHCConnectionManager().connect(username, password, ip, getPreferredHost() == NetworkUtil.WAN, false);
         } else {
             setProgressVisibility(false,"");
         }

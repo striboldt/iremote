@@ -13,9 +13,6 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import java.util.Set;
-
 import ms.ihc.control.viewer.ConnectionManager;
 import ms.ihc.control.viewer.R;
 

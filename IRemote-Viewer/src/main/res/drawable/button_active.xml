@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle"
     android:dither="true">
-    <size android:width="40dp" android:height="40dp"/>
-
+    <size android:width="@dimen/icon_width" android:height="@dimen/icon_height"/>
 <gradient
-    android:startColor="#4CAF50"
-    android:centerColor="#E8F5E9"
-    android:endColor="#4CAF50"
+    android:startColor="@color/activeStartEndColor"
+    android:centerColor="@color/activeCenterColor"
+    android:endColor="@color/activeStartEndColor"
     android:angle="90"
     />
 
