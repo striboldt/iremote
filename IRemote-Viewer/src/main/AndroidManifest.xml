@@ -2,21 +2,23 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="ms.ihc.control.viewer"
     android:versionCode="34"
-    android:versionName="Beta 2.0" >
-
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
-    <uses-permission android:name="com.android.vending.CHECK_LICENSE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    android:versionName="Beta 2.0">
 
     <uses-sdk
         android:minSdkVersion="7"
-        android:targetSdkVersion="19" >
-    </uses-sdk>
+        android:targetSdkVersion="19"></uses-sdk>
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="com.android.vending.CHECK_LICENSE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <android:uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <android:uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
-        android:name="ms.ihc.control.viewer.ApplicationContext"
+        android:name=".ApplicationContext"
         android:allowBackup="false"
         android:icon="@drawable/remote"
         android:label="@string/app_name"
@@ -26,31 +28,34 @@
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/app_name"
             android:noHistory="true"
-            android:screenOrientation="sensor"
-            >
+            android:screenOrientation="sensor">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
             android:name="ms.ihc.control.activities.LocationActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:screenOrientation="sensor"
-            >
-        </activity>
+            android:screenOrientation="sensor"/>
         <activity
             android:name="ms.ihc.control.resource.ResourceActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:screenOrientation="sensor"
             android:parentActivityName="ms.ihc.control.activities.LocationActivity"
-            >
+            android:screenOrientation="sensor">
+
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="ms.ihc.control.activities.LocationActivity" />
         </activity>
-        <meta-data android:name="com.crashlytics.ApiKey" android:value="1b7e419e1e57e4a03bc3adca36ab9087ab1d3c95"/>
+
+        <meta-data
+            android:name="com.crashlytics.ApiKey"
+            android:value="1b7e419e1e57e4a03bc3adca36ab9087ab1d3c95" />
+
+        <activity android:name="ms.ihc.control.WifiSelection.WifiSelectorActivity"/>
     </application>
 
 </manifest>

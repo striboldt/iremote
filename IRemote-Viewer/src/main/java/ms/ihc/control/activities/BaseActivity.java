@@ -99,8 +99,7 @@ public class BaseActivity extends AppCompatActivity {
                     } else {
                         Log.d(TAG, "General Login Message.");
                     }
-                    SnackbarHelper.createSnack(BaseActivity.this, String.format("%s %s", getString(R.string.login_failed_msg), errorMessage));
-                    onMessage(ConnectionManager.IHC_EVENTS.CONNECTION_FAILED, message);
+                    onMessage(ConnectionManager.IHC_EVENTS.CONNECTION_FAILED, errorMessage);
                 } else {
                     Log.e(TAG, "Unhandled action in broadcastReceiver");
                     throw new UnsupportedOperationException("Unhandled action in broadcastReceiver");
@@ -142,8 +141,7 @@ public class BaseActivity extends AppCompatActivity {
             if (((ApplicationContext) getApplicationContext()).dataFileExists()) {
                 this.sharedPreferences.edit().putBoolean("hasValidLogin", true).apply();
                 enableRuntimeValueNotifications();
-                Intent locationIntent = new Intent(this, LocationActivity.class);
-                startActivity(locationIntent);
+                startActivityAsNewTask();
             } else {
                 setProgressVisibility(true, getString(R.string.loading_project_msg));
                 ((ApplicationContext) getApplicationContext()).getIHCConnectionManager().loadIHCProject(false, null);
@@ -155,8 +153,8 @@ public class BaseActivity extends AppCompatActivity {
         else if (event == ConnectionManager.IHC_EVENTS.PROJECT_LOADED) {
             this.sharedPreferences.edit().putBoolean("hasValidLogin", true).apply();
             enableRuntimeValueNotifications();
-            Intent locationIntent = new Intent(this, LocationActivity.class);
-            startActivity(locationIntent);
+            startActivityAsNewTask();
+
         } else if (event == ConnectionManager.IHC_EVENTS.CONNECTION_FAILED || event == ConnectionManager.IHC_EVENTS.DISCONNECTED) {
             if(!(this instanceof SettingsActivity)){
                 if(!attemptReconnect()){
@@ -166,6 +164,7 @@ public class BaseActivity extends AppCompatActivity {
                 }
                 setProgressVisibility(true, getString(R.string.reconnecting));
             } else {
+                SnackbarHelper.createSnack(BaseActivity.this, String.format("%s %s", getString(R.string.login_failed_msg), Extra));
                 setProgressVisibility(false, null);
             }
         } else if(event == ConnectionManager.IHC_EVENTS.RECONNECTION_FAILED) {
@@ -218,7 +217,7 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     protected ApplicationContext getAppContext() {
-        return ((ApplicationContext) getApplicationContext());
+        return ((ApplicationContext) getApplication());
     }
 
     protected void setProgressVisibility(boolean visible, String text) {
@@ -251,6 +250,12 @@ public class BaseActivity extends AppCompatActivity {
             return false;
         }
 
+    }
+
+    private void startActivityAsNewTask(){
+        Intent locationIntent = new Intent(this, LocationActivity.class);
+        locationIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(locationIntent);
     }
 
 }

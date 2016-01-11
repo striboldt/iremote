@@ -1,4 +1,4 @@
-package ms.ihc.control.fragments;
+package ms.ihc.control.resource.fragments;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -9,8 +9,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
-import java.util.Iterator;
-
+import ms.ihc.control.fragments.BaseFragment;
 import ms.ihc.control.resource.ResourceAdapter;
 import ms.ihc.control.devices.wireless.IHCResource;
 import ms.ihc.control.viewer.IHCHome;

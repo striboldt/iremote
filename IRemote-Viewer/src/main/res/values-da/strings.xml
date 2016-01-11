@@ -60,4 +60,6 @@
     <string name="lan_not_available">LAN er kun synligt fra WiFi forbindelse</string>
     <string name="no_route_to_host">Ingen forbindelse til host</string>
     <string name="reconnecting">Genopretter forbindelse…</string>
+    <string name="select_wifi">Vælg WiFi netværk</string>
+    <string name="set_wifi">Brug denne Wifi</string>
 </resources>

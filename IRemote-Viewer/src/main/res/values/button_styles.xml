@@ -2,7 +2,7 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
     
     <style name="button_on_off">
-		<item name="android:background">@drawable/poweron_off</item>
+		<item name="android:background">@drawable/round_button_io_off</item>
 		<item name="android:layout_marginTop">@dimen/icon_padding</item>
 		<item name="android:layout_marginLeft">@dimen/icon_padding</item>
 		<item name="android:layout_marginBottom">@dimen/icon_padding</item>

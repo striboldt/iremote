@@ -4,9 +4,12 @@ import android.app.Activity;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.support.design.widget.Snackbar;
+
+import java.util.List;
 
 import ms.ihc.control.viewer.R;
 
@@ -23,7 +26,7 @@ public class NetworkUtil {
     public static final int WAN = 1;
     public static final int NO_CONNECTION = -1;
     public static final int LAN_NOT_AVAILABLE_FROM_MOBILE = -2;
-    private static String PREFERRED_WIFI = "MSTwifi_5GHz";
+    private static String PREFERRED_WIFI = "";
 
     public NetworkUtil() {
     }
@@ -84,5 +87,14 @@ public class NetworkUtil {
         } else {
             return LAN_NOT_AVAILABLE_FROM_MOBILE;
         }
+    }
+
+    public static List<WifiConfiguration> getKnowWifiNetworks(Context context){
+        WifiManager wm = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+        return wm.getConfiguredNetworks();
+    }
+
+    public static void setPreferredWifi(String preferredWifi) {
+        PREFERRED_WIFI = preferredWifi;
     }
 }

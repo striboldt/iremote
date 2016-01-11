@@ -1,6 +1,5 @@
 package ms.ihc.control.resource;
 
-import android.app.Activity;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
@@ -12,7 +11,7 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import ms.ihc.control.activities.BaseActivity;
-import ms.ihc.control.fragments.ResourceListFragment;
+import ms.ihc.control.resource.fragments.ResourceListFragment;
 import ms.ihc.control.viewer.ConnectionManager;
 import ms.ihc.control.viewer.R;
 

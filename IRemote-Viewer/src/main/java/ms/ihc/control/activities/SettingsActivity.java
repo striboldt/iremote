@@ -9,10 +9,13 @@ import com.google.android.vending.licensing.ServerManagedPolicy;
 import ms.ihc.control.Utils.NetworkUtil;
 import ms.ihc.control.Utils.SharedPreferencesHelper;
 import ms.ihc.control.Utils.SnackbarHelper;
+import ms.ihc.control.WifiSelection.WifiSelectorActivity;
 import ms.ihc.control.fragments.AlertDialogFragment;
 import ms.ihc.control.viewer.ApplicationContext;
 import ms.ihc.control.viewer.ConnectionManager;
 import ms.ihc.control.viewer.R;
+
+import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Settings.Secure;
 import android.content.SharedPreferences;
@@ -40,6 +43,7 @@ public class SettingsActivity extends BaseActivity {
     private static final byte[] SALT = new byte[]{-45, 35, 39, -18, -123, -117, 74, -24, 77, 123, -100, -42, 74, -122, -14, -102, -11, 0, -6, 22};
     private Button loginButton;
     private Button reloadProjectButton;
+    private Button wifiSelectorButton;
 
     private RelativeLayout settingsLayout;
     private FrameLayout progressLayout;
@@ -91,6 +95,7 @@ public class SettingsActivity extends BaseActivity {
         connection_status = (TextView) findViewById(R.id.connection_status);
         loginButton = (Button) findViewById(R.id.loginbutton);
         reloadProjectButton = (Button) findViewById(R.id.reloadProjectButton);
+        wifiSelectorButton = (Button) findViewById(R.id.wifibutton);
         setProgressVisibility(true,"");
 
         // TODO replace getSharedPereferences!!
@@ -232,6 +237,14 @@ public class SettingsActivity extends BaseActivity {
                 editor.apply();
 
                 ((ApplicationContext) getApplicationContext()).getIHCConnectionManager().connect(username, password, ip, false, false);
+            }
+        });
+
+        wifiSelectorButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), WifiSelectorActivity.class);
+                startActivity(intent);
             }
         });
 

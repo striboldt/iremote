@@ -36,12 +36,15 @@ public class LocationActivity extends BaseActivity {
         getSupportActionBar().setTitle(R.string.locations);
        // getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_HOME_AS_UP);
        // getSupportActionBar().setHomeButtonEnabled(true);
+
         getSupportActionBar().setDisplayShowTitleEnabled(true);
 
     }
 
-
-
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
 
     /** Called when the Menu button is pushed */
 

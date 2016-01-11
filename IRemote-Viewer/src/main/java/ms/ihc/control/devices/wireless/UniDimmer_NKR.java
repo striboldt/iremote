@@ -250,7 +250,7 @@ public class UniDimmer_NKR extends ioResource implements IHCResource,java.io.Ser
         
         // Set values
         if(this.state)
-        	holder.button1.setBackgroundResource(R.drawable.poweron_on);
+        	holder.button1.setBackgroundResource(R.drawable.round_button_io_on);
         holder.button1.setTag(ihcCtrl);
         holder.button1.setOnClickListener(this);
         holder.button1.setOnLongClickListener(this);

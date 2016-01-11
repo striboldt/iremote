@@ -1,23 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:background="@drawable/default_background">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/default_background"
+    tools:context="ms.ihc.control.WifiSelection.WifiSelectorActivity">
 
-    <include layout="@layout/custom_toolbar"
+    <include
         android:id="@+id/custom_toolbar"
-        android:minHeight="?attr/actionBarSize"
+        layout="@layout/custom_toolbar"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:minHeight="?attr/actionBarSize" />
 
-    <fragment android:name="ms.ihc.control.resource.fragments.ResourceListFragment"
-        android:id="@+id/resourcefragment"
+    <ListView
+        android:id="@+id/wifi_listview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/custom_toolbar"
-        tools:layout="@layout/generic_listview" />
+        tools:layout="@layout/wifi_list_item" />
 
     <FrameLayout
         android:id="@+id/progressLayout"
@@ -27,9 +28,8 @@
         android:visibility="gone"
         tools:visibility="visible">
 
-        <include layout="@layout/progress_layout"/>
+        <include layout="@layout/progress_layout" />
 
     </FrameLayout>
-
 
 </RelativeLayout>

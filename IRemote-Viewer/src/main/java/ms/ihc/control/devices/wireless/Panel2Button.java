@@ -227,9 +227,7 @@ public class Panel2Button extends ioResource implements IHCResource, java.io.Ser
         	holder.favouriteImg.setVisibility(ImageView.GONE);
         
         // Set values
-        holder.button1.setText(R.string.left);
         holder.button1.setTag(ihcCtrl);
-        holder.button2.setText(R.string.right);
         holder.button2.setTag(ihcCtrl);
         holder.button1.setOnClickListener(this);
         holder.button2.setOnClickListener(this);

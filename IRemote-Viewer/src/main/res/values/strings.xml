@@ -65,6 +65,8 @@
     <string name="no_route_to_host">Host not responding</string>
     <string name="reconnecting">Reconnecting…</string>
 
-    <string name="transition_location_name">transition:LOCATION_NAME</string>
+    <string name="transition_location_name" translatable="false">transition:LOCATION_NAME</string>
+    <string name="select_wifi">Select preferred WiFi</string>
+    <string name="set_wifi">Preferred WiFi</string>
 
 </resources>
