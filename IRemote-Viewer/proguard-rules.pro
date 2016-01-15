@@ -112,6 +112,10 @@
 
 -dontwarn android.support.**
 
+-keepclassmembers,allowshrinking,allowobfuscation class  android.support.** {
+    !static final <fields>;
+}
+
 # Preserve all native method names and the names of their classes.
 
 -keepclasseswithmembernames class * {
@@ -155,3 +159,8 @@
 #Fabric
 -keep class com.crashlytics.** { *; }
 -keep class com.crashlytics.android.**
+
+-keep class org.kobjects.** { *; }
+-keep class org.ksoap2.** { *; }
+-keep class org.kxml2.** { *; }
+-keep class org.xmlpull.** { *; }

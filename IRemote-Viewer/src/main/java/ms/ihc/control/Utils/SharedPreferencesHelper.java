@@ -38,4 +38,12 @@ public class SharedPreferencesHelper {
     public String getWanIp() {
         return sharedPreferences.getString("wan_ip", "");
     }
+
+    public void setSelectedWiFi(String wifiSSID){
+        sharedPreferences.edit().putString("wifiSSID", wifiSSID).apply();
+    }
+
+    public String getSelectedWiFi(){
+        return sharedPreferences.getString("wifiSSID", "");
+    }
 }

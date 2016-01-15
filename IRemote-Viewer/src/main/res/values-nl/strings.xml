@@ -59,5 +59,9 @@
     <string name="no_route_to_host">Host niet reageren</string>
     <string name="reconnecting">Opnieuw verbinding…</string>
     <string name="select_wifi">Kies bij voorkeur WiFi</string>
-    <string name="set_wifi">Voorkeur WiFi</string>
+    <string name="set_wifi">LAN WiFi</string>
+    <string name="login">Login</string>
+    <string name="lan_wifi_help">Selecteer de WiFi-verbinding in verband met de LAN host</string>
+    <string name="none">NIETS</string>
+    <string name="ssl_connection_error">SSL-certificaat error</string>
 </resources>

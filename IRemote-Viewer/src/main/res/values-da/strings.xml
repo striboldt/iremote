@@ -61,5 +61,9 @@
     <string name="no_route_to_host">Ingen forbindelse til host</string>
     <string name="reconnecting">Genopretter forbindelse…</string>
     <string name="select_wifi">Vælg WiFi netværk</string>
-    <string name="set_wifi">Brug denne Wifi</string>
+    <string name="set_wifi">LAN Wifi</string>
+    <string name="login">Login</string>
+    <string name="lan_wifi_help">Vælg WiFi forbindelse som skal benyttes med LAN host</string>
+    <string name="none">IKKE VALGT</string>
+    <string name="ssl_connection_error">SSL certifikat fejl</string>
 </resources>

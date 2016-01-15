@@ -11,6 +11,7 @@
         android:layout_height="wrap_content"
         android:text="Another 5Ghz Wifi"
         android:layout_gravity="center_vertical"
+        android:layout_marginLeft="10dp"
         android:textColor="#FFFFFF"
         android:textSize="20sp"/>
 

@@ -4,7 +4,7 @@
 	<TableLayout android:id="@+id/TableLayout01"
 		android:layout_height="fill_parent" android:layout_width="fill_parent">
 		<TableRow style="@style/tablerow_48dp">
-			<Button android:id="@+id/Button01" style="@style/button_on"></Button>
+			<Button android:id="@+id/Button01" style="@style/button_on"/>
 			<TableLayout android:id="@+id/TableLayout02" android:layout_height="wrap_content" android:layout_width="fill_parent" android:layout_weight="1">
 			<TableRow>
 			<TextView android:id="@+id/position" android:layout_width="wrap_content" android:text="-" 
@@ -21,23 +21,23 @@
 			<ImageView android:layout_width="wrap_content" android:id="@+id/favourite_img" android:visibility="gone" android:src="@android:drawable/btn_star_big_on" android:layout_height="wrap_content"/>
 			</TableRow>
 			</TableLayout>
-			<Button android:id="@+id/Button02" style="@style/button_off"></Button>
+			<Button android:id="@+id/Button02" style="@style/button_off"/>
 		</TableRow>
 		<TableRow style="@style/tablerow_48dp">
-			<Button android:id="@+id/Button03" style="@style/button_left"></Button>
-			<TextView android:id="@+id/position" android:layout_width="fill_parent"
+			<Button android:id="@+id/Button03" style="@style/button_left"/>
+			<TextView android:layout_width="fill_parent"
 				android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center_horizontal|center_vertical"
 				android:textColor="#FFFFFF">
 			</TextView>
-			<Button android:id="@+id/Button04" style="@style/button_right"></Button>
+			<Button android:id="@+id/Button04" style="@style/button_right"/>
 		</TableRow>
 		<TableRow style="@style/tablerow_48dp">
-			<Button android:id="@+id/Button05" style="@style/button_left"></Button>
-			<TextView android:id="@+id/position" android:layout_width="fill_parent"
+			<Button android:id="@+id/Button05" style="@style/button_left"/>
+			<TextView android:layout_width="fill_parent"
 				android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center_horizontal|center_vertical"
 				android:textColor="#FFFFFF">
 			</TextView>
-			<Button android:id="@+id/Button06" style="@style/button_right"></Button>
+			<Button android:id="@+id/Button06" style="@style/button_right"/>
 		</TableRow>
 	</TableLayout>
 </LinearLayout>

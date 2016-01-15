@@ -40,7 +40,7 @@ import ms.ihc.control.devices.ResourceFactory;
 
 public class ConnectionManager {
 
-    private static final String TAG = ConnectionManager.class.getPackage().getName();
+    private static final String TAG = ConnectionManager.class.getCanonicalName();
 
     public enum IHC_EVENTS {
         RESOURCE_VALUE_CHANGED("ms.ihc.control.viewer.resource_value_changed"),
@@ -110,12 +110,16 @@ public class ConnectionManager {
             // loading CAs from an InputStream
             CertificateFactory cf = CertificateFactory.getInstance("X.509");
             InputStream cert = context.getResources().openRawResource(R.raw.lk);
-            Certificate ca;
+            InputStream cert2 = context.getResources().openRawResource(R.raw.lk2);
+            Certificate ca, ca2;
             try {
                 ca = cf.generateCertificate(cert);
+                ca2 = cf.generateCertificate(cert2);
                 Log.i(TAG, "ca=" + ((X509Certificate) ca).getSubjectDN());
+                Log.i(TAG, "ca2=" + ((X509Certificate) ca2).getSubjectDN());
             } finally {
                 cert.close();
+                cert2.close();
             }
 
             // creating a KeyStore containing our trusted CAs
@@ -123,13 +127,18 @@ public class ConnectionManager {
             trustedKeystore = KeyStore.getInstance(keyStoreType);
             trustedKeystore.load(null, null);
             trustedKeystore.setCertificateEntry("ca", ca);
+            trustedKeystore.setCertificateEntry("ca2", ca2);
         } catch (CertificateException e) {
+            Crashlytics.getInstance().core.logException(e);
             e.printStackTrace();
         } catch (NoSuchAlgorithmException e) {
+            Crashlytics.getInstance().core.logException(e);
             e.printStackTrace();
         } catch (IOException e) {
+            Crashlytics.getInstance().core.logException(e);
             e.printStackTrace();
         } catch (KeyStoreException e) {
+            Crashlytics.getInstance().core.logException(e);
             e.printStackTrace();
         }
     }
@@ -202,7 +211,8 @@ public class ConnectionManager {
 
     private IHCMESSAGE handleException(Exception e) {
         IHCMESSAGE ihcmessage = null;
-        Log.w(TAG, e.getMessage());
+        Crashlytics.getInstance().core.logException(e);
+        Log.w(TAG, "handleException: ", e);
         if (e instanceof SocketTimeoutException) {
             ihcmessage = IHCMESSAGE.SOCKET_TIMEOUT;
         } else if (e instanceof SSLHandshakeException) {
@@ -227,7 +237,7 @@ public class ConnectionManager {
             URI = new URI(String.format("https://%s/ws/", ip));
             new AuthenticationTask().execute();
         } catch (Exception e) {
-            handleException(e);
+            sendBroadcast(IHC_EVENTS.CONNECTION_FAILED,  handleException(e));
         }
 
 
@@ -330,10 +340,13 @@ public class ConnectionManager {
 
             } catch (IOException e) {
                 Log.e(TAG, e.getMessage());
+                Crashlytics.getInstance().core.logException(e);
             } catch (XmlPullParserException e) {
                 Log.e(TAG, "XmlPullParserException: " + e.getMessage());
+                Crashlytics.getInstance().core.logException(e);
             } catch (NullPointerException e) {
                 Log.e(TAG, e.getMessage());
+                Crashlytics.getInstance().core.logException(e);
             }
 
             ConnectionManager.this.context.setIHCHome(home);
@@ -462,6 +475,7 @@ public class ConnectionManager {
                 decodedStream.write(Base64.decode(base64.toString()));
 
             } catch (Exception e) {
+                Crashlytics.getInstance().core.logException(e);
                 Log.e(TAG, e.getMessage());
             }
         }
@@ -518,6 +532,7 @@ public class ConnectionManager {
 
             } catch (Exception e) {
                 Log.e(TAG, e.getMessage());
+                Crashlytics.getInstance().core.logException(e);
             }
         }
 
@@ -550,6 +565,7 @@ public class ConnectionManager {
 
             } catch (Exception e) {
                 Log.e(TAG, e.getMessage());
+                Crashlytics.getInstance().core.logException(e);
             }
         }
 
@@ -579,6 +595,7 @@ public class ConnectionManager {
             return (SoapObject) envelope.bodyIn;
         } catch (Exception e) {
             Log.e(TAG, e.getMessage());
+            Crashlytics.getInstance().core.logException(e);
         }
 
         return null;
@@ -702,6 +719,7 @@ public class ConnectionManager {
                         ihcResource.setupResources(xpp, xpp.getName());
                         location.getResources().add(ihcResource);
                     } catch (Exception e) {
+                        Crashlytics.getInstance().core.logException(e);
                         Log.e(TAG, e.getMessage());
                     }
                 } else if (xpp.getName().equals("product_dataline")) {
@@ -717,6 +735,7 @@ public class ConnectionManager {
                         ihcResource.setupResources(xpp, xpp.getName());
                         location.getResources().add(ihcResource);
                     } catch (Exception e) {
+                        Crashlytics.getInstance().core.logException(e);
                         Log.e(TAG, e.getMessage());
                     }
 

@@ -46,7 +46,7 @@ public class LocationFragment extends BaseFragment implements OnItemClickListene
 		{
 			IHCHome home = getApplicationContext().getIHCHome();
 			
-			if(home != null && list == null)
+			if(home != null)
 			{
 				list = new ArrayList<>();
 				for (IHCLocation location : home.getLocations()) {
@@ -62,9 +62,10 @@ public class LocationFragment extends BaseFragment implements OnItemClickListene
 	
 			locationListView.setOnItemClickListener(this);
 			locationListView.setTextFilterEnabled(true);
-
-			SimpleAdapter locationAdapter = new SimpleAdapter(getApplicationContext(), list, R.layout.location_list_item, from,to );
-			locationListView.setAdapter(locationAdapter);
+			if(list != null){
+				SimpleAdapter locationAdapter = new SimpleAdapter(getApplicationContext(), list, R.layout.location_list_item, from,to );
+				locationListView.setAdapter(locationAdapter);
+			}
 			//Crashlytics.getInstance().core.setUserIdentifier();
 		}
 

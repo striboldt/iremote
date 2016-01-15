@@ -95,6 +95,8 @@ public class BaseActivity extends AppCompatActivity {
                             errorMessage = getString(R.string.error_wrong_uri);
                         } else if (message.equalsIgnoreCase(ConnectionManager.IHCMESSAGE.NO_ROUTE_TO_HOST.toString())) {
                             errorMessage = getString(R.string.no_route_to_host);
+                        } else if (message.equalsIgnoreCase(ConnectionManager.IHCMESSAGE.CERTIFICATE_NOT_TRUSTED.toString())) {
+                            errorMessage = getString(R.string.ssl_connection_error);
                         }
                     } else {
                         Log.d(TAG, "General Login Message.");
@@ -141,42 +143,37 @@ public class BaseActivity extends AppCompatActivity {
             if (((ApplicationContext) getApplicationContext()).dataFileExists()) {
                 this.sharedPreferences.edit().putBoolean("hasValidLogin", true).apply();
                 enableRuntimeValueNotifications();
-                startActivityAsNewTask();
+                startLocationActivityAsNewTask();
             } else {
                 setProgressVisibility(true, getString(R.string.loading_project_msg));
                 ((ApplicationContext) getApplicationContext()).getIHCConnectionManager().loadIHCProject(false, null);
             }
-        } else if(event == ConnectionManager.IHC_EVENTS.RECONNECTED) {
+        }
+        else if(event == ConnectionManager.IHC_EVENTS.RECONNECTED) {
             enableRuntimeValueNotifications();
             setProgressVisibility(false, null);
         }
         else if (event == ConnectionManager.IHC_EVENTS.PROJECT_LOADED) {
             this.sharedPreferences.edit().putBoolean("hasValidLogin", true).apply();
             enableRuntimeValueNotifications();
-            startActivityAsNewTask();
-
-        } else if (event == ConnectionManager.IHC_EVENTS.CONNECTION_FAILED || event == ConnectionManager.IHC_EVENTS.DISCONNECTED) {
-            if(!(this instanceof SettingsActivity)){
+            startLocationActivityAsNewTask();
+        }
+        else if (event == ConnectionManager.IHC_EVENTS.CONNECTION_FAILED || event == ConnectionManager.IHC_EVENTS.DISCONNECTED) {
+            if(!(this instanceof LoginActivity)){
                 if(!attemptReconnect()){
-                    Intent locationIntent = new Intent(this, SettingsActivity.class);
-                    locationIntent.addFlags((Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
-                    startActivity(locationIntent);
+                    startLoginActivityAsNewTask();
                 }
-                setProgressVisibility(true, getString(R.string.reconnecting));
             } else {
                 SnackbarHelper.createSnack(BaseActivity.this, String.format("%s %s", getString(R.string.login_failed_msg), Extra));
                 setProgressVisibility(false, null);
             }
-        } else if(event == ConnectionManager.IHC_EVENTS.RECONNECTION_FAILED) {
-            Intent locationIntent = new Intent(this, SettingsActivity.class);
-            locationIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(locationIntent);
+        }
+        else if(event == ConnectionManager.IHC_EVENTS.RECONNECTION_FAILED) {
+            startLoginActivityAsNewTask();
         }
         else if (event == ConnectionManager.IHC_EVENTS.NETWORK_CHANGE) {
-            if (!(this instanceof SettingsActivity) && Extra == "0") {
-                Intent locationIntent = new Intent(this, SettingsActivity.class);
-                locationIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(locationIntent);
+            if (!(this instanceof LoginActivity) && Extra == "0") {
+                startLoginActivityAsNewTask();
             } else {
                 if (Extra != "0") {
                     setProgressVisibility(false, "");
@@ -243,7 +240,7 @@ public class BaseActivity extends AppCompatActivity {
                     }
                     break;
             }
-            setProgressVisibility(true,getString(R.string.login_msg));
+            setProgressVisibility(true, getString(R.string.reconnecting));
             ((ApplicationContext) getApplicationContext()).getIHCConnectionManager().reconnect(ip, getPreferredHost() == NetworkUtil.WAN);
             return true;
         } else {
@@ -252,9 +249,15 @@ public class BaseActivity extends AppCompatActivity {
 
     }
 
-    private void startActivityAsNewTask(){
+    private void startLocationActivityAsNewTask(){
         Intent locationIntent = new Intent(this, LocationActivity.class);
         locationIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(locationIntent);
+    }
+
+    private void startLoginActivityAsNewTask(){
+        Intent locationIntent = new Intent(this, LoginActivity.class);
+        locationIntent.addFlags((Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
         startActivity(locationIntent);
     }
 

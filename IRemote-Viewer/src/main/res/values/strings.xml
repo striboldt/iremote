@@ -67,6 +67,10 @@
 
     <string name="transition_location_name" translatable="false">transition:LOCATION_NAME</string>
     <string name="select_wifi">Select preferred WiFi</string>
-    <string name="set_wifi">Preferred WiFi</string>
+    <string name="set_wifi">LAN WiFi</string>
+    <string name="login">Login</string>
+    <string name="lan_wifi_help">Select the WiFi connection associated with the LAN host</string>
+    <string name="none">NONE</string>
+    <string name="ssl_connection_error">SSL certificate error</string>
 
 </resources>

@@ -21,11 +21,15 @@
 
 package ms.ihc.control.ksoap2.transport;
 
+import android.support.annotation.Nullable;
+
+import com.crashlytics.android.Crashlytics;
 import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.RequestBody;
 import com.squareup.okhttp.Response;
+
 import javax.net.ssl.*;
 import org.apache.http.conn.ssl.*;
 import java.io.IOException;
@@ -35,6 +39,8 @@ import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.UnrecoverableKeyException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 
@@ -53,8 +59,8 @@ public class OkHttpWrapper {
         // Exists only to defeat instantiation.
     }
 
-    public static OkHttpWrapper getInstance(){
-        if(instance == null) {
+    public static OkHttpWrapper getInstance() {
+        if (instance == null) {
             instance = new OkHttpWrapper();
         }
         return instance;
@@ -68,7 +74,7 @@ public class OkHttpWrapper {
             keyManagerFactory.init(trustedKeystore, null);
             TrustManagerFactory trustManagerFactory = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
             trustManagerFactory.init(trustedKeystore);
-            sslContext = SSLContext.getInstance("TLS");
+            sslContext = SSLContext.getInstance("SSLv3");
             sslContext.init(keyManagerFactory.getKeyManagers(), trustManagerFactory.getTrustManagers(), new SecureRandom());
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
@@ -82,12 +88,13 @@ public class OkHttpWrapper {
         return sslContext;
     }
 
-    public void setConnection(KeyStore trustedKeystore){
-        if(connection == null) {
+    public void setConnection(KeyStore trustedKeystore) {
+
+        if (connection == null) {
             connection = new OkHttpClient();
             connection.setSslSocketFactory(getSSLContext(trustedKeystore).getSocketFactory());
             connection.setHostnameVerifier(new AllowAllHostnameVerifier());
-            connection.setConnectTimeout(12000, TimeUnit.MILLISECONDS);
+            connection.setConnectTimeout(10, TimeUnit.SECONDS);
             connection.setFollowRedirects(false);
         }
     }
@@ -105,8 +112,15 @@ public class OkHttpWrapper {
         request = request.newBuilder().post(body).build();
     }
 
+    @Nullable
     public Response call() throws IOException {
-        Response response = connection.newCall(request).execute();
+        Response response;
+        try {
+            response = connection.newCall(request).execute();
+        } catch (Exception e) {
+            Crashlytics.getInstance().core.logException(e);
+            throw e;
+        }
         return response;
     }
 

@@ -1,0 +1,10 @@
+Beta 2.0 build 37:
+Release notes:
+- Fixed SSL issue with Android 5.0.2 and probably older versions as well.
+- Android 5.0+6.0 support
+- New design
+- Login algorithm enhanced (auto select LAN or WAN IP, depending on connection availability)
+- LAN connections can be configured for a specific WiFi network.
+
+Note:
+Favourites and Active resources list are currently not available.

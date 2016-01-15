@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.crashlytics.android.Crashlytics;
 
 import io.fabric.sdk.android.Fabric;
+import ms.ihc.control.Utils.SharedPreferencesHelper;
 import ms.ihc.control.Utils.SnackbarHelper;
 
 public class ApplicationContext extends Application {
@@ -35,6 +36,10 @@ public class ApplicationContext extends Application {
     public void onCreate() {
         super.onCreate();
         Fabric.with(this, new Crashlytics());
+    }
+
+    public SharedPreferencesHelper getSharedPreferencesHelper(){
+        return SharedPreferencesHelper.getInstance(this);
     }
 
     public ConnectionManager getIHCConnectionManager() {

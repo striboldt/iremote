@@ -13,6 +13,8 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import ms.ihc.control.viewer.BuildConfig;
 import ms.ihc.control.viewer.ConnectionManager;
 import ms.ihc.control.viewer.R;
 
@@ -64,7 +66,6 @@ public class LocationActivity extends BaseActivity {
 		switch (item.getItemId()) {
 		case R.id.action_settings:
             intent = new Intent(this,SettingsActivity.class);
-            intent.putExtra("autoconnect", false);
             startActivity(intent);
 			return true;
 
@@ -101,7 +102,7 @@ public class LocationActivity extends BaseActivity {
 			email.setText(getResources().getString(R.string.email));
 			author.setText(getResources().getString(R.string.author));
 			text.setText(getResources().getString(R.string.aboutText));
-			versionView.setText("Version: " + version);
+			versionView.setText("Version: " + BuildConfig.VERSION_NAME + " Build:" + BuildConfig.VERSION_CODE);
 			ImageView image = (ImageView) dialog.findViewById(R.id.image);
 			image.setImageResource(icon);
 			dialog.setCanceledOnTouchOutside(true);

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="ms.ihc.control.viewer"
-    android:versionCode="34"
-    android:versionName="Beta 2.0">
+    android:versionCode="37"
+    android:versionName="Beta 2.1">
 
     <uses-sdk
         android:minSdkVersion="7"
@@ -13,9 +13,8 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="com.android.vending.CHECK_LICENSE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-
-    <android:uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <android:uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:name=".ApplicationContext"
@@ -24,14 +23,12 @@
         android:label="@string/app_name"
         android:theme="@style/iremote_theme">
         <activity
-            android:name="ms.ihc.control.activities.SettingsActivity"
+            android:name="ms.ihc.control.activities.LoginActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/app_name"
-            android:noHistory="true"
             android:screenOrientation="sensor">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -49,6 +46,18 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="ms.ihc.control.activities.LocationActivity" />
+        </activity>
+
+        <activity
+            android:name="ms.ihc.control.activities.SettingsActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:parentActivityName="ms.ihc.control.activities.LocationActivity"
+            android:screenOrientation="sensor">
+
+        <!-- Parent activity meta-data to support 4.0 and lower -->
+        <meta-data
+            android:name="android.support.PARENT_ACTIVITY"
+            android:value="ms.ihc.control.activities.LocationActivity" />
         </activity>
 
         <meta-data

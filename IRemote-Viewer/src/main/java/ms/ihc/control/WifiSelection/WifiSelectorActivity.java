@@ -21,7 +21,7 @@ import ms.ihc.control.Utils.NetworkUtil;
 import ms.ihc.control.activities.BaseActivity;
 import ms.ihc.control.viewer.R;
 
-public class WifiSelectorActivity extends BaseActivity implements AdapterView.OnItemClickListener {
+public class WifiSelectorActivity extends BaseActivity {
 
     private FrameLayout progressLayout;
     private TextView connection_status;
@@ -49,23 +49,25 @@ public class WifiSelectorActivity extends BaseActivity implements AdapterView.On
         List<Map<String,String>> list = new ArrayList<>();
         for (WifiConfiguration wifiConfiguration : wifiConfigurationList) {
             Map<String, String> map = new HashMap<>();
-            map.put("wifi_ssid", wifiConfiguration.SSID);
+            map.put("wifi_ssid", wifiConfiguration.SSID.replace("\"",""));
             list.add(map);
         }
 
         String[] from = {"wifi_ssid"};
         int[] to = {R.id.wifi_ssid};
 
-        wifiListView.setOnItemClickListener(this);
+        wifiListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                WifiConfiguration wifiConfiguration = wifiConfigurationList.get(position);
+                NetworkUtil.setPreferredWifi(wifiConfiguration.SSID.replace("\"",""), getApplicationContext());
+                finish();
+            }
+        });
         wifiListView.setTextFilterEnabled(true);
 
         SimpleAdapter locationAdapter = new SimpleAdapter(getApplicationContext(), list, R.layout.wifi_list_item, from, to);
         wifiListView.setAdapter(locationAdapter);
     }
 
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        WifiConfiguration wifiConfiguration = wifiConfigurationList.get(position);
-        NetworkUtil.setPreferredWifi(wifiConfiguration.SSID);
-    }
 }

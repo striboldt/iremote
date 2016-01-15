@@ -8,7 +8,7 @@ buildscript {
 
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.0.0-alpha3'
+        classpath 'com.android.tools.build:gradle:2.0.0-alpha5'
         classpath 'io.fabric.tools:gradle:1.+'
     }
 }
@@ -29,7 +29,7 @@ dependencies {
     compile 'com.android.support:appcompat-v7:23.1.1'
 
     compile group: 'net.sourceforge.kxml', name: 'kxml', version: '2.2.4'
-    compile 'com.squareup.okhttp:okhttp:2.6.0'
+    compile 'com.squareup.okhttp:okhttp:2.1.0'
     compile project(':Google-LVL')
 
     // Crashlytics Kit
@@ -82,6 +82,7 @@ android {
             signingConfig signingConfigs.release
             minifyEnabled true
             proguardFiles 'proguard-rules.pro'
+            ext.betaDistributionReleaseNotesFilePath="release_notes.txt"
         }
         debug {
             applicationIdSuffix ".debug"
@@ -94,6 +95,7 @@ android {
             proguardFiles 'proguard-rules.pro'
             signingConfig signingConfigs.beta
             applicationIdSuffix ".beta"
+            ext.betaDistributionReleaseNotesFilePath="release_notes.txt"
             debuggable true
         }
     }

@@ -24,11 +24,11 @@
         android:layout_height="wrap_content"
         android:visibility="visible">
 
-        <include layout="@layout/custom_toolbar"
+        <include
             android:id="@+id/custom_toolbar"
-            android:minHeight="?attr/actionBarSize"
+            layout="@layout/custom_toolbar"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content" />
 
         <LinearLayout
             android:id="@+id/lan_layout"
@@ -145,6 +145,7 @@
             android:layout_below="@id/wan_layout"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
+            android:layout_marginBottom="10dp"
             android:orientation="vertical">
 
             <TextView
@@ -185,15 +186,26 @@
                 android:inputType="textPassword" />
         </LinearLayout>
 
+        <Button
+            android:id="@+id/loginbutton"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_below="@id/userpass_layout"
+            android:background="@drawable/custom_button"
+            android:layout_marginLeft="10dp"
+            android:text="@string/loginbutton" />
 
         <Button
             android:id="@+id/reloadProjectButton"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="40dp"
+            android:layout_alignParentRight="true"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:layout_marginRight="10dp"
             android:layout_below="@id/userpass_layout"
-            android:layout_margin="10dp"
             android:background="@drawable/custom_button"
-            android:padding="10dp"
+
             android:text="@string/reload_project" />
 
     </RelativeLayout>

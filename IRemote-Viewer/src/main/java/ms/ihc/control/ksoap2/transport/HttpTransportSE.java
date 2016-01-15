@@ -28,6 +28,7 @@ public class HttpTransportSE extends Transport {
         super(url);
         //System.setProperty("http.keepAlive", "true");
         //System.setProperty("http.maxConnections", "5");
+        System.setProperty("jsse.enableSNIExtension","false");
         this.trustedKeystore = trustedKeystore;
     }
 

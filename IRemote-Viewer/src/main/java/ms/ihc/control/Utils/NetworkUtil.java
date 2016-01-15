@@ -11,6 +11,7 @@ import android.support.design.widget.Snackbar;
 
 import java.util.List;
 
+import ms.ihc.control.viewer.ApplicationContext;
 import ms.ihc.control.viewer.R;
 
 /**
@@ -94,7 +95,8 @@ public class NetworkUtil {
         return wm.getConfiguredNetworks();
     }
 
-    public static void setPreferredWifi(String preferredWifi) {
+    public static void setPreferredWifi(String preferredWifi, Context context) {
+        ((ApplicationContext)context.getApplicationContext()).getSharedPreferencesHelper().setSelectedWiFi(preferredWifi);
         PREFERRED_WIFI = preferredWifi;
     }
 }
