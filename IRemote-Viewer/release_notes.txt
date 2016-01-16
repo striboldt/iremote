@@ -1,6 +1,6 @@
-Beta 2.0 build 37:
+Beta 2.0 build 39:
 Release notes:
-- Fixed SSL issue with Android 5.0.2 and probably older versions as well.
+- Still trying to find a solution for supporting different certificates.
 - Android 5.0+6.0 support
 - New design
 - Login algorithm enhanced (auto select LAN or WAN IP, depending on connection availability)

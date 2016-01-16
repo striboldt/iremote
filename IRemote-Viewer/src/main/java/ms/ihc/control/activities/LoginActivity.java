@@ -13,6 +13,7 @@ import ms.ihc.control.Utils.SnackbarHelper;
 import ms.ihc.control.WifiSelection.WifiSelectorActivity;
 import ms.ihc.control.fragments.AlertDialogFragment;
 import ms.ihc.control.viewer.ApplicationContext;
+import ms.ihc.control.viewer.BuildConfig;
 import ms.ihc.control.viewer.ConnectionManager;
 import ms.ihc.control.viewer.R;
 
@@ -91,6 +92,9 @@ public class LoginActivity extends BaseActivity {
 
         progressLayout = (FrameLayout) findViewById(R.id.progressLayout);
         settingsLayout = (RelativeLayout) findViewById(R.id.settingsLayout);
+        TextView versionText = (TextView) findViewById(R.id.version_data);
+        versionText.setText("IRemote " + BuildConfig.VERSION_NAME + " Build: " + BuildConfig.VERSION_CODE);
+
         connection_status = (TextView) findViewById(R.id.connection_status);
         Button loginButton = (Button) findViewById(R.id.loginbutton);
         Button reloadProjectButton = (Button) findViewById(R.id.reloadProjectButton);

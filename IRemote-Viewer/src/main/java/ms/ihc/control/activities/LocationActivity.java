@@ -14,6 +14,8 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import org.w3c.dom.Text;
+
 import ms.ihc.control.viewer.BuildConfig;
 import ms.ihc.control.viewer.ConnectionManager;
 import ms.ihc.control.viewer.R;
@@ -31,6 +33,8 @@ public class LocationActivity extends BaseActivity {
 
         progressLayout = (FrameLayout) findViewById(R.id.progressLayout);
         connection_status = (TextView) findViewById(R.id.connection_status);
+		TextView versionText = (TextView) findViewById(R.id.version_data);
+		versionText.setText("IRemote " + BuildConfig.VERSION_NAME + " Build: " + BuildConfig.VERSION_CODE);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -102,7 +106,7 @@ public class LocationActivity extends BaseActivity {
 			email.setText(getResources().getString(R.string.email));
 			author.setText(getResources().getString(R.string.author));
 			text.setText(getResources().getString(R.string.aboutText));
-			versionView.setText("Version: " + BuildConfig.VERSION_NAME + " Build:" + BuildConfig.VERSION_CODE);
+			versionView.setText("Version: " + BuildConfig.VERSION_NAME + " Build: " + BuildConfig.VERSION_CODE);
 			ImageView image = (ImageView) dialog.findViewById(R.id.image);
 			image.setImageResource(icon);
 			dialog.setCanceledOnTouchOutside(true);

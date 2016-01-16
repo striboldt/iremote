@@ -26,6 +26,7 @@ import ms.ihc.control.Utils.SharedPreferencesHelper;
 import ms.ihc.control.Utils.SnackbarHelper;
 import ms.ihc.control.WifiSelection.WifiSelectorActivity;
 import ms.ihc.control.viewer.ApplicationContext;
+import ms.ihc.control.viewer.BuildConfig;
 import ms.ihc.control.viewer.ConnectionManager;
 import ms.ihc.control.viewer.R;
 
@@ -52,6 +53,8 @@ public class SettingsActivity extends BaseActivity {
 
         progressLayout = (FrameLayout) findViewById(R.id.progressLayout);
         settingsLayout = (RelativeLayout) findViewById(R.id.settingsLayout);
+        TextView versionText = (TextView) findViewById(R.id.version_data);
+        versionText.setText("IRemote " + BuildConfig.VERSION_NAME + " Build: " + BuildConfig.VERSION_CODE);
         connection_status = (TextView) findViewById(R.id.connection_status);
         reloadProjectButton = (Button) findViewById(R.id.reloadProjectButton);
         wifiSelectorButton = (Button) findViewById(R.id.wifibutton);

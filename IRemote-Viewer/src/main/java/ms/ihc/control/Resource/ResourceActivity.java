@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import ms.ihc.control.activities.BaseActivity;
 import ms.ihc.control.resource.fragments.ResourceListFragment;
+import ms.ihc.control.viewer.BuildConfig;
 import ms.ihc.control.viewer.ConnectionManager;
 import ms.ihc.control.viewer.R;
 
@@ -30,6 +31,8 @@ public class ResourceActivity extends BaseActivity {
 
         progressLayout = (FrameLayout) findViewById(R.id.progressLayout);
         connection_status = (TextView) findViewById(R.id.connection_status);
+        TextView versionText = (TextView) findViewById(R.id.version_data);
+        versionText.setText("IRemote " + BuildConfig.VERSION_NAME + " Build: " + BuildConfig.VERSION_CODE);
 
         // Set a toolbar to replace the action bar.
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);

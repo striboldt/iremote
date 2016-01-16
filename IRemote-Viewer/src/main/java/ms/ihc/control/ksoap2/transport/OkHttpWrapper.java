@@ -22,6 +22,7 @@
 package ms.ihc.control.ksoap2.transport;
 
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import com.crashlytics.android.Crashlytics;
 import com.squareup.okhttp.MediaType;
@@ -33,12 +34,16 @@ import com.squareup.okhttp.Response;
 import javax.net.ssl.*;
 import org.apache.http.conn.ssl.*;
 import java.io.IOException;
+import java.math.BigInteger;
 import java.security.KeyManagementException;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.UnrecoverableKeyException;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
+import java.security.interfaces.RSAPublicKey;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -66,22 +71,23 @@ public class OkHttpWrapper {
         return instance;
     }
 
-    private static SSLContext getSSLContext(KeyStore trustedKeystore) {
+    private SSLContext getSSLContext(KeyStore trustedKeystore) {
 
         SSLContext sslContext = null;
         try {
-            KeyManagerFactory keyManagerFactory = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
-            keyManagerFactory.init(trustedKeystore, null);
-            TrustManagerFactory trustManagerFactory = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
-            trustManagerFactory.init(trustedKeystore);
-            sslContext = SSLContext.getInstance("SSLv3");
-            sslContext.init(keyManagerFactory.getKeyManagers(), trustManagerFactory.getTrustManagers(), new SecureRandom());
+         //   KeyManagerFactory keyManagerFactory = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
+         //   keyManagerFactory.init(trustedKeystore, null);
+            TrustManager tm[] = { new PubKeyManager() };
+        //    TrustManagerFactory trustManagerFactory = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
+        //    trustManagerFactory.init(trustedKeystore);
+            sslContext = SSLContext.getInstance("TLS");
+            sslContext.init(null, tm, null);
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
-        } catch (UnrecoverableKeyException e) {
+      /*  } catch (UnrecoverableKeyException e) {
             e.printStackTrace();
         } catch (KeyStoreException e) {
-            e.printStackTrace();
+            e.printStackTrace();*/
         } catch (KeyManagementException e) {
             e.printStackTrace();
         }
@@ -124,4 +130,54 @@ public class OkHttpWrapper {
         return response;
     }
 
+
+    public final class PubKeyManager implements X509TrustManager
+    {
+        private String TAG = PubKeyManager.class.getName();
+
+        @Override
+        public void checkClientTrusted(X509Certificate[] chain, String authType) throws CertificateException {
+            Log.i(TAG, "checkClientTrusted: ");
+        }
+
+        @Override
+        public void checkServerTrusted(X509Certificate[] chain, String authType) throws CertificateException
+        {
+            if (chain == null) {
+                throw new IllegalArgumentException("checkServerTrusted: X509Certificate array is null");
+            }
+
+            if (!(chain.length > 0)) {
+                throw new IllegalArgumentException("checkServerTrusted: X509Certificate is empty");
+            }
+
+            if (!(null != authType && authType.equalsIgnoreCase("RSA"))) {
+                throw new CertificateException("checkServerTrusted: AuthType is not RSA");
+            }
+
+            // Perform customary SSL/TLS checks
+           /* try {
+                TrustManagerFactory tmf = TrustManagerFactory.getInstance("X509");
+                tmf.init((KeyStore) null);
+
+                for (TrustManager trustManager : tmf.getTrustManagers()) {
+                    ((X509TrustManager) trustManager).checkServerTrusted(chain, authType);
+                }
+            } catch (Exception e) {
+                throw new CertificateException(e);
+            }*/
+
+            // Hack ahead: BigInteger and toString(). We know a DER encoded Public Key begins
+            // with 0x30 (ASN.1 SEQUENCE and CONSTRUCTED), so there is no leading 0x00 to drop.
+            RSAPublicKey pubkey = (RSAPublicKey) chain[0].getPublicKey();
+            String encoded = new BigInteger(1 /* positive */, pubkey.getEncoded()).toString(16);
+            Log.i(TAG, "checkServerTrusted: public key: " + encoded);
+
+        }
+
+        @Override
+        public X509Certificate[] getAcceptedIssuers() {
+            return new X509Certificate[0];
+        }
+    }
 }

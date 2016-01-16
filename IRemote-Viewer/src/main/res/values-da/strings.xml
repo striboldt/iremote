@@ -66,4 +66,6 @@
     <string name="lan_wifi_help">Vælg WiFi forbindelse som skal benyttes med LAN host</string>
     <string name="none">IKKE VALGT</string>
     <string name="ssl_connection_error">SSL certifikat fejl</string>
+    <string name="insufficient_rights">Manglende rettigheder</string>
+    <string name="wrong_credentials">Forkert brugernavn/password</string>
 </resources>

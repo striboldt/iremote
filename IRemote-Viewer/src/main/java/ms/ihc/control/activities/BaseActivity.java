@@ -97,6 +97,10 @@ public class BaseActivity extends AppCompatActivity {
                             errorMessage = getString(R.string.no_route_to_host);
                         } else if (message.equalsIgnoreCase(ConnectionManager.IHCMESSAGE.CERTIFICATE_NOT_TRUSTED.toString())) {
                             errorMessage = getString(R.string.ssl_connection_error);
+                        } else if (message.equalsIgnoreCase(ConnectionManager.IHCMESSAGE.INVALID_ACCOUNT.toString())) {
+                            errorMessage = getString(R.string.wrong_credentials);
+                        } else if (message.equalsIgnoreCase(ConnectionManager.IHCMESSAGE.INSUFFICIENT_RIGHTS.toString())) {
+                            errorMessage = getString(R.string.insufficient_rights);
                         }
                     } else {
                         Log.d(TAG, "General Login Message.");

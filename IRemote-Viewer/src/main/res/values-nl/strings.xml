@@ -64,4 +64,6 @@
     <string name="lan_wifi_help">Selecteer de WiFi-verbinding in verband met de LAN host</string>
     <string name="none">NIETS</string>
     <string name="ssl_connection_error">SSL-certificaat error</string>
+    <string name="wrong_credentials">Verkeerde gebruikersnaam / wachtwoord</string>
+    <string name="insufficient_rights">Onvoldoende rechten</string>
 </resources>
