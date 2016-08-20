@@ -23,31 +23,23 @@ package ms.ihc.control.ksoap2.transport;
 
 import android.support.annotation.Nullable;
 import android.util.Log;
-
 import com.crashlytics.android.Crashlytics;
-import com.squareup.okhttp.MediaType;
-import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.RequestBody;
-import com.squareup.okhttp.Response;
-
 import javax.net.ssl.*;
 import org.apache.http.conn.ssl.*;
 import java.io.IOException;
-import java.math.BigInteger;
+import java.io.InterruptedIOException;
 import java.security.KeyManagementException;
 import java.security.KeyStore;
-import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
-import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
-import java.security.interfaces.RSAPublicKey;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 /**
  * Connection for J2SE environments.
@@ -97,11 +89,20 @@ public class OkHttpWrapper {
     public void setConnection(KeyStore trustedKeystore) {
 
         if (connection == null) {
-            connection = new OkHttpClient();
+            connection = new OkHttpClient().newBuilder().sslSocketFactory(getSSLContext(trustedKeystore).getSocketFactory())
+                    .connectTimeout(6, TimeUnit.SECONDS)
+                    .hostnameVerifier(new AllowAllHostnameVerifier())
+                    .readTimeout(6, TimeUnit.SECONDS)
+                    .writeTimeout(6, TimeUnit.SECONDS)
+                    .followRedirects(false)
+                    .build();
+            /*connection = new OkHttpClient();
             connection.setSslSocketFactory(getSSLContext(trustedKeystore).getSocketFactory());
             connection.setHostnameVerifier(new AllowAllHostnameVerifier());
-            connection.setConnectTimeout(10, TimeUnit.SECONDS);
-            connection.setFollowRedirects(false);
+            connection.setConnectTimeout(6, TimeUnit.SECONDS);
+            connection.setReadTimeout(6, TimeUnit.SECONDS);
+            connection.setWriteTimeout(6, TimeUnit.SECONDS);
+            connection.setFollowRedirects(false);*/
         }
     }
 
@@ -120,11 +121,15 @@ public class OkHttpWrapper {
 
     @Nullable
     public Response call() throws IOException {
-        Response response;
+        Response response = null;
         try {
             response = connection.newCall(request).execute();
-        } catch (Exception e) {
+        } catch (InterruptedIOException interruptedIOException) {
+            //NOPMD
+        }
+        catch (Exception e) {
             Crashlytics.getInstance().core.logException(e);
+            Log.e("OkHttpWrapper", "call: ", e);
             throw e;
         }
         return response;
@@ -169,9 +174,9 @@ public class OkHttpWrapper {
 
             // Hack ahead: BigInteger and toString(). We know a DER encoded Public Key begins
             // with 0x30 (ASN.1 SEQUENCE and CONSTRUCTED), so there is no leading 0x00 to drop.
-            RSAPublicKey pubkey = (RSAPublicKey) chain[0].getPublicKey();
-            String encoded = new BigInteger(1 /* positive */, pubkey.getEncoded()).toString(16);
-            Log.i(TAG, "checkServerTrusted: public key: " + encoded);
+            /*RSAPublicKey pubkey = (RSAPublicKey) chain[0].getPublicKey();
+            String encoded = new BigInteger(1 , pubkey.getEncoded()).toString(16);
+            Log.i(TAG, "checkServerTrusted: public key: " + encoded);*/
 
         }
 

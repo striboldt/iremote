@@ -20,7 +20,7 @@ import android.view.View;
 import ms.ihc.control.valueTypes.*;
 
 
-public interface IHCResource extends View.OnClickListener  {
+public interface IHCResource extends View.OnClickListener {
 	
 	public static final int LAMPEUDTAGDIMMER = 0x4304;
 	public static final int KOMBIDIMMER4TAST = 0x4406;

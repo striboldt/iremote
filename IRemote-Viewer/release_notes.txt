@@ -1,10 +1,7 @@
-Beta 2.0 build 39:
+IRemote Viewer 2.0 Release Candidate 1 (build 43):
 Release notes:
-- Still trying to find a solution for supporting different certificates.
-- Android 5.0+6.0 support
-- New design
-- Login algorithm enhanced (auto select LAN or WAN IP, depending on connection availability)
-- LAN connections can be configured for a specific WiFi network.
+- Supports Android 5.0 and above. Use old IRemote viewer (version 1.x, with Kitkat and Jellybean installations.)
+- Optimized connection algorithm. Should be much more reliable in terms of login.
 
 Note:
 Favourites and Active resources list are currently not available.

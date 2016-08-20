@@ -12,6 +12,11 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
+import com.crashlytics.android.Crashlytics;
+import com.crashlytics.android.answers.Answers;
+import com.crashlytics.android.answers.CustomEvent;
+import com.crashlytics.android.answers.LoginEvent;
+
 import ms.ihc.control.Utils.NetworkUtil;
 import ms.ihc.control.Utils.SharedPreferencesHelper;
 import ms.ihc.control.Utils.SnackbarHelper;
@@ -61,13 +66,35 @@ public class BaseActivity extends AppCompatActivity {
                     onMessage(ConnectionManager.IHC_EVENTS.RESOURCE_VALUE_CHANGED, message);
                 } else if (intent.getAction().equalsIgnoreCase(ConnectionManager.IHC_EVENTS.CONNECTED.toString())) {
                     Log.d(TAG, "CONNECTED ");
+                    Answers.getInstance().logLogin(new LoginEvent()
+                            .putMethod("Login")
+                            .putSuccess(true));
                     onMessage(ConnectionManager.IHC_EVENTS.CONNECTED, message);
                 } else if (intent.getAction().equalsIgnoreCase(ConnectionManager.IHC_EVENTS.RECONNECTED.toString())) {
                     Log.d(TAG, "RECONNECTED ");
                     onMessage(ConnectionManager.IHC_EVENTS.RECONNECTED, message);
                 } else if (intent.getAction().equalsIgnoreCase(ConnectionManager.IHC_EVENTS.RECONNECTION_FAILED.toString())) {
                     Log.d(TAG, "RECONNECTION FAILED ");
-                    onMessage(ConnectionManager.IHC_EVENTS.RECONNECTION_FAILED, message);
+                    String errorMessage = "";
+                    if (intent.hasExtra(ConnectionManager.IHCMESSAGE.class.getName())) {
+                        Log.d(TAG, "General Login Message: " + message);
+                        if (message.equalsIgnoreCase(ConnectionManager.IHCMESSAGE.INVALID_URI.toString())) {
+                            errorMessage = getString(R.string.error_wrong_uri);
+                        } else if (message.equalsIgnoreCase(ConnectionManager.IHCMESSAGE.NO_ROUTE_TO_HOST.toString())) {
+                            errorMessage = getString(R.string.no_route_to_host);
+                        } else if (message.equalsIgnoreCase(ConnectionManager.IHCMESSAGE.CERTIFICATE_NOT_TRUSTED.toString())) {
+                            errorMessage = getString(R.string.ssl_connection_error);
+                        } else if (message.equalsIgnoreCase(ConnectionManager.IHCMESSAGE.INVALID_ACCOUNT.toString())) {
+                            errorMessage = getString(R.string.wrong_credentials);
+                        } else if (message.equalsIgnoreCase(ConnectionManager.IHCMESSAGE.INSUFFICIENT_RIGHTS.toString())) {
+                            errorMessage = getString(R.string.insufficient_rights);
+                        } else if (message.equalsIgnoreCase(ConnectionManager.IHCMESSAGE.SOCKET_TIMEOUT.toString())){
+                            errorMessage = getString(R.string.timeout);
+                        }
+                    } else {
+                        Log.d(TAG, "General Login Message.");
+                    }
+                    onMessage(ConnectionManager.IHC_EVENTS.RECONNECTION_FAILED, errorMessage);
                 } else if (intent.getAction().equalsIgnoreCase(ConnectionManager.IHC_EVENTS.DISCONNECTED.toString())) {
 
                     if (intent.hasExtra(ConnectionManager.IHCMESSAGE.class.getName())) {
@@ -85,6 +112,7 @@ public class BaseActivity extends AppCompatActivity {
                     } else {
                         Log.d(TAG, "Project Loaded.");
                     }
+                    Answers.getInstance().logCustom(new CustomEvent("Project loaded"));
                     onMessage(ConnectionManager.IHC_EVENTS.PROJECT_LOADED, message);
 
                 } else if (intent.getAction().equalsIgnoreCase(ConnectionManager.IHC_EVENTS.CONNECTION_FAILED.toString())) {
@@ -101,10 +129,16 @@ public class BaseActivity extends AppCompatActivity {
                             errorMessage = getString(R.string.wrong_credentials);
                         } else if (message.equalsIgnoreCase(ConnectionManager.IHCMESSAGE.INSUFFICIENT_RIGHTS.toString())) {
                             errorMessage = getString(R.string.insufficient_rights);
+                        } else if (message.equalsIgnoreCase(ConnectionManager.IHCMESSAGE.SOCKET_TIMEOUT.toString())){
+                            errorMessage = getString(R.string.timeout);
                         }
                     } else {
                         Log.d(TAG, "General Login Message.");
                     }
+                    Answers.getInstance().logLogin(new LoginEvent()
+                            .putMethod("Login")
+                            .putSuccess(false)
+                            .putCustomAttribute(intent.getAction(), errorMessage));
                     onMessage(ConnectionManager.IHC_EVENTS.CONNECTION_FAILED, errorMessage);
                 } else {
                     Log.e(TAG, "Unhandled action in broadcastReceiver");
@@ -139,7 +173,6 @@ public class BaseActivity extends AppCompatActivity {
         filters.addAction(WIFI_INTENT_ACTION);
         filters.addAction(CONNECTIVITY_CHANGE_INTENT_ACTION);
         registerReceiver(broadcastReceiver, new IntentFilter(filters));
-
     }
 
     protected void onMessage(ConnectionManager.IHC_EVENTS event, String Extra) {
@@ -179,6 +212,7 @@ public class BaseActivity extends AppCompatActivity {
             if (!(this instanceof LoginActivity) && Extra == "0") {
                 startLoginActivityAsNewTask();
             } else {
+                preferredHost = NetworkUtil.getPreferredHost(this);
                 if (Extra != "0") {
                     setProgressVisibility(false, "");
                 } else {
@@ -224,15 +258,12 @@ public class BaseActivity extends AppCompatActivity {
     protected void setProgressVisibility(boolean visible, String text) {
     }
 
-    protected int getPreferredHost(){
-        return preferredHost;
-    }
-
     private boolean attemptReconnect(){
         SharedPreferencesHelper sharedPreferencesHelper = SharedPreferencesHelper.getInstance(this);
-        if (sharedPreferences.getBoolean("hasValidLogin", false) && getPreferredHost() >= 0) {
+        int preferredHost = NetworkUtil.getPreferredHost(this);
+        if (sharedPreferences.getBoolean("hasValidLogin", false) && preferredHost >= 0) {
             String ip = "";
-            switch (getPreferredHost()){
+            switch (preferredHost){
                 case NetworkUtil.LAN:
                     if(sharedPreferencesHelper.hasValidLanIp()){
                         ip = sharedPreferencesHelper.getLanIp();
@@ -245,7 +276,7 @@ public class BaseActivity extends AppCompatActivity {
                     break;
             }
             setProgressVisibility(true, getString(R.string.reconnecting));
-            ((ApplicationContext) getApplicationContext()).getIHCConnectionManager().reconnect(ip, getPreferredHost() == NetworkUtil.WAN);
+            ((ApplicationContext) getApplicationContext()).getIHCConnectionManager().reconnect(ip, preferredHost == NetworkUtil.WAN);
             return true;
         } else {
             return false;

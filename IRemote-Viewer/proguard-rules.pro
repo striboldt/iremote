@@ -164,3 +164,10 @@
 -keep class org.ksoap2.** { *; }
 -keep class org.kxml2.** { *; }
 -keep class org.xmlpull.** { *; }
+
+
+-keep class com.squareup.okhttp.** { *; }
+-keep interface com.squareup.okhttp.** { *; }
+-keep class okhttp3.** { *; }
+-keep interface okhttp3.** { *; }
+-dontwarn com.squareup.okhttp.**

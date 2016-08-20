@@ -26,11 +26,23 @@ public class LocationFragment extends BaseFragment implements OnItemClickListene
 	private final static String TAG = LocationFragment.class.getName();
 
 	private ArrayList<HashMap<String,String>> list;
+	private IHCHome home;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		if (savedInstanceState != null) {
+			// Restore last state
+			IHCHome restoredIHChome = (IHCHome) savedInstanceState.getSerializable("home");
+			getApplicationContext().setIHCHome(restoredIHChome);
+		}
 
+	}
+
+	@Override
+	public void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+		outState.putSerializable("home", home);
 	}
 
 	@Override
@@ -44,7 +56,8 @@ public class LocationFragment extends BaseFragment implements OnItemClickListene
 			getActivity().finish();
 		else
 		{
-			IHCHome home = getApplicationContext().getIHCHome();
+
+			home = getApplicationContext().getIHCHome();
 			
 			if(home != null)
 			{
@@ -66,7 +79,6 @@ public class LocationFragment extends BaseFragment implements OnItemClickListene
 				SimpleAdapter locationAdapter = new SimpleAdapter(getApplicationContext(), list, R.layout.location_list_item, from,to );
 				locationListView.setAdapter(locationAdapter);
 			}
-			//Crashlytics.getInstance().core.setUserIdentifier();
 		}
 
 

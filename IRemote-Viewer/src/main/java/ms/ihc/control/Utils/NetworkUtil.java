@@ -27,7 +27,6 @@ public class NetworkUtil {
     public static final int WAN = 1;
     public static final int NO_CONNECTION = -1;
     public static final int LAN_NOT_AVAILABLE_FROM_MOBILE = -2;
-    private static String PREFERRED_WIFI = "";
 
     public NetworkUtil() {
     }
@@ -61,19 +60,20 @@ public class NetworkUtil {
     private static String getWifiSSIDName(Context context) {
         WifiManager wifiMgr = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
         WifiInfo wifiInfo = wifiMgr.getConnectionInfo();
-        return wifiInfo.getSSID();
+        return wifiInfo.getSSID().replace("\"","");
     }
 
     public static int getPreferredHost(Activity activity) {
 
         SharedPreferencesHelper sharedPreferencesHelper = SharedPreferencesHelper.getInstance(activity);
+        String selectedWiFi = sharedPreferencesHelper.getSelectedWiFi();
         int status = getConnectivityStatusString(activity);
         if (status == NETWORK_STATUS_NOT_CONNECTED) {
             return NO_CONNECTION;
         } else if (status == NETWORK_STATUS_MOBILE && sharedPreferencesHelper.hasValidWanIp()) {
             // We can only connect to public IP (WAN side)
             return WAN;
-        } else if (status == NETWORK_STAUS_WIFI && getWifiSSIDName(activity) == PREFERRED_WIFI && sharedPreferencesHelper.hasValidLanIp()) {
+        } else if (status == NETWORK_STAUS_WIFI && getWifiSSIDName(activity).contentEquals(selectedWiFi) && sharedPreferencesHelper.hasValidLanIp()) {
             // We are on the preferred WiFi network which should have access to LAN IP
             return LAN;
         } else if (status == NETWORK_STAUS_WIFI && sharedPreferencesHelper.hasValidWanIp()) {
@@ -90,13 +90,12 @@ public class NetworkUtil {
         }
     }
 
-    public static List<WifiConfiguration> getKnowWifiNetworks(Context context){
+    public static List<WifiConfiguration> getKnownWifiNetworks(Context context){
         WifiManager wm = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
         return wm.getConfiguredNetworks();
     }
 
     public static void setPreferredWifi(String preferredWifi, Context context) {
         ((ApplicationContext)context.getApplicationContext()).getSharedPreferencesHelper().setSelectedWiFi(preferredWifi);
-        PREFERRED_WIFI = preferredWifi;
     }
 }

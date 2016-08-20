@@ -5,18 +5,13 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InterruptedIOException;
 import java.net.ConnectException;
 import java.net.SocketTimeoutException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.UnknownHostException;
 import java.security.KeyStore;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
-import java.security.cert.Certificate;
-import java.security.cert.CertificateException;
-import java.security.cert.CertificateFactory;
-import java.security.cert.X509Certificate;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.zip.GZIPInputStream;
@@ -105,8 +100,9 @@ public class ConnectionManager {
     public ConnectionManager(ApplicationContext applicationContext) {
         this.context = applicationContext;
 
+        // No longer nessesary
         // Load LK certificate into keystore from resources
-        try {
+ /*       try {
             // loading CAs from an InputStream
             CertificateFactory cf = CertificateFactory.getInstance("X.509");
             InputStream cert = context.getResources().openRawResource(R.raw.lk);
@@ -140,13 +136,21 @@ public class ConnectionManager {
         } catch (KeyStoreException e) {
             Crashlytics.getInstance().core.logException(e);
             e.printStackTrace();
-        }
+        }*/
     }
 
     private class AuthenticationTask extends AsyncTask<Void, Void, Void> {
 
         @Override
         protected Void doInBackground(Void... voids) {
+
+          /*  try {
+                InetAddress address = InetAddress.getByName(ip);
+                URI = new URI(String.format("https://%s/ws/", address.getHostAddress()));
+            } catch (Exception e) {
+                sendBroadcast(IHC_EVENTS.CONNECTION_FAILED,  handleException(e));
+            }*/
+
             String SOAP_ACTION = "authenticate";
             String SERVICE = "AuthenticationService";
 
@@ -228,19 +232,17 @@ public class ConnectionManager {
         return ihcmessage;
     }
 
-    public void connect(final String username, String pwd, final String ip, final boolean WAN, boolean reconnect) {
+    public void connect(final String username, String pwd, final String IP, final boolean WAN, boolean reconnect) {
         login = username;
         password = pwd;
         wan = WAN;
         isReconnecting = reconnect;
         try {
-            URI = new URI(String.format("https://%s/ws/", ip));
+            URI = new URI(String.format("https://%s/ws/", IP));
             new AuthenticationTask().execute();
         } catch (Exception e) {
             sendBroadcast(IHC_EVENTS.CONNECTION_FAILED,  handleException(e));
         }
-
-
     }
 
     // TODO: Setup algorithm for connection retry and timeout. And notify upstream Activities in case of failure
@@ -606,7 +608,7 @@ public class ConnectionManager {
         String SERVICE = "ResourceInteractionService";
 
         SoapObject request = new SoapObject(NAMESPACE, "");
-        request.addProperty("waitForResourceValueChanges1", 8);
+        request.addProperty("waitForResourceValueChanges1", 4);
 
         SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
 
@@ -625,6 +627,10 @@ public class ConnectionManager {
                     return false;
                 } else {
                     SoapObject soapResponse = (SoapObject) envelope.bodyIn;
+                    if (soapResponse == null) {
+                        return false;
+                    }
+
                     int properties = soapResponse.getPropertyCount();
 
                     for (int i = 0; i < properties; i++) {
@@ -650,7 +656,9 @@ public class ConnectionManager {
                 }
             } catch (Exception e) {
                 IHCMESSAGE ihcmessage = handleException(e);
-                sendBroadcast(IHC_EVENTS.CONNECTION_FAILED, ihcmessage);
+                if( !(e instanceof InterruptedIOException))
+                    sendBroadcast(IHC_EVENTS.CONNECTION_FAILED, ihcmessage);
+
             }
         } else {
             Log.v(TAG, "waitForResourceValueChanges - No connection");

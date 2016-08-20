@@ -23,8 +23,10 @@ import android.provider.Settings.Secure;
 import android.content.SharedPreferences;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -87,9 +89,6 @@ public class LoginActivity extends BaseActivity {
 
         setContentView(R.layout.login);
 
-        Log.i(TAG, "Preferred host: " + getPreferredHost());
-        Crashlytics.log("Preferred host: " + getPreferredHost());
-
         progressLayout = (FrameLayout) findViewById(R.id.progressLayout);
         settingsLayout = (RelativeLayout) findViewById(R.id.settingsLayout);
         TextView versionText = (TextView) findViewById(R.id.version_data);
@@ -97,7 +96,6 @@ public class LoginActivity extends BaseActivity {
 
         connection_status = (TextView) findViewById(R.id.connection_status);
         Button loginButton = (Button) findViewById(R.id.loginbutton);
-        Button reloadProjectButton = (Button) findViewById(R.id.reloadProjectButton);
         Button wifiSelectorButton = (Button) findViewById(R.id.wifibutton);
         selected_wifi = (TextView) findViewById(R.id.selected_wifi);
         setProgressVisibility(true, "");
@@ -116,13 +114,14 @@ public class LoginActivity extends BaseActivity {
             mChecker.checkAccess(mLicenseCheckerCallback);
         }
 
+        int preferredHost = NetworkUtil.getPreferredHost(this);
 
         // Auto login if login is valid
-        if (sharedPreferences.getBoolean("hasValidLogin", false) && getPreferredHost() >= 0) {
+        if (sharedPreferences.getBoolean("hasValidLogin", false) && preferredHost >= 0) {
             String username = sharedPreferences.getString("username", "");
             String password = sharedPreferences.getString("password", "");
             String ip = "";
-            switch (getPreferredHost()) {
+            switch (preferredHost) {
                 case NetworkUtil.LAN:
                     if (sharedPreferencesHelper.hasValidLanIp()) {
                         ip = sharedPreferencesHelper.getLanIp();
@@ -135,7 +134,7 @@ public class LoginActivity extends BaseActivity {
                     break;
             }
             setProgressVisibility(true, getString(R.string.login_msg));
-            getAppContext().getIHCConnectionManager().connect(username, password, ip, getPreferredHost() == NetworkUtil.WAN, false);
+            getAppContext().getIHCConnectionManager().connect(username, password, ip, preferredHost == NetworkUtil.WAN, false);
         } else {
             setProgressVisibility(false, "");
         }
@@ -161,88 +160,25 @@ public class LoginActivity extends BaseActivity {
 
         EditText password = (EditText) findViewById(R.id.password);
         password.setText(this.sharedPreferences.getString("password", ""));
+        password.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_NEXT) {
+                    onConnectClick();
+                    return true;
+                }
+                return false;
+            }
+        });
+
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                hideSoftKeyboard();
-                String ip;
-
-                String wanip = ((EditText) findViewById(R.id.wan_ip)).getText().toString();
-                String lanip = ((EditText) findViewById(R.id.lan_ip)).getText().toString();
-                String username = ((EditText) findViewById(R.id.username)).getText().toString();
-                String password = ((EditText) findViewById(R.id.password)).getText().toString();
-
-                if (!username.isEmpty() && !password.isEmpty()) {
-                    if (!wanip.isEmpty() || !lanip.isEmpty()) {
-                    } else {
-                        SnackbarHelper.createSnack(LoginActivity.this, String.format("%s %s", getString(R.string.login_failed_msg), getString(R.string.missing_host)));
-                        return;
-                    }
-                } else {
-                    SnackbarHelper.createSnack(LoginActivity.this, String.format("%s %s", getString(R.string.login_failed_msg), getString(R.string.missing_login_credentials)));
-                    return;
-                }
-
-                if (!lanip.isEmpty()) {
-                    ip = lanip;
-                } else {
-                    ip = wanip;
-                }
-
-                SharedPreferences saveSettings = getSharedPreferences(PREFS_NAME, 0);
-                SharedPreferences.Editor editor = saveSettings.edit();
-                editor.putString("username", username);
-                editor.putString("password", password);
-                editor.putString("lan_ip", lanip);
-                editor.putString("wan_ip", wanip);
-                editor.apply();
-
-                ((ApplicationContext) getApplicationContext()).getIHCConnectionManager().connect(username, password, ip, false, false);
-                setProgressVisibility(true, getString(R.string.login_msg));
+                onConnectClick();
             }
         });
 
-        reloadProjectButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                hideSoftKeyboard();
-                getAppContext().deleteDataFile();
-                String ip;
-
-                String wanip = ((EditText) findViewById(R.id.wan_ip)).getText().toString();
-                String lanip = ((EditText) findViewById(R.id.lan_ip)).getText().toString();
-                String username = ((EditText) findViewById(R.id.username)).getText().toString();
-                String password = ((EditText) findViewById(R.id.password)).getText().toString();
-
-                if (!username.isEmpty() && !password.isEmpty()) {
-                    if (!wanip.isEmpty() || !lanip.isEmpty()) {
-                    } else {
-                        SnackbarHelper.createSnack(LoginActivity.this, String.format("%s %s", getString(R.string.login_failed_msg), getString(R.string.missing_host)));
-                        return;
-                    }
-                } else {
-                    SnackbarHelper.createSnack(LoginActivity.this, String.format("%s %s", getString(R.string.login_failed_msg), getString(R.string.missing_login_credentials)));
-                    return;
-                }
-
-                if (!lanip.isEmpty()) {
-                    ip = lanip;
-                } else {
-                    ip = wanip;
-                }
-
-                SharedPreferences saveSettings = getSharedPreferences(PREFS_NAME, 0);
-                SharedPreferences.Editor editor = saveSettings.edit();
-                editor.putString("username", username);
-                editor.putString("password", password);
-                editor.putString("lan_ip", lanip);
-                editor.putString("wan_ip", wanip);
-                editor.apply();
-
-                ((ApplicationContext) getApplicationContext()).getIHCConnectionManager().connect(username, password, ip, false, false);
-            }
-        });
 
         wifiSelectorButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -262,7 +198,7 @@ public class LoginActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if(!getAppContext().getSharedPreferencesHelper().getSelectedWiFi().isEmpty()){
+        if (!getAppContext().getSharedPreferencesHelper().getSelectedWiFi().isEmpty()) {
             selected_wifi.setText(getAppContext().getSharedPreferencesHelper().getSelectedWiFi());
         }
     }
@@ -299,6 +235,56 @@ public class LoginActivity extends BaseActivity {
         } catch (NullPointerException e) {
             Log.i(TAG, "hideSoftKeyboard: keyboard not visible");
         }
+    }
+
+    private void onConnectClick(){
+
+        String ip = "NA";
+        String wanip = ((EditText) findViewById(R.id.wan_ip)).getText().toString();
+        String lanip = ((EditText) findViewById(R.id.lan_ip)).getText().toString();
+        String user = ((EditText) findViewById(R.id.username)).getText().toString();
+        String pass = ((EditText) findViewById(R.id.password)).getText().toString();
+
+        SharedPreferences saveSettings = getSharedPreferences(PREFS_NAME, 0);
+        SharedPreferences.Editor editor = saveSettings.edit();
+        editor.putString("username", user);
+        editor.putString("password", pass);
+        editor.putString("lan_ip", lanip);
+        editor.putString("wan_ip", wanip);
+        editor.apply();
+
+        int preferredHost = NetworkUtil.getPreferredHost(this);
+        if(preferredHost == NetworkUtil.LAN_NOT_AVAILABLE_FROM_MOBILE)
+            return;
+
+        hideSoftKeyboard();
+
+        if (!user.isEmpty() && !pass.isEmpty()) {
+            if (!wanip.isEmpty() || !lanip.isEmpty()) {
+            } else {
+                SnackbarHelper.createSnack(LoginActivity.this, String.format("%s %s", getString(R.string.login_failed_msg), getString(R.string.missing_host)));
+                return;
+            }
+        } else {
+            SnackbarHelper.createSnack(LoginActivity.this, String.format("%s %s", getString(R.string.login_failed_msg), getString(R.string.missing_login_credentials)));
+            return;
+        }
+
+        switch (preferredHost) {
+            case NetworkUtil.LAN:
+                if (!lanip.isEmpty()) {
+                    ip = lanip;
+                }
+                break;
+            case NetworkUtil.WAN:
+                if (!wanip.isEmpty()) {
+                    ip = wanip;
+                }
+                break;
+        }
+
+        getAppContext().getIHCConnectionManager().connect(user, pass, ip, preferredHost == NetworkUtil.WAN, false);
+        setProgressVisibility(true, getString(R.string.login_msg));
     }
 
 }

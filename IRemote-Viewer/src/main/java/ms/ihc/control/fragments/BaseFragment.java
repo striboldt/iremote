@@ -19,22 +19,20 @@ public class BaseFragment extends Fragment {
     private ApplicationContext appContext;
     private Handler mHandler = new Handler();
     private SparseArray<IHCResource> resources;
+    private waitForResourceValueChangesTask resourceUpdaterTask;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         appContext = (ApplicationContext) getActivity().getApplicationContext();
-        try {
-            resources = appContext.getIHCHome().getAllResourceIDs();
-        } catch (NullPointerException e){
-            Log.i(TAG, "onCreate: IHCRemote not yet initialized");
-        }
     }
 
     private Runnable waitForResourceValuesChange = new Runnable() {
         public void run() {
             if (!appContext.getIsWaitingForValueChanges()) {
-                new waitForResourceValueChangesTask().execute();
+                resourceUpdaterTask = new waitForResourceValueChangesTask();
+                resourceUpdaterTask.execute();
             }
             mHandler.postDelayed(this, 1000);
         }
@@ -62,11 +60,23 @@ public class BaseFragment extends Fragment {
         protected void onPostExecute(Boolean refreshListView) {
             appContext.setIsWaitingForValueChanges(false);
         }
+
+        @Override
+        protected void onCancelled(Boolean aBoolean) {
+            super.onCancelled(aBoolean);
+            Log.i(TAG, "onCancelled: Task canceled");
+            appContext.setIsWaitingForValueChanges(false);
+        }
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        try {
+            resources = appContext.getIHCHome().getAllResourceIDs();
+        } catch (NullPointerException e){
+            Log.i(TAG, "onCreate: IRemote not yet initialized");
+        }
         mHandler.post(waitForResourceValuesChange);
     }
 
@@ -74,6 +84,9 @@ public class BaseFragment extends Fragment {
     public void onPause() {
         super.onPause();
         mHandler.removeCallbacks(waitForResourceValuesChange);
+        if(resourceUpdaterTask != null) {
+            resourceUpdaterTask.cancel(true);
+        }
     }
 
     protected ApplicationContext getApplicationContext(){

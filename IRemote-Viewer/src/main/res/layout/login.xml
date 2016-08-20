@@ -52,7 +52,8 @@
             <EditText
                 android:id="@+id/lan_ip"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="40dp"
+                android:textSize="15sp"
                 android:layout_marginLeft="10dp"
                 android:maxLines="1"
                 android:inputType="textUri"
@@ -132,7 +133,8 @@
             <EditText
                 android:id="@+id/wan_ip"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="40dp"
+                android:textSize="15sp"
                 android:maxLines="1"
                 android:inputType="textUri"
                 android:hint="@string/wan_host_help" />
@@ -162,7 +164,8 @@
             <EditText
                 android:id="@+id/username"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="40dp"
+                android:textSize="15sp"
                 android:inputType="text"
                 android:maxLines="1"
                 />
@@ -181,9 +184,13 @@
             <EditText
                 android:id="@+id/password"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="40dp"
+                android:textSize="15sp"
                 android:maxLines="1"
-                android:inputType="textPassword" />
+                android:inputType="textPassword"
+                android:imeActionLabel="@string/loginbutton"
+                android:imeOptions="actionNext"
+                android:imeActionId="5"/>
         </LinearLayout>
 
         <Button
@@ -194,19 +201,6 @@
             android:background="@drawable/custom_button"
             android:layout_marginLeft="10dp"
             android:text="@string/loginbutton" />
-
-        <Button
-            android:id="@+id/reloadProjectButton"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:layout_alignParentRight="true"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_below="@id/userpass_layout"
-            android:background="@drawable/custom_button"
-
-            android:text="@string/reload_project" />
 
     </RelativeLayout>
 

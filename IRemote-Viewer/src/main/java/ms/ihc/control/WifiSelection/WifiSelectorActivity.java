@@ -1,7 +1,6 @@
 package ms.ihc.control.WifiSelection;
 
 
-import android.content.Intent;
 import android.net.wifi.WifiConfiguration;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -44,7 +43,7 @@ public class WifiSelectorActivity extends BaseActivity {
 
         ListView wifiListView = (ListView) findViewById(R.id.wifi_listview);
 
-        wifiConfigurationList = NetworkUtil.getKnowWifiNetworks(getApplicationContext());
+        wifiConfigurationList = NetworkUtil.getKnownWifiNetworks(getApplicationContext());
 
         List<Map<String,String>> list = new ArrayList<>();
         for (WifiConfiguration wifiConfiguration : wifiConfigurationList) {

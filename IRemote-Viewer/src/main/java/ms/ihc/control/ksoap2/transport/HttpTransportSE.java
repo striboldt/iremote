@@ -2,13 +2,14 @@ package ms.ihc.control.ksoap2.transport;
 
 import android.util.Log;
 
-import com.squareup.okhttp.Response;
-
 import java.io.*;
 import java.net.ConnectException;
 import java.security.KeyStore;
+
 import org.xmlpull.v1.*;
+
 import ms.ihc.control.ksoap2.serialization.SoapEnvelope;
+import okhttp3.Response;
 
 /**
  * A J2SE based HttpTransport layer.
@@ -28,7 +29,7 @@ public class HttpTransportSE extends Transport {
         super(url);
         //System.setProperty("http.keepAlive", "true");
         //System.setProperty("http.maxConnections", "5");
-        System.setProperty("jsse.enableSNIExtension","false");
+        System.setProperty("jsse.enableSNIExtension", "false");
         this.trustedKeystore = trustedKeystore;
     }
 
@@ -62,9 +63,9 @@ public class HttpTransportSE extends Transport {
         if (response != null && response.isSuccessful()) {
             this.sessionCookie = response.header("set-cookie");
             parseResponse(envelope, response.body().byteStream());
-        } else {
+        } else if (response != null) {
             Log.e(TAG, "call failed: " + response);
-            if (response.code() != 200 ){
+            if (response.code() != 200) {
                 throw new ConnectException("Response error code: " + response.code() + ". Detailed message: " + response.message());
             } else throw new IOException(response.message());
         }

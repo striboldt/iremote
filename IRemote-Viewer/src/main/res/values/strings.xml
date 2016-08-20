@@ -74,5 +74,6 @@
     <string name="lan_wifi_help">Select the WiFi connection associated with the LAN host</string>
     <string name="none">NONE</string>
     <string name="ssl_connection_error">SSL certificate error</string>
+    <string name="timeout">socket timeout</string>
 
 </resources>

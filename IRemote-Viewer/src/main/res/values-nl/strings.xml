@@ -66,4 +66,5 @@
     <string name="ssl_connection_error">SSL-certificaat error</string>
     <string name="wrong_credentials">Verkeerde gebruikersnaam / wachtwoord</string>
     <string name="insufficient_rights">Onvoldoende rechten</string>
+    <string name="timeout">socket timeout</string>
 </resources>
