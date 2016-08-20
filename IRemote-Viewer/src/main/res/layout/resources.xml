@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/default_background">
+
+    <include layout="@layout/custom_toolbar"
+        android:id="@+id/custom_toolbar"
+        android:minHeight="?attr/actionBarSize"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"/>
+
+    <fragment android:name="ms.ihc.control.resource.fragments.ResourceListFragment"
+        android:id="@+id/resourcefragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/custom_toolbar"
+        tools:layout="@layout/generic_listview" />
+
+    <FrameLayout
+        android:id="@+id/progressLayout"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="#AA000000"
+        android:visibility="gone"
+        tools:visibility="visible">
+
+        <include layout="@layout/progress_layout"/>
+
+    </FrameLayout>
+
+
+</RelativeLayout>

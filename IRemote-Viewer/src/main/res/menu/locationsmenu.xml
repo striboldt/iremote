@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="@color/toolbarColor">
+	<!-- Settings, should always be in the overflow -->
+	<item
+		android:title="@string/settings"
+		android:id="@+id/action_settings"
+		android:icon="@drawable/ic_settings_white_36dp"
+        />
+	<item
+		android:title="@string/about"
+		android:id="@+id/action_about"
+		/>
+</menu>

@@ -1,0 +1,7 @@
+IRemote Viewer 2.0 Release Candidate 1 (build 43):
+Release notes:
+- Supports Android 5.0 and above. Use old IRemote viewer (version 1.x, with Kitkat and Jellybean installations.)
+- Optimized connection algorithm. Should be much more reliable in terms of login.
+
+Note:
+Favourites and Active resources list are currently not available.

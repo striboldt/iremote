@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:layout_marginLeft="5dp"
+    android:layout_marginRight="5dp"
+    android:background="@drawable/default_background"
+    android:orientation="vertical">
+
+
+    <FrameLayout
+        android:id="@+id/progressLayout"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="#AA000000"
+        android:visibility="gone">
+
+        <include layout="@layout/progress_layout" />
+    </FrameLayout>
+
+    <RelativeLayout
+        android:id="@+id/settingsLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="visible">
+
+        <include
+            android:id="@+id/custom_toolbar"
+            layout="@layout/custom_toolbar"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" />
+
+        <LinearLayout
+            android:id="@+id/lan_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/custom_toolbar"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/lan_host"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="@string/lan_host"
+                android:textAllCaps="true"
+                android:textColor="@android:color/white"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/lan_ip"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:textSize="15sp"
+                android:layout_marginLeft="10dp"
+                android:maxLines="1"
+                android:inputType="textUri"
+                android:hint="@string/lan_host_help" />
+
+            <TextView
+                android:id="@+id/helptext"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:paddingLeft="10dp"
+                android:text="@string/lan_wifi_help"
+                />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal"
+                >
+                <Button
+                    android:id="@+id/wifibutton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="40dp"
+                    android:background="@drawable/custom_button"
+                    android:layout_gravity="center_vertical"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:text="@string/set_wifi" />
+
+                <TextView
+                    android:id="@+id/selected_wifi"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/none"
+                    android:layout_gravity="center_vertical"
+                    android:textColor="@android:color/white"
+                    android:textStyle="bold"
+                    />
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+        <View
+            android:id="@+id/lan_seperator"
+            android:layout_height="1dp"
+            android:layout_width="match_parent"
+            android:background="#ffffff"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="10dp"
+            android:layout_below="@id/lan_layout"
+            />
+
+        <LinearLayout
+            android:id="@+id/wan_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/lan_seperator"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/wan_host"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:padding="3dp"
+                android:text="@string/wan_host"
+                android:textAllCaps="true"
+                android:textColor="@android:color/white"
+                android:textStyle="bold"/>
+
+            <EditText
+                android:id="@+id/wan_ip"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:textSize="15sp"
+                android:maxLines="1"
+                android:inputType="textUri"
+                android:hint="@string/wan_host_help" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/userpass_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/wan_layout"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="10dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/username_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:padding="3dp"
+                android:text="@string/username"
+                android:textAllCaps="true"
+                android:textColor="@android:color/white"
+                android:textStyle="bold"/>
+
+            <EditText
+                android:id="@+id/username"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:textSize="15sp"
+                android:inputType="text"
+                android:maxLines="1"
+                />
+
+            <TextView
+                android:id="@+id/password_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:padding="3dp"
+                android:text="@string/password"
+                android:textAllCaps="true"
+                android:textColor="@android:color/white"
+                android:textStyle="bold"/>
+
+            <EditText
+                android:id="@+id/password"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:textSize="15sp"
+                android:maxLines="1"
+                android:inputType="textPassword"
+                android:imeActionLabel="@string/loginbutton"
+                android:imeOptions="actionNext"
+                android:imeActionId="5"/>
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/loginbutton"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_below="@id/userpass_layout"
+            android:background="@drawable/custom_button"
+            android:layout_marginLeft="10dp"
+            android:text="@string/loginbutton" />
+
+    </RelativeLayout>
+
+</LinearLayout>
+
+
+
+
+
+

@@ -1,0 +1,4 @@
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android" >
+    <item android:drawable="@drawable/button_inactive_pressed"/>
+    <item android:drawable="@drawable/ring_inactive"/>
+</layer-list>

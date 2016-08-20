@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="about">Om IRemote</string>
+    <string name="author">Udvikler: Morten Striboldt.</string>
+    <string name="email">Email: ihc@striboldt.com</string>
+    <string name="aboutText">IRemote er en app til fjernstyring af LK/Schneider Electric IHC (Intelligent House Control).</string>
+    <string name="app_name">IRemote Viewer</string>
+    <string name="lan_host">LAN Host</string>
+    <string name="lan_host_help">IP el. Hostnavn</string>
+    <string name="wan_host">WAN Host</string>
+    <string name="wan_host_help">IP el. Hostnavn</string>
+    <string name="username">Brugernavn</string>
+    <string name="password">Password</string>
+    <string name="connect_wan_only">Opret forbindelse via WAN</string>
+    <string name="locations">Lokationer</string>
+    <string name="favourites">Farvoritter</string>
+    <string name="settings">Setup</string>
+    <string name="active_resources">Aktive Resourcer</string>
+    <string name="resources">Resourcer: </string>
+    <string name="upperleft">ø.v</string>
+    <string name="upperright">ø.h</string>
+    <string name="midleft">m.v</string>
+    <string name="midright">m.h</string>
+    <string name="lowerleft">n.v</string>
+    <string name="lowerright">n.h</string>
+    <string name="loginbutton">Login</string>
+    <string name="reload_project">Genindlæs projektfil</string>
+    <string name="check_license">Rettighedstjek</string>
+	<string name="checking_license">Tjekker licens…</string>
+	<string name="dont_allow">Giv ikke brugeren adgang</string>
+	<string name="allow">Giv brugere adgang</string>
+	<string name="login_msg">Logger ind…</string>
+	<string name="login_failed_msg">Login fejl: </string>
+	<string name="loading_project_msg">Projekt hentes. Vent venligst…</string>
+	
+	<string name="application_error">Applications fejl: %1$s</string>
+	<!-- Unlicensed dialog messages -->
+	<string name="unlicensed_dialog_title">Applikation licensfejl.</string>
+	<string name="unlicensed_dialog_body">Der er ikke fundet noget licens. Køb venligst app\'en via Android Market, eller kontakt ihc@striboldt.com</string>
+	<string name="buy_button">Køb app</string>
+	<string name="quit_button">Luk</string>
+	<string name="autologin">Automatisk login</string>
+	<string name="left">v</string>
+	<string name="right">h</string>
+	<string name="up">o</string>
+	<string name="down">n</string>
+	<string name="edit_resource">Edit Resource</string>
+	<string-array name="ContextMenu">
+			<item>Tilføj/Fjern Favorit</item>
+    		<item>Slet resource</item>
+    </string-array>
+    <string-array name="ContextMenuRemoveFav">
+			<item>Slet Favorit</item>
+    </string-array>
+    <string name="default_connection_type">Default forbindelse</string>
+    <string name="error_wrong_uri">Forkert IP eller Hostnavn</string>
+    <string name="error_no_network">Tjek netværksforbindelse</string>
+    <string name="missing_host">Lan/Wan host mangler</string>
+    <string name="missing_login_credentials">Brugernavn/Password mangler</string>
+    <string name="lan_not_available">LAN er kun synligt fra WiFi forbindelse</string>
+    <string name="no_route_to_host">Ingen forbindelse til host</string>
+    <string name="reconnecting">Genopretter forbindelse…</string>
+    <string name="select_wifi">Vælg WiFi netværk</string>
+    <string name="set_wifi">LAN Wifi</string>
+    <string name="login">Login</string>
+    <string name="lan_wifi_help">Vælg WiFi forbindelse som skal benyttes med LAN host</string>
+    <string name="none">IKKE VALGT</string>
+    <string name="ssl_connection_error">SSL certifikat fejl</string>
+    <string name="insufficient_rights">Manglende rettigheder</string>
+    <string name="wrong_credentials">Forkert brugernavn/password</string>
+    <string name="timeout">socket timeout</string>
+</resources>

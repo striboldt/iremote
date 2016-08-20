@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_focused="true" android:state_pressed="false">
+        <layer-list xmlns:android="http://schemas.android.com/apk/res/android" >
+            <item android:drawable="@drawable/button_inactive"/>
+            <item android:drawable="@drawable/rectangle_inactive" android:left="19dp" android:right="19dp" android:bottom="21dp" android:top="3dp"/>
+            <item android:drawable="@drawable/ring_inactive"/>
+        </layer-list>
+    </item>
+    <item android:state_focused="true" android:state_pressed="true">
+        <layer-list xmlns:android="http://schemas.android.com/apk/res/android" >
+            <item android:drawable="@drawable/button_inactive_pressed"/>
+            <item android:drawable="@drawable/rectangle_inactive" android:left="19dp" android:right="19dp" android:bottom="21dp" android:top="3dp"/>
+            <item android:drawable="@drawable/ring_inactive"/>
+        </layer-list>
+    </item>
+    <item android:state_focused="false" android:state_pressed="true">
+        <layer-list xmlns:android="http://schemas.android.com/apk/res/android" >
+            <item android:drawable="@drawable/button_inactive_pressed"/>
+            <item android:drawable="@drawable/rectangle_inactive" android:left="19dp" android:right="19dp" android:bottom="21dp" android:top="3dp"/>
+            <item android:drawable="@drawable/ring_inactive"/>
+        </layer-list>
+    </item>
+    <item>
+        <layer-list xmlns:android="http://schemas.android.com/apk/res/android" >
+            <item android:drawable="@drawable/button_inactive"/>
+            <item android:drawable="@drawable/rectangle_inactive" android:left="19dp" android:right="19dp" android:bottom="21dp" android:top="3dp"/>
+            <item android:drawable="@drawable/ring_inactive"/>
+        </layer-list>
+    </item>
+</selector>
+
+
+
