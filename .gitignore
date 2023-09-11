@@ -28,3 +28,4 @@ Google-LVL/.gradle/1.9/taskArtifacts/taskArtifacts.bin
 .gradle/1.12/taskArtifacts/taskArtifacts.bin
 com_crashlytics_export_strings.xml
 .gradle
+*.keystore
